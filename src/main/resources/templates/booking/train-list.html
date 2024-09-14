@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách chuyến tàu</title>
+</head>
+<body>
+<h2>Kết quả tìm kiếm chuyến tàu</h2>
+<ul>
+    <li th:each="route : ${routes}">
+        <strong>Chuyến tàu:</strong> <span th:text="${route.train.trainNumber}"></span> |
+        <strong>Ga đi:</strong> <span th:text="${route.startStation.stationName}"></span> |
+        <strong>Ga đến:</strong> <span th:text="${route.endStation.stationName}"></span> |
+        <strong>Khoảng cách:</strong> <span th:text="${route.distance}"></span> km |
+        <strong>Khởi hành:</strong> <span th:text="${route.departureTime}"></span> <!-- Thời gian khởi hành hàng ngày -->
+        <a th:href="@{/train-details/{trainId}(trainId=${route.train.trainId})}">Xem chi tiết</a>
+    </li>
+</ul>
+</body>
+</html>

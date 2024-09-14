@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Đặt vé tàu</title>
+</head>
+<body>
+<h2>Tìm chuyến tàu</h2>
+<form action="/search-trains" method="GET">
+  <label for="startStation">Ga đi:</label>
+  <select name="startStation" required>
+    <option value="" disabled selected>Chọn ga đi</option>
+    <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+  </select>
+
+  <label for="endStation">Ga đến:</label>
+  <select name="endStation" required>
+    <option value="" disabled selected>Chọn ga đến</option>
+    <option th:each="station : ${stations}" th:value="${station.stationId}" th:text="${station.stationName}"></option>
+  </select>
+
+  <label for="departureDate">Ngày khởi hành:</label>
+  <input type="date" name="departureDate" required>
+
+  <button type="submit">Tìm kiếm</button>
+</form>
+</body>
+</html>

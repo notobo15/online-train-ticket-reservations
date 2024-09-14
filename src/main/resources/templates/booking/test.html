@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt vé tàu</title>
+</head>
+<body>
+<h1>Đặt vé tàu</h1>
+<form id="bookingForm">
+    <label for="departureStation">Ga đi:</label>
+    <select id="departureStation" name="departureStation">
+        <option value="1">Ga Hà Nội</option>
+        <option value="2">Ga Sài Gòn</option>
+        <option value="3">Ga Nha Trang</option>
+        <!-- Thêm các ga khác -->
+    </select>
+
+    <label for="arrivalStation">Ga đến:</label>
+    <select id="arrivalStation" name="arrivalStation">
+        <option value="1">Ga Hà Nội</option>
+        <option value="2">Ga Sài Gòn</option>
+        <option value="3">Ga Nha Trang</option>
+        <!-- Thêm các ga khác -->
+    </select>
+
+    <label for="departureDate">Ngày đi:</label>
+    <input type="date" id="departureDate" name="departureDate" required>
+
+    <label for="passengerCount">Số lượng hành khách:</label>
+    <input type="number" id="passengerCount" name="passengerCount" value="1" min="1" max="10" required>
+
+    <!-- Danh sách loại hành khách -->
+    <h3>Loại hành khách</h3>
+    <div id="passengerTypes">
+        <div>
+            <label for="adult">Người lớn:</label>
+            <input type="number" id="adult" name="adult" value="1" min="0">
+        </div>
+        <div>
+            <label for="children">Trẻ em:</label>
+            <input type="number" id="children" name="children" value="0" min="0">
+        </div>
+        <div>
+            <label for="student">Sinh viên:</label>
+            <input type="number" id="student" name="student" value="0" min="0">
+        </div>
+        <div>
+            <label for="elder">Người cao tuổi:</label>
+            <input type="number" id="elder" name="elder" value="0" min="0">
+        </div>
+    </div>
+
+    <button type="submit">Tìm vé</button>
+</form>
+
+<!-- Danh sách tàu và khung giờ -->
+<h2>Danh sách các chuyến tàu</h2>
+<div id="trainList"></div>
+
+<!-- Danh sách ghế -->
+<h2>Chọn ghế</h2>
+<div id="seatList"></div>
+
+<script>
+    // Lấy dữ liệu từ form và gọi API để tìm vé
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const departureStation = document.getElementById('departureStation').value;
+        const arrivalStation = document.getElementById('arrivalStation').value;
+        const departureDate = document.getElementById('departureDate').value;
+        const passengerCount = document.getElementById('passengerCount').value;
+        const adult = document.getElementById('adult').value;
+        const children = document.getElementById('children').value;
+        const student = document.getElementById('student').value;
+        const elder = document.getElementById('elder').value;
+
+        // Thực hiện gọi API để lấy danh sách tàu
+        fetch(`/api/trains?departureStation=${departureStation}&arrivalStation=${arrivalStation}&date=${departureDate}`)
+            .then(response => response.json())
+            .then(data => {
+                // Hiển thị danh sách tàu
+                const trainList = document.getElementById('trainList');
+                trainList.innerHTML = '';
+                data.forEach(train => {
+                    const trainElement = document.createElement('div');
+                    trainElement.innerHTML = `<h3>${train.trainNumber} - Khởi hành: ${train.departureTime} - Đến: ${train.arrivalTime}</h3>`;
+                    trainElement.addEventListener('click', () => showSeats(train.trainId));
+                    trainList.appendChild(trainElement);
+                });
+            });
+    });
+
+    // Hiển thị danh sách ghế khi người dùng chọn tàu
+    function showSeats(trainId) {
+        fetch(`/api/seats?trainId=${trainId}`)
+            .then(response => response.json())
+            .then(data => {
+                const seatList = document.getElementById('seatList');
+                seatList.innerHTML = '';
+                data.forEach(seat => {
+                    const seatElement = document.createElement('div');
+                    seatElement.innerHTML = `<span>${seat.seatNumber} - ${seat.price} VND - ${seat.status}</span>`;
+                    seatList.appendChild(seatElement);
+                });
+            });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi tiết chuyến tàu</title>
+</head>
+<body>
+<h2>Danh sách toa tàu</h2>
+<ul>
+    <li th:each="car : ${trainCars}">
+        Toa số: <span th:text="${car.carNumber}"></span> |
+        Loại toa: <span th:text="${car.carType}"></span> |
+        Tổng số tầng: <span th:text="${car.totalFloors}"></span>
+        <a th:href="@{/compartment/{compartmentId}/seats(compartmentId=${car.compartments[0].compartmentId})}">Xem chỗ ngồi</a>
+    </li>
+</ul>
+</body>
+</html>
