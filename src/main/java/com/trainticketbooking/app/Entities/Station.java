@@ -10,7 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "stations")
 @Data
-@ToString
 public class Station {
 
     @Id
