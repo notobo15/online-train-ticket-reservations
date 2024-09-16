@@ -16,6 +16,9 @@ public class SeatType {
     @Column(name = "seat_type", nullable = false)
     private String seatType;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "description")
     private String description;
 }
