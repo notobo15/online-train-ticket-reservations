@@ -3,7 +3,6 @@ package com.trainticketbooking.app.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -45,5 +44,5 @@ public class Route {
     private int dateNumber;
 
     @OneToMany(mappedBy = "route")
-    private List<SeatRoute> seatRoutes;
+    private List<Price> prices;
 }
