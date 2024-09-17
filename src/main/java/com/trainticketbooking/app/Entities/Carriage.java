@@ -33,7 +33,7 @@ public class Carriage {
     @Column(name = "total_floors")
     private int totalFloors;
 
-    @OneToMany(mappedBy = "carriage")
-    private List<Compartment> compartments;
+//    @OneToMany(mappedBy = "carriage")
+//    private List<Compartment> compartments;
 
 }
