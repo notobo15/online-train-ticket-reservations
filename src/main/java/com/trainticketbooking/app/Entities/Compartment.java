@@ -16,8 +16,8 @@ public class Compartment {
     private Long compartmentId;
 
     @ManyToOne
-    @JoinColumn(name = "train_car_id", nullable = false)
-    private TrainCar trainCar;
+    @JoinColumn(name = "carriage_id", nullable = false)
+    private Carriage carriage;
 
     @OneToMany(mappedBy = "compartment")
     private List<Seat> seats;
@@ -34,4 +34,5 @@ public class Compartment {
 
     @Column(name = "floor")
     private int floor;
+
 }
