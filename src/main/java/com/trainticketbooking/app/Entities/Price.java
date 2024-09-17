@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "seat_route")
+@Table(name = "prices")
 @Data
-public class SeatRoute {
+public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seat_route_id")
-    private Integer seatRouteId;
+    @Column(name = "priceId")
+    private Integer priceId;
 
     @ManyToOne
     @JoinColumn(name = "seat_id")
@@ -22,4 +22,8 @@ public class SeatRoute {
 
     @Column(name = "price", nullable = false)
     private Double price;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
 }
