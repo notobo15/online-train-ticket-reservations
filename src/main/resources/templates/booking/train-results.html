@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Available Trains</title>
+</head>
+<body>
+<h1>Available Trains</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Train Number</th>
+        <th>Train Type</th>
+        <th>Seats</th> <!-- Added column for seat details -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="train : ${availableTrains}">
+        <td th:text="${train.trainNumber}"></td>
+        <td th:text="${train.trainType}"></td>
+        <td>
+            <!-- Link to view seats of this train -->
+            <a th:href="@{/viewSeats(trainId=${train.trainId})}">View Seats</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

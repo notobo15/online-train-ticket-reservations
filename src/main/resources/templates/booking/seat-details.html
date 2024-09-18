@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Seat Details</title>
+    <style>
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 50px);
+            grid-gap: 10px;
+        }
+        .seat {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .seat-occupied {
+            background-color: #ccc;
+        }
+        .floor-label {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .carriage-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Seat Details</h1>
+
+<div th:if="${carriages.size() == 0}">
+    <p>No carriages or seats available for this train.</p>
+</div>
+
+<div th:each="carriage : ${carriages}">
+    <div class="carriage-header" th:text="'Carriage ' + ${carriage.carNumber}"></div>
+
+    <div th:if="${carriage.totalFloors > 1}">
+        <!-- Multi-floor carriage layout -->
+        <div th:each="floor : ${floorNumbersMap[carriage.carriageId]}">
+            <div class="floor-label" th:text="'Floor ' + ${floor}"></div>
+            <div class="seat-grid">
+                <div th:each="seat : ${availableSeats}"
+                     th:if="${seat.carriage.carriageId == carriage.carriageId} and ${seat.floor == floor}"
+                     th:classappend="${seat.status == 'occupied'} ? 'seat-occupied' : ''"
+                     th:text="${seat.seatNumber}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${carriage.totalFloors == 1}">
+        <!-- Single-floor carriage layout -->
+        <div class="seat-grid">
+            <div th:each="seat : ${availableSeats}"
+                 th:if="${seat.carriage.carriageId == carriage.carriageId}"
+                 th:classappend="${seat.status == 'occupied'} ? 'seat-occupied' : ''"
+                 th:text="${seat.seatNumber}">
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
