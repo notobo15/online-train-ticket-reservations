@@ -3,7 +3,9 @@ package com.trainticketbooking.app.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -17,16 +19,12 @@ public class TrainSchedule {
     private Long scheduleId;
 
     @ManyToOne
-    @JoinColumn(name = "route_id", nullable = false)
+    @JoinColumn(name = "route_id")
     private Route route;
 
-    @ManyToOne
-    @JoinColumn(name = "station_id", nullable = false)
-    private Station station;
+    @Column(name = "arrival_date")
+    private LocalDate arrivalDate;
 
-    @Column(name = "arrival_time")
-    private LocalDateTime arrivalTime;
-
-    @Column(name = "departure_time")
-    private LocalDateTime departureTime;
+    @Column(name = "departure_date")
+    private LocalDate departureDate;
 }
