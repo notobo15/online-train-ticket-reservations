@@ -1,18 +1,57 @@
-# Online Train Ticket Reservations
-
-## No. 14
-
-## Topic
+### Phải checkout dang branch `feat/web-ui`
 
 ```
- Đặt vé tàu lửa (tham khảo hệ thống đặt vé tàu lửa)
+git checkout feat/web-ui
 ```
 
-## Members
+### Đặt tên branch phù hợp với tasks
 
-| STT | MSSV | FullName | Role | Tasks | Results
-| - | - | - | - | - | - | 
-| 5 | 3121410082 | Nguyễn Thanh Bình 
-| 46 | 3121410254 | Nguyễn Hoàng Khang 
-| 47 | 3121410265 | Nguyễn Huy Khiêm 
-| 113 | 3121410274 | Nguyễn Nhật Khoa
+```
+git checkout -b feat/web-ui/...
+```
+
+# Tasks
+
+## 1. Client
+
+### 1. Trang Home: giới thiệu về đặt vé tàu
+
+### 2. Trang Search: nhập thôn tin form - chọn chổ - đặt vé - thanh toán.
+
+### 3. Trang check ticket: kiểm tra thông tin vé đã đặt.
+
+### 4. Trang Đăng nhập.
+
+### 5. Trang Đăng ký.
+
+### 6. Trang return ticket: trả vé.
+
+### 7. Trang policy: Xem thông tin qui định, điều lệ.
+
+### 8. Trang Schedule: Xem thông tin lịnh trình tàu.
+
+### 9. Trang booking info: tra cứu thông tin đặt chỗ.
+
+### 10. Trang quản lý tài khoản.
+
+## 2. Admin
+
+### 1. Quản lý users
+
+### 2. Quản lý trains
+
+### 3. Quản lý routes
+
+### 4. Quản lý railways
+
+### 5. Quản lý seats
+
+### 6. Quản lý price
+
+### 7. Quản lý type seats
+
+### 8. Quản lý type cariage
+
+### 9. Quản lý cariage
+
+### 10. Quản lý ticket
