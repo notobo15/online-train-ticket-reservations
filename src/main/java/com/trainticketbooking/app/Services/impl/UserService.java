@@ -1,7 +1,9 @@
-package com.trainticketbooking.app.Services;
+package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.UserRepository;
+import com.trainticketbooking.app.Services.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

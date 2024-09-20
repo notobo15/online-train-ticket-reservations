@@ -1,4 +1,4 @@
-package com.trainticketbooking.app.Services;
+package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Seat;

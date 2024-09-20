@@ -1,4 +1,4 @@
-package com.trainticketbooking.app.Services;
+package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Dtos.SeatDto;
 import com.trainticketbooking.app.Repos.SeatRepository;
@@ -14,8 +14,8 @@ public class SeatService {
     private SeatRepository seatRepository;
 
     // Lấy danh sách ghế theo mã tàu
-//    public List<SeatDto> getSeats(Long trainId) {
-//        // Tìm kiếm ghế từ cơ sở dữ liệu
-//        return seatRepository.findByTrainId(trainId);
-//    }
+    // public List<SeatDto> getSeats(Long trainId) {
+    // // Tìm kiếm ghế từ cơ sở dữ liệu
+    // return seatRepository.findByTrainId(trainId);
+    // }
 }

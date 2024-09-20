@@ -2,9 +2,10 @@ package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Repos.*;
-import com.trainticketbooking.app.Services.RailwayNetworkService;
-import com.trainticketbooking.app.Services.RailwayRouteService;
-import com.trainticketbooking.app.Services.TrainService;
+import com.trainticketbooking.app.Services.impl.RailwayNetworkService;
+import com.trainticketbooking.app.Services.impl.RailwayRouteService;
+import com.trainticketbooking.app.Services.impl.TrainService;
+
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
