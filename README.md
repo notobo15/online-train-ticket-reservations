@@ -1,13 +1,31 @@
-### Phải checkout dang branch `feat/web-ui`
+### Git clone project
 
 ```
-git checkout feat/web-ui
+git clone  https://github.com/notobo15/online-train-ticket-reservations.git
+```
+
+### Fetch branch ui về lobal branch
+
+```
+git fetch origin origin/feat/ui:feat/ui
+```
+
+###
+
+```
+git checkout feat/ui
+```
+
+### Phải checkout sang branch `feat/ui`
+
+```
+git checkout -b feat/ui....
 ```
 
 ### Đặt tên branch phù hợp với tasks
 
 ```
-git checkout -b feat/web-ui/...
+git checkout -b feat/ui/...
 ```
 
 # Tasks
@@ -55,3 +73,5 @@ git checkout -b feat/web-ui/...
 ### 9. Quản lý cariage
 
 ### 10. Quản lý ticket
+
+### 11. Quản lý passenger
