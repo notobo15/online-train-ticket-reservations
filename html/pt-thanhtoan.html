@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phương thức thanh toán</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .payment-option {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .payment-option img {
+            max-height: 30px;
+            margin-right: 10px;
+        }
+        .bounce-btn {
+            transition: transform 0.1s ease;
+            /* Hiệu ứng chuyển đổi khi phóng to trở lại */
+        }
+        
+        .bounce-btn:active {
+            transform: scale(0.9);
+            /* Nút sẽ nhỏ lại khi được nhấn */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                PHƯƠNG THỨC THANH TOÁN
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="vnpay">
+                            <label class="form-check-label" for="vnpay">
+                                <img src="img/path_to_vnpay_logo.png" alt="VNPAY">
+                                Thanh toán trực tuyến qua cổng thanh toán VNPAY
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            - QR Pay trên ứng dụng Mobile Banking của các ngân hàng và Ví VNPAY (quét mã VNPAY-QR để
+                            thanh toán)<br>
+                            - Thẻ quốc tế phát hành trong nước và nước ngoài: Visa, Master, JCB, UnionPay, Amex, Google
+                            Pay, Apple Pay, Samsung Pay<br>
+                            - Thẻ ATM/Tài khoản nội địa
+                        </small>
+                    </div>
+
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="momo">
+                            <label class="form-check-label" for="momo">
+                                <img src="img/path_to_momo_logo.png" alt="MoMo">
+                                Thanh toán trực tuyến qua ví điện tử MoMo
+                            </label>
+                        </div>
+                        <small class="text-muted">- Nhập mã MOMODSVN giảm đến 100k tại mục Ưu đãi</small>
+                    </div>
+
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="napas">
+                            <label class="form-check-label" for="napas">
+                                <img src="img/path_to_napas_logo.png" alt="Napas">
+                                Thanh toán trực tuyến qua cổng thanh toán Napas
+                            </label>
+                        </div>
+                        <small class="text-muted">-Bằng thẻ nội địa, thẻ quốc tế qua cổng của công ty cổ phần thanh toán
+                            quốc gia Việt Nam - Napas</small>
+                    </div>
+
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="zalopay" checked>
+                            <label class="form-check-label" for="zalopay">
+                                <img src="img/path_to_zalopay_logo.png" alt="ZaloPay">
+                                Thanh toán trực tuyến qua ví điện tử ZaloPay
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            - Thanh toán bằng hình thức Quét mã QR sử dụng ví điện tử ZaloPay<br>
+                            - Nhập mã TAU200 giảm 3% tối đa 200.000 VNĐ cho đơn hàng có giá trị thanh toán từ 300.000
+                            VNĐ thanh toán qua ZaloPay
+                        </small>
+                    </div>
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="payoo" checked>
+                            <label class="form-check-label" for="payoo">
+                                <img src="img/payoo.png" alt="payoo">
+                                Thanh toán trực tuyến qua cổng thanh toán Payoo
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            - Ví điện tử, thẻ nội địa, thẻ quốc tế qua cổng thanh toán Payoo
+                        </small>
+                    </div>
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="shopeepay" checked>
+                            <label class="form-check-label" for="shopeepay">
+                                <img src="img/shopeepay.png" alt="shopeepay">
+                                Thanh toán trực tuyến qua ví điện tử ShopeePay
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            - Thanh toán bằng hình thức Quét mã QR sử dụng ví điện tử ShopeePay
+                            - Nhập mã SPPDSVN09 tại mục Mã giảm giá trên Ví ShopeePay: Giảm 15k cho đơn từ 150k (Áp
+                            dụng từ 1/9 - 30/09)
+                        </small>
+                    </div>
+                    <div class="payment-option">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="tt_trasau" checked>
+                            <label class="form-check-label" for="tt_trasau">
+                                <img src="img/tt_trasau.png" alt="tt_trasau">
+                                hanh toán trả sau bằng tiền mặt, internet banking tại các điểm giao dịch:
+                            </label>
+                        </div>
+                        <small class="text-muted">
+                            - Tại các nhà ga, các điểm bưu cục VNPost, ngân hàng VIB, Payoo, Internet Banking
+                            (Phương thức thanh toán trả sau sẽ tạm dừng từ ngày 01/10/2024)
+                        </small>
+                    </div>
+
+                    <!-- Thêm các phương thức thanh toán khác tương tự -->
+
+                </form>
+
+            </div>
+            <div class="card-footer">
+
+                <div class="row mt-3 d-flex justify-content-between mx-1">
+
+                    <button type="button" class="btn btn-primary bounce-btn">&lt;&lt; Quay lại Thông tin giỏ vé</button>
+                    <button type="button" class="btn btn-primary bounce-btn">Thanh toán &gt;&gt;</button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
