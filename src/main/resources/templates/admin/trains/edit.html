@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/layout}"
+>
+
+<body>
+<div layout:fragment="content">
+    <h3>Edit Train</h3>
+    <form th:action="@{/trains/edit/{id}(id=${train.trainId})}" th:object="${train}" method="post">
+        <label for="trainNumber">Số hiệu tàu:</label>
+        <input type="text" th:field="*{trainNumber}" id="trainNumber"/>
+
+        <label for="trainType">Loại tàu:</label>
+        <input type="text" th:field="*{trainType}" id="trainType"/>
+
+        <button type="submit">Lưu</button>
+    </form>
+</div>
+
+</body>
+</html>
