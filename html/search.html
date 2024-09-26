@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -20,4 +20,524 @@
   <body>
     <h1>Trang Tìm kiếm chuyến tàu</h1>
   </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt vé tàu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- <script src="https://kit.fontawesome.com/563866a00e.js" crossorigin="anonymous"></script> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/search.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row mb-4" id="chieudi">
+                    <div class="col-12 text-center">
+                        <h5 class="journey-header">Chiều đi: ngày 27/09/2024 từ Sài Gòn đến Hà Nội</h5>
+                    </div>
+                    <!-- Danh sách các đoàn tàu -->
+                    <div class="col-12">
+                        <div class="d-flex flex-nowrap overflow-auto pb-1">
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <!-- Toa tàu -->
+                    <div class="col-12 mt-1">
+                        <div class="train-composition d-flex justify-content-center align-items-center">
+
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip" title="Toa 9">9
+
+
+                            </button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 9">9</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 8">8</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 7">7</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 6">6</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 5">5</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 4">4</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 3">3</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 2">2</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 1">1</button>
+                            <div class="train-car locomotive"><i class="fas fa-train"></i></div>
+                        </div>
+                    </div>
+                    <!-- Sơ đồ toa tàu -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h5>Toa số 1: Ngồi mềm điều hòa</h5>
+                        </div>
+                        <div class="col-12 ">
+                            <div class="d-flex align-items-stretch">
+                                <button class="btn btn-primary me-1 bounce-btn" style="height: 170px;">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <!-- ... existing code ... -->
+                                <div class="border border-primary p-3 rounded-3 flex-grow-1 pt-md-2 pb-md-2"
+                                    id="seat-map" style="height: 170px; overflow-x: auto;">
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex">
+                                            <div class="d-flex flex-column justify-content-around" style="width: 30px;">
+                                                <span class="mb-1">T3</span>
+                                                <span class="mb-1">T2</span>
+                                                <span>T1</span>
+                                            </div>
+                                            <!-- 7 khoang -->
+                                            <div class="d-flex justify-content-between  flex-grow-1" id="coach-list">
+                                                <!-- Khoang 1 -->
+
+                                                <div class="d-flex flex-wrap-reverse " id="coach" style="width: 77px;">
+                                                    <div class="d-flex  flex-column me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm  btn-danger">1</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">2</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">3</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">4</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">5</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">6</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                </div>
+                                                <!-- Repeat this structure for the remaining 6 khoang -->
+                                                <!-- ... -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Khoang labels -->
+                                        <div class="d-flex mt-2" id="khoang-labels">
+                                            <div style="width: 30px;"></div> <!-- Spacer for alignment -->
+                                            <div class="d-flex justify-content-between  flex-grow-1">
+                                                <span>Khoang 1</span>
+                                                <span>Khoang 2</span>
+                                                <span>Khoang 3</span>
+                                                <span>Khoang 4</span>
+                                                <span>Khoang 5</span>
+                                                <span>Khoang 6</span>
+                                                <span>Khoang 7</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ... existing code ... -->
+                                <button class="btn btn-primary ms-1 bounce-btn" style="height: 170px;">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4 mt-5" id="chieuve">
+                    <div class="col-12 text-center">
+                        <h5 class="journey-header">Chiều về: ngày 27/09/2024 từ Hà Nội đến Sài Gòn</h5>
+                    </div>
+                    <!-- Danh sách các đoàn tàu -->
+                    <div class="col-12">
+                        <div class="d-flex flex-nowrap overflow-auto pb-1">
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+                            <div class="card train-card rounded-bottom-4 rounded-top-2 flex-shrink-0 mx-2">
+                                <div class="card-header train-header py-2">
+                                    SE8
+                                </div>
+                                <div class="card-body train-body p-2">
+                                    <div class="station-info">
+                                        <div class="departure">
+                                            <small class="text-muted">Ga đi: Sài Gòn</small>
+                                            <div class="fs-6">27/09 06:00</div>
+                                        </div>
+                                        <div class="journey-arrow">
+                                            <i class="fas fa-long-arrow-alt-down"></i>
+                                        </div>
+                                        <div class="arrival">
+                                            <small class="text-muted">Ga đến: Hà Nội</small>
+                                            <div class="fs-6">28/09 19:12</div>
+                                        </div>
+                                    </div>
+                                    <div class="train-stats mt-2">
+                                        <span class="booked">26 đã đặt</span>
+                                        <span class="available">205 trống</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer train-footer p-0">
+                                    <div class="train-base"></div>
+                                    <div class="wheel"></div>
+                                    <div class="wheel"></div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <!-- Toa tàu -->
+                    <div class="col-12 mt-1">
+                        <div class="train-composition d-flex justify-content-center align-items-center">
+
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip" title="Toa 9">9
+
+
+                            </button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 9">9</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 8">8</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 7">7</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 6">6</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 5">5</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 4">4</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 3">3</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 2">2</button>
+                            <button class="btn btn-outline-success train-car " data-bs-toggle="tooltip"
+                                title="Toa 1">1</button>
+                            <div class="train-car locomotive"><i class="fas fa-train"></i></div>
+                        </div>
+                    </div>
+                    <!-- Sơ đồ toa tàu -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h5>Toa số 1: Ngồi mềm điều hòa</h5>
+                        </div>
+                        <div class="col-12 ">
+                            <div class="d-flex align-items-stretch">
+                                <button class="btn btn-primary me-1 bounce-btn" style="height: 170px;">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <!-- ... existing code ... -->
+                                <div class="border border-primary p-3 rounded-3 flex-grow-1 pt-md-2 pb-md-2"
+                                    id="seat-map" style="height: 170px; overflow-x: auto;">
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex">
+                                            <div class="d-flex flex-column justify-content-around" style="width: 30px;">
+                                                <span class="mb-1">T3</span>
+                                                <span class="mb-1">T2</span>
+                                                <span>T1</span>
+                                            </div>
+                                            <!-- 7 khoang -->
+                                            <div class="d-flex justify-content-between  flex-grow-1" id="coach-list">
+                                                <!-- Khoang 1 -->
+
+                                                <div class="d-flex flex-wrap-reverse " id="coach" style="width: 77px;">
+                                                    <div class="d-flex  flex-column me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm  btn-danger">1</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">2</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">3</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">4</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">5</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                    <div class="d-flex flex-column  me-1 mb-1" id="khoang-con">
+                                                        <button class="btn btn-sm btn-danger">6</button>
+                                                        <span class="bg-secondary rounded-1"
+                                                            style="width: 30px; height: 5px;"></span>
+                                                    </div>
+                                                </div>
+                                                <!-- Repeat this structure for the remaining 6 khoang -->
+                                                <!-- ... -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Khoang labels -->
+                                        <div class="d-flex mt-2" id="khoang-labels">
+                                            <div style="width: 30px;"></div> <!-- Spacer for alignment -->
+                                            <div class="d-flex justify-content-between  flex-grow-1">
+                                                <span>Khoang 1</span>
+                                                <span>Khoang 2</span>
+                                                <span>Khoang 3</span>
+                                                <span>Khoang 4</span>
+                                                <span>Khoang 5</span>
+                                                <span>Khoang 6</span>
+                                                <span>Khoang 7</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ... existing code ... -->
+                                <button class="btn btn-primary ms-1 bounce-btn" style="height: 170px;">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Thông tin hành trình</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="departure" class="form-label">Ga đi</label>
+                                <input type="text" class="form-control" id="departure" placeholder="Sài Gòn">
+                            </div>
+                            <div class="mb-3">
+                                <label for="arrival" class="form-label">Ga đến</label>
+                                <input type="text" class="form-control" id="arrival" placeholder="Hà Nội">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticket-type" class="form-label">Loại vé</label>
+                                <select class="form-control" id="ticket-type">
+                                    <option value="one-way">Một chiều</option>
+                                    <option value="round-trip">Khứ hồi</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Ngày đi</label>
+                                <input type="date" class="form-control" id="date">
+                            </div>
+                            <div class="mb-3">
+                                <label for="return-date" class="form-label">Ngày về</label>
+                                <input type="date" class="form-control" id="return-date">
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-sm bounce-btn">Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Giỏ vé</h5>
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                    <div class="card-footer">
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-sm bounce-btn">Đặt vé</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="js/search.js"></script>
+</body>
+
 </html>
