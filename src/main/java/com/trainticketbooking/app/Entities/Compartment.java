@@ -19,8 +19,8 @@ public class Compartment {
     @JoinColumn(name = "carriage_id", nullable = false)
     private Carriage carriage;
 
-    @OneToMany(mappedBy = "compartment")
-    private List<Seat> seats;
+//    @OneToMany(mappedBy = "compartment")
+//    private List<Seat> seats;
 
     @Column(name = "compartment_number", nullable = false)
     private String compartmentNumber;

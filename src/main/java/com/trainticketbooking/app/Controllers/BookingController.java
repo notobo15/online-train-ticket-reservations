@@ -2,11 +2,10 @@ package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Repos.*;
+
 import com.trainticketbooking.app.Services.impl.RailwayNetworkService;
 import com.trainticketbooking.app.Services.impl.RailwayRouteService;
 import com.trainticketbooking.app.Services.impl.TrainService;
-
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +17,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,8 +27,8 @@ public class BookingController {
     @Autowired
     private StationRepository stationRepository;
 
-    @Autowired
-    private TrainScheduleRepository trainScheduleRepository;
+//    @Autowired
+//    private TrainScheduleRepository trainScheduleRepository;
 
     @Autowired
     private CarriageRepository carriageRepository;
@@ -41,8 +39,8 @@ public class BookingController {
     @Autowired
     private TrainRepository trainRepository;
 
-    @Autowired
-    private CompartmentRepository compartmentRepository;
+//    @Autowired
+//    private CompartmentRepository compartmentRepository;
 
     @Autowired
     private TrainService trainService;
