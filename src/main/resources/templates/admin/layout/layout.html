@@ -28,7 +28,7 @@
 <body>
 <div class="main-wrapper">
     <!-- partial:partials/_sidebar.html -->
-    <div th:include="~{admin/fragments/sidebar}"></div>
+    <div th:replace="~{admin/fragments/sidebar}"></div>
     <!-- partial -->
 
     <div class="page-wrapper">
@@ -36,8 +36,7 @@
 
         <div th:replace="~{admin/fragments/navbar}"></div>
         <!-- partial -->
-        <div layout:fragment="content"></div>
-
+        <div layout:fragment="content" class="page-content"></div>
 
         <!-- partial:partials/_footer.html -->
         <div th:replace="~{admin/fragments/footer}"></div>
