@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin hành trình - Đường sắt Việt Nam</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") no-repeat right 0.75rem center/8px 10px;
+        }
+
+        .bounce-btn {
+            transition: transform 0.1s ease;
+            /* Hiệu ứng chuyển đổi khi phóng to trở lại */
+        }
+
+        .bounce-btn:active {
+            transform: scale(0.9);
+            /* Nút sẽ nhỏ lại khi được nhấn */
+        }
+
+
+        .badge-pill {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                THÔNG TIN HÀNH TRÌNH
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="departure">Ga đi</label>
+                            <select id="departure" class="form-control custom-select">
+                                <option selected>Hà Nội (HNO)</option>
+                                <option>Sài Gòn (SGO)</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="arrival">Ga đến</label>
+                            <select id="arrival" class="form-control custom-select">
+                                <option>Hà Nội (HNO)</option>
+                                <option selected>Sài Gòn (SGO)</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="date">Ngày đi</label>
+                            <input type="date" class="form-control" id="date" value="2024-10-16">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary btn-block bounce-btn">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+        
+                <div class="mt-2">
+                    <h3>Kết quả tìm kiếm</h3>
+                    <table class="table table-bordered table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>Mã tàu</th>
+                                <th>Ga đi</th>
+                                <th>Ga đến</th>
+                                <th>Giờ đi</th>
+                                <th>Giờ đến</th>
+                                <th>Thời gian</th>
+                                <th>Giá từ</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SE7</td>
+                                <td>Hà Nội</td>
+                                <td>Sài Gòn</td>
+                                <td>06:00</td>
+                                <td>04:39 (+1)</td>
+                                <td>33h 39m</td>
+                                <td>1,025,000 ₫</td>
+                                <td><button class="btn btn-sm btn-outline-primary bounce-btn">Chọn</button></td>
+                            </tr>
+                            <tr>
+                                <td>SE3</td>
+                                <td>Hà Nội</td>
+                                <td>Sài Gòn</td>
+                                <td>19:30</td>
+                                <td>17:29 (+1)</td>
+                                <td>32h 59m</td>
+                                <td>1,110,000 ₫</td>
+                                <td><button class="btn btn-sm btn-outline-primary bounce-btn">Chọn</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        <hr>
+                <div class="container mt-2">
+                    <h3>Chi tiết hành trình</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="card-title text-center mb-0">
+                                        <i class="fas fa-train text-primary mr-2"></i> Tàu SE7
+                                    </h5>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-5 text-center text-md-right">
+                                            <h6 class="mb-1">Ga đi: Hà Nội</h6>
+                                            <p class="mb-0 text-muted">Ngày đi: 16/10/2024 06:10</p>
+                                        </div>
+                                        <div class="col-md-2 text-center my-3 my-md-0">
+                                            <i class="fas fa-long-arrow-alt-right fa-2x text-primary"></i>
+                                        </div>
+                                        <div class="col-md-5 text-center text-md-left">
+                                            <h6 class="mb-1">Ga đến: Sài Gòn</h6>
+                                            <p class="mb-0 text-muted">Ngày đến: 17/10/2024 18:10</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <span class="badge badge-primary p-2">Thời gian hành trình: 1 ngày 12 giờ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Các ga trong hành trình</h6>
+                                    <ul class="list-group list-group-flush" style="height: 600px; overflow-y: auto;">
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">1</span>
+                                            <div>
+                                                <h6 class="mb-0">Hà Nội</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 0 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        
+                                        
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">2</span>
+                                            <div>
+                                                <h6 class="mb-0">Phủ Lý</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 59 km | Ngày đi: 16/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                        <!-- Thêm các ga khác tương tự -->
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <span class="badge badge-primary badge-pill mr-3">34</span>
+                                            <div>
+                                                <h6 class="mb-0">Sài Gòn</h6>
+                                                <small class="text-muted">
+                                                    Cự ly: 1726 km | Ngày đi: 17/10/2024 | Giờ đến: 06:10 | Giờ đi: 06:10
+                                                </small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Bảng giá vé</h6>
+                                    <table class="table table-sm table-striped text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Mã</th>
+                                                <th>Loại chỗ</th>
+                                                <th>Giá vé (₫)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tầng 1, khoang có 4 giường</td>
+                                                <td>AnLT1</td>
+                                                <td>1,599,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tầng 1, khoang có 4 giường</td>
+                                                <td>AnLT1</td>
+                                                <td>1,599,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tầng 1, khoang có 4 giường</td>
+                                                <td>AnLT1</td>
+                                                <td>1,599,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tầng 1, khoang có 4 giường</td>
+                                                <td>AnLT1</td>
+                                                <td>1,599,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tầng 1, khoang có 4 giường</td>
+                                                <td>AnLT1</td>
+                                                <td>1,599,000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="text-muted small">Chú ý: Giá vé đã bao gồm tiền bảo hiểm.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+      
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

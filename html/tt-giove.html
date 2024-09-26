@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin giỏ vé</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .custom-alert {
+            background-color: #e6f3ff;
+            border-color: #b8daff;
+        }
+
+        .table-header {
+            background-color: #f8f9fa;
+        }
+
+        .delete-icon {
+            color: #007bff;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .bounce-btn {
+            transition: transform 0.1s ease;
+            /* Hiệu ứng chuyển đổi khi phóng to trở lại */
+        }
+
+        .bounce-btn:active {
+            transform: scale(0.9);
+            /* Nút sẽ nhỏ lại khi được nhấn */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                THÔNG TIN GIỎ VÉ
+            </div>
+            <div class="card-body">
+                <div class="alert custom-alert" role="alert">
+                    <p><strong>Các vé có biểu tượng ⚠️ là các vé bị hết thời gian tạm giữ. Xin vui lòng loại bỏ các vé
+                            này khỏi danh sách vé đặt mua trước khi thực hiện giao dịch thanh toán tiền.</strong></p>
+                    <p>Quý khách vui lòng điền đầy đủ, chính xác tất cả các thông tin về hành khách đi tàu bao gồm: Họ
+                        tên đầy đủ, số giấy tờ tùy thân (Số chứng minh nhân dân hoặc số hộ chiếu hoặc số giấy phép lái
+                        xe đường bộ được pháp luật Việt Nam công nhận hoặc ngày tháng năm sinh nếu là trẻ em hoặc thẻ
+                        sinh viên nếu là sinh viên). Để đảm bảo an toàn, minh bạch trong quá trình bán vé các thông tin
+                        này sẽ được nhân viên soát vé kiểm tra trước khi lên tàu theo đúng các quy định của Tổng công ty
+                        Đường sắt Việt Nam.</p>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead class="table-header text-center">
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Thông tin chỗ</th>
+                            <th>Giá vé</th>
+                            <th>Giảm đối tượng</th>
+                            <th>Khuyến mại</th>
+                            <th>Bảo hiểm</th>
+                            <th>Thành tiền (VNĐ)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" placeholder="Họ tên">
+                                <select class="form-control mt-2">
+                                    <option>Người lớn</option>
+                                    <option>Trẻ em</option>
+                                </select>
+                                <input type="text" class="form-control mt-2" placeholder="Số CMND/ Hộ chiếu/ Ngày sinh">
+                            </td>
+                            <td>Giờ trong 323 giây<br>SE7 Hà Nội-Sài Gòn<br>27/09/2024 06:10<br>Toa 1 chỗ 8<br>Ngồi mềm
+                            </td>
+                            <td>954,000</td>
+                            <td>0</td>
+                            <td>Không có khuyến mại cho vé này</td>
+                            <td>1,000</td>
+                            <td>955,000</td>
+                            <td class="text-center align-middle ">
+                                <i class="fas fa-trash delete-icon bounce-btn"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-primary bounce-btn"><i class="fas fa-trash"></i> Xóa tất cả các
+                        vé</button>
+                    <div class="d-flex align-items-center">
+                        <input type="text" class="form-control d-inline-block" placeholder="Nhập mã giảm giá tại đây"
+                            style="width: 215px;">
+                        <button class="btn btn-primary bounce-btn">Áp dụng</button>
+                    </div>
+                    <h5>Tổng tiền: 955,000</h5>
+                </div>
+
+                <hr>
+
+                <h5 class="text-primary">Thông tin người đặt vé</h5>
+                <p>Quý khách vui lòng điền đầy đủ và chính xác các thông tin về người mua vé dưới đây. Các thông tin này
+                    sẽ được sử dụng để xác minh người mua vé và lấy vé tại ga trước khi lên tàu theo đúng các quy định
+                    của Tổng công ty Đường sắt Việt Nam.</p>
+
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fullName">Họ và tên*</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Họ và tên">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="idNumber">Số CMND/Hộ chiếu*</label>
+                            <input type="text" class="form-control" id="idNumber" placeholder="Số CMND/Hộ chiếu">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="confirmEmail">Xác nhận email</label>
+                            <input type="email" class="form-control" id="confirmEmail" placeholder="Xác nhận email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số di động*</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Số di động">
+                    </div>
+                </form>
+
+                <hr>
+
+                <h5 class="text-primary">Thông tin xuất hóa đơn điện tử</h5>
+                <p class="text-danger"> - Tổng công ty ĐSVN phát hành hóa đơn điện tử đối với tất cả các vé bán ra</p>
+                <p class="text-danger"> - Trường hợp khách hàng không nhập thông tin hóa đơn dưới đây, ĐSVN sẽ xuất hóa
+                    đơn theo thông tin mua hàng </p>
+
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fullName">Người mua hàng*</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Người mua hàng">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="idNumber">Mã số thuế*</label>
+                            <input type="text" class="form-control" id="idNumber" placeholder="Mã số thuế">
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="email">Tên Công ty/Đơn vị</label>
+                        <input type="email" class="form-control" id="email" placeholder="Tên Công ty/Đơn vị">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="phone">Số di động*</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Số di động">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="agreementCheckbox">
+                            <label class="form-check-label" for="agreementCheckbox">
+                                Tôi đã đọc kỹ và đồng ý tuân thủ tất cả các <a href="#">quy định mua vé trực tuyến</a>,
+                                các <a href="#">chương trình khuyến mại</a> của Tổng công ty đường sắt Việt Nam và chịu
+                                trách nhiệm về tính xác thực của các thông tin trên.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3 d-flex justify-content-between mx-1">
+
+                    <button type="button" class="btn btn-primary bounce-btn">&lt;&lt; Quay lại</button>
+
+
+                    <button type="button" class="btn btn-primary bounce-btn">Phương thức thanh toán &gt;&gt;</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+
+</html>
