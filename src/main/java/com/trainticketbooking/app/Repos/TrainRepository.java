@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.trainticketbooking.app.Entities.Train;
 
 @Repository
-public interface TrainRepository extends JpaRepository<Train, Long> {
+public interface TrainRepository extends JpaRepository<Train, Integer> {
 }
