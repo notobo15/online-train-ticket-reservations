@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+
+
+    <!-- bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-center mb-2">
+                    <h1 class="text-primary">Update Route</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">ID:</h5>
+                                <span>123</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Date Number:</h5>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Distance:</h5>
+                                <span>123 km</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Station Number:</h5>
+                                <span>4</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Start Station:</h5>
+                                <select class="form-select" id="start_station" name="start_station_id">
+                                    <option value="1">Station A</option>
+                                    <option value="2">Station B</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">End Station:</h5>
+                                <select class="form-select" id="start_station" name="start_station_id">
+                                    <option value="1">Station A</option>
+                                    <option value="2">Station B</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Departure Date:</h5>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Departure Time:</h5>
+                                <input type="text" class="timePicker form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Arrival Date:</h5>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Arrival Time:</h5>
+                                <input type="time" class="timePicker form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-danger btn-lg me-2">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </button>
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fa-solid fa-check"></i> Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+    let isDisabled = false;
+    document
+        .getElementById("togglePassword")
+        .addEventListener("click", function () {
+            const passwordInput = document.getElementById("password");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            // Toggle the type attribute
+            const type =
+                passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+
+            // Toggle the eye icon
+            eyeIcon.classList.toggle("fa-eye-slash");
+            eyeIcon.classList.toggle("fa-eye");
+        });
+
+</script>
+
+</html>
