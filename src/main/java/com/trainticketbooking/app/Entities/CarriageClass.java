@@ -1,16 +1,19 @@
 package com.trainticketbooking.app.Entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "carriage_class")
 public class CarriageClass {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        @Column(name = "carriage_class_id")
+        private Integer CarriageClassId;
 
         private String name;
 

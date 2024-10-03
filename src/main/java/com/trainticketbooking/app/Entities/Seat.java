@@ -13,7 +13,7 @@ public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_id")
-    private Long seatId;
+    private Integer seatId;
 
     // @ManyToOne
     // @JoinColumn(name = "compartment_id", nullable = true)

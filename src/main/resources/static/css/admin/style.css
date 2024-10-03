@@ -1,0 +1,12 @@
+.actions,
+.size-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.actions svg {
+    width: 20px;
+    height: 20px;
+}
+

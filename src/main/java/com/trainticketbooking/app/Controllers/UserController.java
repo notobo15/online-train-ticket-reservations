@@ -20,14 +20,14 @@ public class UserController {
 
     @GetMapping
     public String getAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
+        List<User> users = userService.getAll();
         model.addAttribute("users", users);
         return "users/list"; // Đường dẫn đến file view hiển thị danh sách người dùng
     }
 
     @GetMapping("/{id}")
     public String getUserById(@PathVariable("id") Integer id, Model model) {
-        Optional<User> user = userService.getUserById(id);
+        Optional<User> user = userService.getById(id);
         model.addAttribute("user", user.orElse(null));
         return "users/view"; // Đường dẫn đến file view hiển thị chi tiết người dùng
     }
@@ -40,13 +40,13 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/update/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        Optional<User> user = userService.getUserById(id);
+        Optional<User> user = userService.getById(id);
         model.addAttribute("user", user.orElse(null));
         return "users/update"; // Đường dẫn đến file view chỉnh sửa người dùng
     }
@@ -54,13 +54,13 @@ public class UserController {
     @PostMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @ModelAttribute("user") User user) {
         user.setUserId(id); // Đảm bảo cập nhật đúng người dùng
-        userService.saveUser(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id) {
-        userService.deleteUserById(id);
+        userService.deleteById(id);
         return "redirect:/users";
     }
 }

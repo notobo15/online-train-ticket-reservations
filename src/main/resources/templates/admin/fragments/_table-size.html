@@ -1,0 +1,9 @@
+<div class="size-wrapper">
+    <span>Show</span>
+    <select id="pageSize" class="form-select form-select-sm" th:onchange="location.href='?size=' + this.value">
+        <option th:value="5" th:selected="${size == 5}">5</option>
+        <option th:value="10" th:selected="${size == 10}">10</option>
+        <option th:value="20" th:selected="${size == 20}">20</option>
+        <option th:value="50" th:selected="${size == 50}">50</option>
+    </select>
+</div>

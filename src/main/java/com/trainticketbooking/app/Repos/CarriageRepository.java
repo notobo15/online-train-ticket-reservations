@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface CarriageRepository extends JpaRepository<Carriage, Long> {
+public interface CarriageRepository extends JpaRepository<Carriage, Integer> {
     List<Carriage> findByTrain(Train train);
 
     List<Carriage> findByTrainTrainId(Integer trainId);

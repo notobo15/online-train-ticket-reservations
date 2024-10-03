@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="head">
+    <style>
+        .wrapper {
+          border-radius: 10px;
+          border: 3px solid #385d8a;
+          margin: 0;
+          padding: 5px 10px;
+          height: 176px;
+        }
+
+        .carriage {
+          width: 47%;
+          float: left;
+          min-height: 1px;
+        }
+
+        .seat-wrapper {
+          width: 12.5%;
+          float: left;
+          min-height: 1px;
+          height: 35px;
+          padding: 0 2px;
+          line-height: 30px;
+        }
+
+        .seat {
+          height: 35px;
+          line-height: 30px;
+          width: 100%;
+          float: left;
+          padding: 0 2px;
+        }
+
+        .side {
+          width: 16%;
+          float: left;
+          min-height: 1px;
+          height: 100%;
+          background-color: #948a54;
+          border-radius: 2px;
+        }
+
+        .seat-outer {
+          height: 100%;
+          padding: 2px 2px 2px 0;
+        }
+
+        .seat-avaiable {
+          height: 100%;
+          border-radius: 5px;
+          border-top: 1px solid #888;
+          border-right: 1px solid #888;
+          border-bottom: 1px solid #888;
+          line-height: inherit;
+          font-size: 1em;
+          background-color: #fff;
+          cursor: pointer;
+          text-align: center;
+        }
+
+        .separated {
+          width: 100%;
+          height: 20px;
+          float: left;
+        }
+
+        .seperator {
+          width: 4%;
+          float: left;
+          height: 158px;
+          padding: 0 5px;
+        }
+
+        .seperator div {
+          height: 69px;
+          width: 100%;
+          background-color: #888;
+          border-radius: 5px;
+        }
+
+        .seperator div:first-child {
+          margin-bottom: 32px;
+          margin-top: -5px;
+        }
+
+        .floor-wrapper {
+          border-radius: 10px;
+          border: 3px solid #385d8a;
+          margin: 0;
+          padding: 25px 10px;
+          /* float: left; */
+          min-height: 1px;
+        }
+
+        .title {
+          width: 6.25%;
+          float: left;
+          min-height: 1px;
+          height: 158px;
+        }
+
+        .title div {
+          height: 40px;
+          line-height: 40px;
+          width: 99%;
+        }
+
+        .title-heading {
+          height: 40px;
+          line-height: 40px;
+          width: 93%;
+        }
+
+        .title-heading div {
+          width: 12.5%;
+          float: left;
+          min-height: 1px;
+          text-align: center !important;
+        }
+
+        .bed-wrapper {
+          height: 35px;
+          line-height: 30px;
+          width: 100%;
+          max-width: 100px;
+          float: left;
+          min-height: 1px;
+        }
+
+        .bed-outer {
+          padding-right: 2px;
+          padding-top: 3px;
+          padding-bottom: 10px;
+          height: 100%;
+        }
+
+        .bed {
+          height: 100%;
+          margin: 0 4px -8px;
+          border-radius: 5px;
+          border: 1px solid #888;
+          line-height: 25px;
+          text-align: center;
+          background-color: #fff;
+          cursor: pointer;
+        }
+
+        .bed-illu {
+          border-bottom: 3px solid #385d8a;
+          border-left: 3px solid #385d8a;
+          border-right: 3px solid #385d8a;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+          height: 10px;
+          line-height: 30px;
+        }
+
+        .bed-left {
+          border-left: 3px solid #385d8a;
+          height: 40px;
+        }
+
+        .bed-right {
+          border-right: 3px solid #385d8a;
+          height: 40px;
+        }
+
+        table th {
+          font-size: 12px;
+          text-align: center;
+        }
+
+        .bed-heading {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .bed-heading div {
+          height: 52px;
+          line-height: 2.4;
+        }
+
+        .bed-heading div:first-child {
+          height: 40px;
+        }
+
+        td {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+    </style>
+    <title>Seat Details</title>
+    <style>
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 50px);
+            grid-gap: 10px;
+        }
+        .seat {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .seat-occupied {
+            background-color: #ccc;
+        }
+        .floor-label {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .carriage-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+          .seat-layout {
+            display: grid;
+            grid-template-columns: repeat(12, 40px); /* 12 columns including aisles */
+            gap: 5px;
+            margin: 20px;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 5px;
+        }
+        .aisle {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+        }
+        .occupied {
+            background-color: #ff4d4d; /* Red for occupied seats */
+        }
+    </style>
+</div>
+
+<body>
+<div layout:fragment="content">
+    <h1>Seat Details</h1>
+
+    <div th:if="${carriages.size() == 0}">
+        <p>No carriages or seats available for this train.</p>
+    </div>
+
+    <div th:each="carriage : ${carriages}">
+        <div class="carriage-header" th:text="'Carriage ' + ${carriage.carNumber}"></div>
+
+        <div th:if="${carriage.totalFloors > 1}">
+            <!-- Multi-floor carriage layout -->
+            <div th:each="floor : ${floorNumbersMap[carriage.carriageId]}">
+                <div class="floor-label" th:text="'Floor ' + ${floor}"></div>
+                <div class="seat-grid">
+                    <div th:each="seat : ${availableSeats}"
+                         th:if="${seat.carriage.carriageId == carriage.carriageId} and ${seat.floor == floor}"
+                         th:classappend="${seat.status == 'occupied'} ? 'seat-occupied' : ''"
+                         th:text="${seat.seatNumber}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${carriage.totalFloors == 1}">
+            <!-- Single-floor carriage layout -->
+            <div class="seat-grid">
+                <div th:each="seat : ${availableSeats}"
+                     th:if="${seat.carriage.carriageId == carriage.carriageId}"
+                     th:classappend="${seat.status == 'occupied'} ? 'seat-occupied' : ''"
+                     th:text="${seat.seatNumber}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="et-car-nm-64-sit ng-isolate-scope" et-seat-right="" seat="seatMap[29]" direct="direct">
+        <div class="et-car-seat-right et-seat-h-35" analytics-on="click" analytics-event="SelectTicket"
+             ng-click="buyTicket(seat, direct)" ng-show="seat.Status">
+            <div class="et-col-84 et-sit-sur-outer-invert">
+                <div class="et-sit-sur-invert text-center et-sit-avaiable"
+                     ng-class="{'et-sit-booked': seat.Status.Status == 2,'et-sit-bought': seat.Status.Status == 1, 'et-sit-longer': seat.Status.Status == 5, 'et-sit-blocked': seat.Status.Status == 4 &amp;&amp; (!seat.Status.LyDo || seat.Status.LyDo.toLowerCase().indexOf('chỗ giãn cách') == -1), 'et-sit-avaiable': seat.Status.Status == 3, 'et-sit-buying': seat.Status.Status == 6, 'et-sit-distancing': seat.Status.Status == 4 &amp;&amp; seat.Status.LyDo &amp;&amp; seat.Status.LyDo.toLowerCase().indexOf('chỗ giãn cách') != -1}">
+                    <div data-popover="Giá: 1,095,000 VNĐ" data-popover-title="Chỗ trống"
+                         data-popover-trigger="mouseenter" data-popover-placement="top" class="et-sit-no ng-scope"><span
+                            ng-show="!seat.waiting" class="ng-binding">30</span> <img src="/images/loading51.gif"
+                                                                                      ng-show="seat.waiting"
+                                                                                      class="ng-hide"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:each="carriage : ${carriages}">
+        <!-- Hiển thị Carriage -->
+        <div class="row wrapper">
+            <!-- Lặp qua các ghế trong Carriage -->
+            <div th:if="${carriage.totalFloors == '1'}">
+                <div class="carriage">
+                    <th:block th:each="seat : ${carriage.seats}">
+                        <div th:if="${seat.seatNumber <= '32'}" class="seat-wrapper">
+                            <div class="seat">
+                                <div class="side"></div>
+                                <div class="seat-outer">
+                                    <!-- Hiển thị số ghế -->
+                                    <div class="seat-available" th:text="${seat.seatNumber}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="carriage">
+                    <th:block th:each="seat : ${carriage.seats}">
+
+
+                        <!-- Kiểm tra nếu seatNumber là 32, chèn separator -->
+                        <div th:if="${seat.seatNumber == 32}" class="seperator">
+                            <div></div>
+                            <div></div>
+                        </div>
+
+                    </th:block>
+                </div>
+                <div class="carriage">
+                    <th:block th:each="seat : ${carriage.seats}">
+                        <div th:if="${seat.seatNumber > 32}">
+                            <div class="seat-wrapper">
+                                <div class="seat">
+                                    <div class="side"></div>
+                                    <div class="seat-outer">
+                                        <!-- Hiển thị số ghế -->
+                                        <div class="seat-available" th:text="${seat.seatNumber}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div layout:fragment="scripts">
+    <script>
+        axios.get("/api/trains/8/carriages/1/available-seats")
+           .then(response => {
+           console.log(response.data);
+           })
+           .catch(error => {
+           console.error(error);
+           });
+    </script>
+</div>
+</body>
+</html>

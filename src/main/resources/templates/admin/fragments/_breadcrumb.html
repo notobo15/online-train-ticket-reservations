@@ -1,0 +1,12 @@
+<nav th:fragment="breadcrumb(title, links)">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a th:href="@{/admin}">Admin</a>
+        </li>
+        <li th:each="link : ${links}" class="breadcrumb-item" th:classappend="${link.active ? 'active' : ''}"
+            th:attrappend="${link.active ? 'aria-current=\'page\'' : ''}">
+            <a th:if="${!link.active}" th:href="${link.href}" th:text="${link.name}"></a>
+            <span th:if="${link.active}" th:text="${link.name}"></span>
+        </li>
+    </ol>
+</nav>
