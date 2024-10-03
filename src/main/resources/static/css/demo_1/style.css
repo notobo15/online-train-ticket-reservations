@@ -20872,8 +20872,8 @@ address p {
           white-space: nowrap;
           color: #000; }
           .sidebar .sidebar-body .nav .nav-item .nav-link .link-icon {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             fill: rgba(233, 236, 239, 0.21);
             position: absolute;
             color: inherit; }
@@ -20927,7 +20927,7 @@ address p {
             position: absolute;
             left: -25px; }
           .sidebar .sidebar-body .nav .nav-item.active .nav-link .link-icon {
-            fill: rgba(239, 243, 255, 0.5);
+            /* fill: rgba(239, 243, 255, 0.5); */
             color: #727cf5; }
       .sidebar .sidebar-body .nav.sub-menu {
         padding: 0 0 15px 33px; }
