@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Thêm Select2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+    <form method="post" action="/submit-form">
+        <label for="roles">Select Role:</label>
+        <select id="roles" name="roles" class="form-control" style="width: 100%;">
+            <!-- Các option sẽ được tải động từ server -->
+        </select>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#roles').select2({
+            ajax: {
+                url: 'http://localhost:8080/api/roles',
+                data: function (params) {
+                    return {
+                        search: params.term // Gửi từ khóa tìm kiếm tới server
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (role) {
+                            return { id: role, text: role };
+                        })
+                    };
+                }
+            },
+            placeholder: 'Select a role',
+            allowClear: true
+        });
+    });
+</script>
+
+</html>
