@@ -20,6 +20,9 @@ public class CarriageService implements ICarriageService {
     @Autowired
     private CarriageRepository carriageRepository;
 
+    @Autowired
+    private SeatRepository seatRepository;
+
     @Override
     public List<Carriage> getAll() {
         return carriageRepository.findAll();
@@ -27,7 +30,7 @@ public class CarriageService implements ICarriageService {
 
     @Override
     public Optional<Carriage> getById(Integer id) {
-        return carriageRepository.findById(Long.valueOf(id));
+        return carriageRepository.findById(id);
     }
 
     @Override
@@ -37,7 +40,7 @@ public class CarriageService implements ICarriageService {
 
     @Override
     public void deleteById(Integer id) {
-        carriageRepository.deleteById(Long.valueOf(id));
+        carriageRepository.deleteById(id);
     }
 
     @Override
@@ -54,5 +57,13 @@ public class CarriageService implements ICarriageService {
         } else {
             throw new RuntimeException("Carriage not found with ID: " + carriage.getCarriageId());
         }
+    }
+
+
+    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
+        Carriage carriage = carriageRepository.findById(carriageId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid carriage ID: " + carriageId));
+
+        return seatRepository.findByCarriage(carriage);
     }
 }
