@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div layout:fragment="head">
+    <style>
+        .train-block {
+          width: 120px;
+          height: 120px;
+          border-radius: 20px;
+          background: #999;
+          padding: 5px;
+          cursor: pointer;
+        }
+
+        .train-number {
+          height: 15px;
+          border-radius: 10px;
+          background-color: #fff;
+          display: inline-block;
+          font-size: 10px;
+          font-weight: 700;
+          width: 50px;
+          margin: 0 auto;
+        }
+
+        .carriage-block {
+          width: 50px;
+          height: 50px;
+          border-radius: 5px;
+          background: #666;
+          padding: 5px;
+          cursor: pointer;
+        }
+
+        .seat-info {
+          margin-top: 10px;
+        }
+
+        .wrapper {
+          border-radius: 10px;
+          border: 3px solid #385d8a;
+          margin: 0;
+          padding: 5px 10px;
+          height: 176px;
+        }
+
+        .carriage {
+          width: 47%;
+          float: left;
+          min-height: 1px;
+        }
+
+        .seat-wrapper {
+          width: 12.5%;
+          float: left;
+          min-height: 1px;
+          height: 35px;
+          padding: 0 2px;
+          line-height: 30px;
+        }
+
+        .seat {
+          height: 35px;
+          line-height: 30px;
+          width: 100%;
+          float: left;
+          padding: 0 2px;
+        }
+
+        .side {
+          width: 16%;
+          float: left;
+          min-height: 1px;
+          height: 100%;
+          background-color: #948a54;
+          border-radius: 2px;
+        }
+
+        .seat-outer {
+          height: 100%;
+          padding: 2px 2px 2px 0;
+        }
+
+        .seat-avaiable {
+          height: 100%;
+          border-radius: 5px;
+          border-top: 1px solid #888;
+          border-right: 1px solid #888;
+          border-bottom: 1px solid #888;
+          line-height: inherit;
+          font-size: 1em;
+          background-color: #fff;
+          cursor: pointer;
+          text-align: center;
+        }
+
+        .separated {
+          width: 100%;
+          height: 20px;
+          float: left;
+        }
+
+        .separator {
+          width: 4%;
+          float: left;
+          height: 158px;
+          padding: 0 5px;
+        }
+
+        .separator div {
+          height: 69px;
+          width: 100%;
+          background-color: #888;
+          border-radius: 5px;
+        }
+
+        .separator div:first-child {
+          margin-bottom: 32px;
+          margin-top: -5px;
+        }
+
+        .floor-wrapper {
+          border-radius: 10px;
+          border: 3px solid #385d8a;
+          margin: 0;
+          padding: 25px 10px;
+          /* float: left; */
+          min-height: 1px;
+        }
+
+        .title {
+          width: 6.25%;
+          float: left;
+          min-height: 1px;
+          height: 158px;
+        }
+
+        .title div {
+          height: 40px;
+          line-height: 40px;
+          width: 99%;
+        }
+
+        .title-heading {
+          height: 40px;
+          line-height: 40px;
+          width: 93%;
+        }
+
+        .title-heading div {
+          width: 12.5%;
+          float: left;
+          min-height: 1px;
+          text-align: center !important;
+        }
+
+        .bed-wrapper {
+          height: 35px;
+          line-height: 30px;
+          width: 100%;
+          max-width: 100px;
+          float: left;
+          min-height: 1px;
+        }
+
+        .bed-outer {
+          padding-right: 2px;
+          padding-top: 3px;
+          padding-bottom: 10px;
+          height: 100%;
+        }
+
+        .bed {
+          height: 100%;
+          margin: 0 4px -8px;
+          border-radius: 5px;
+          border: 1px solid #888;
+          line-height: 25px;
+          text-align: center;
+          background-color: #fff;
+          cursor: pointer;
+        }
+
+        .bed-illu {
+          border-bottom: 3px solid #385d8a;
+          border-left: 3px solid #385d8a;
+          border-right: 3px solid #385d8a;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+          height: 10px;
+          line-height: 30px;
+        }
+
+        .bed-left {
+          border-left: 3px solid #385d8a;
+          height: 40px;
+        }
+
+        .bed-right {
+          border-right: 3px solid #385d8a;
+          height: 40px;
+        }
+
+        table th {
+          font-size: 12px;
+          text-align: center;
+        }
+
+        .bed-heading {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .bed-heading div {
+          height: 52px;
+          line-height: 2.4;
+        }
+
+        .bed-heading div:first-child {
+          height: 40px;
+        }
+
+        td {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+    </style>
+</div>
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+
+                <h1>Available Trains</h1>
+
+                <!--    <table>-->
+                <!--        <thead>-->
+                <!--        <tr>-->
+                <!--            <th>Train Number</th>-->
+                <!--            <th>Train Type</th>-->
+                <!--            <th>Seats</th> &lt;!&ndash; Added column for seat details &ndash;&gt;-->
+                <!--        </tr>-->
+                <!--        </thead>-->
+                <!--        <tbody>-->
+                <!--        <tr th:each="train : ${availableTrains}">-->
+                <!--            <td th:text="${train.trainNumber}"></td>-->
+                <!--            <td th:text="${train.trainType}"></td>-->
+                <!--            <td>-->
+                <!--                &lt;!&ndash; Link to view seats of this train &ndash;&gt;-->
+                <!--                <a th:href="@{/trains/{trainId}/seats(trainId=${train.trainId})}">View Seats</a>-->
+                <!--            </td>-->
+                <!--        </tr>-->
+
+
+                <!--        </tbody>-->
+                <!--    </table>-->
+
+                <div class="d-flex" style="gap: 10px">
+                    <!-- Display available trains -->
+                    <th:block th:each="train : ${availableTrains}">
+                        <div class="train-block" th:data-train-id="${train.trainId}" onclick="loadCarriages(this)">
+                            <div class="text-center">
+                                <span class="train-number" th:text="${train.trainNumber}"></span>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <h2>Carriages</h2>
+                <div id="carriages-container" class="d-flex" style="gap: 10px;">
+                    <!-- Carriages will be loaded here -->
+                </div>
+
+                <h2>Seat Info</h2>
+                <div id="seats-container">
+                    <!-- Seat info will be displayed here -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        // Function to load carriages when a train is clicked
+        function loadCarriages(trainElement) {
+          const trainId = trainElement.getAttribute('data-train-id');
+
+          // Send API request to get carriages for the selected train
+          axios.get(`/api/trains/${trainId}/carriages`)
+            .then(response => {
+              const carriages = response.data;
+              const carriagesContainer = document.getElementById('carriages-container');
+              carriagesContainer.innerHTML = ''; // Clear previous carriages
+
+              // Render carriages
+              carriages.forEach(carriage => {
+                const carriageElement = document.createElement('div');
+                carriageElement.className = 'carriage-block';
+                carriageElement.setAttribute('data-carriage-id', carriage.carriageId);
+                carriageElement.innerText = carriage.carNumber;
+                carriageElement.onclick = () => loadSeats(carriage.carriageId); // Load seats when a carriage is clicked
+                carriagesContainer.appendChild(carriageElement);
+              });
+            })
+            .catch(error => {
+              console.error('Error loading carriages:', error);
+            });
+        }
+
+        function loadSeats(carriageId) {
+          // Send API request to get seat information for the selected carriage
+          axios.get(`/api/carriages/${carriageId}/seats`)
+            .then(response => {
+              const { seats, carriageType } = response.data;
+              if (carriageType.carriageClassId === 1)
+                renderCarriageClassEquals1(seats);
+              else if (carriageType.carriageClassId === 2)
+                renderCarriageClassEquals3(seats)
+              else if (carriageType.carriageClassId === 3)
+                renderCarriageClassEquals2(seats)
+            })
+            .catch(error => {
+              console.error('Error loading seats:', error);
+            });
+        }
+        function renderCarriageClassEquals1(seats) {
+
+          const seatsContainer = document.getElementById('seats-container');
+          seatsContainer.innerHTML = ''; // Xóa nội dung cũ trước khi thêm nội dung mới
+
+
+          // Create the container for the floors and compartment layout
+          const floorWrapper = document.createElement('div');
+          floorWrapper.className = 'row wrapper';
+
+          // Tạo container cho các ghế nhỏ hơn hoặc bằng 32
+          const firstHalfContainer = document.createElement('div');
+          firstHalfContainer.className = 'carriage';
+
+          // Tạo container cho separator
+          const separatorContainer = document.createElement('div');
+          separatorContainer.className = 'separator';
+          separatorContainer.innerHTML = '<div></div><div></div>';  // Tạo ngăn cách giữa hai phần
+
+          // Tạo container cho các ghế lớn hơn 32
+          const secondHalfContainer = document.createElement('div');
+          secondHalfContainer.className = 'carriage';
+
+          // Lặp qua danh sách ghế
+          seats.forEach(seat => {
+            const seatElement = document.createElement('div');
+            seatElement.className = 'seat-wrapper';
+            seatElement.innerHTML = `
+                      <div class="seat">
+                          <div class="side"></div>
+                          <div class="seat-outer">
+                              <div class="seat-available">${seat.seatNumber}</div>
+                          </div>
+                      </div>
+                  `;
+
+            // Phân loại ghế dựa trên số ghế
+            if (seat.seatNumber <= 32) {
+              firstHalfContainer.appendChild(seatElement);
+            } else {
+              secondHalfContainer.appendChild(seatElement);
+            }
+          });
+
+          // Thêm các container vào seatsContainer
+          floorWrapper.appendChild(firstHalfContainer); // Thêm ghế nhỏ hơn hoặc bằng 32
+          floorWrapper.appendChild(separatorContainer); // Thêm ngăn cách
+          floorWrapper.appendChild(secondHalfContainer); // Thêm ghế lớn hơn 32
+          seatsContainer.appendChild(floorWrapper)
+        }
+
+        function renderCarriageClassEquals2(seats) {
+          const seatsContainer = document.getElementById('seats-container');
+          seatsContainer.innerHTML = ''; // Clear previous content
+
+          // Create the container for the floors and compartment layout
+          const floorWrapper = document.createElement('div');
+          floorWrapper.className = 'row floor-wrapper d-flex';
+
+          // Create the bed heading (Tầng 2 and Tầng 1)
+          const bedHeading = document.createElement('div');
+          bedHeading.className = 'bed-heading';
+          bedHeading.style.width = '100px';
+          bedHeading.innerHTML = `
+          <div></div>
+          <div>Tầng 2</div>
+          <div>Tầng 1</div>
+      `;
+          floorWrapper.appendChild(bedHeading);
+
+          // Create the table to hold the compartments and beds
+          const table = document.createElement('table');
+          table.className = 'table';
+          table.style.width = 'calc(100% - 100px)';
+
+          // Create the table header for the compartments (Khoang 1 to Khoang 7)
+          const thead = document.createElement('thead');
+          thead.innerHTML = `
+          <tr>
+              <th scope="col" colspan="2">Khoang 1</th>
+              <th scope="col" colspan="2">Khoang 2</th>
+              <th scope="col" colspan="2">Khoang 3</th>
+              <th scope="col" colspan="2">Khoang 4</th>
+              <th scope="col" colspan="2">Khoang 5</th>
+              <th scope="col" colspan="2">Khoang 6</th>
+              <th scope="col" colspan="2">Khoang 7</th>
+          </tr>
+      `;
+          table.appendChild(thead);
+
+          // Create the table body for both floor 1 and floor 2
+          const tbody = document.createElement('tbody');
+
+          // Helper function to create a bed element
+          const createBedElement = (seatNumber) => {
+            return `
+              <div class="bed-wrapper">
+                  <div class="bed-outer">
+                      <div class="bed">${seatNumber}</div>
+                      <div class="bed-illu"></div>
+                  </div>
+              </div>
+          `;
+          };
+
+          // Generate the first row (Tầng 2)
+          const rowFloor2 = document.createElement('tr');
+          for (let i = 0; i < 14; i++) {
+            const td = document.createElement('td');
+            td.innerHTML = i % 2 === 0 ? createBedElement(seats[i]?.seatNumber || '-') : createBedElement(seats[i]?.seatNumber || '-');
+            rowFloor2.appendChild(td);
+          }
+
+          // Generate the second row (Tầng 1)
+          const rowFloor1 = document.createElement('tr');
+          for (let i = 14; i < 28; i++) {
+            const td = document.createElement('td');
+            td.innerHTML = i % 2 === 0 ? createBedElement(seats[i]?.seatNumber || '-') : createBedElement(seats[i]?.seatNumber || '-');
+            rowFloor1.appendChild(td);
+          }
+
+          // Append the rows to the table body
+          tbody.appendChild(rowFloor2);
+          tbody.appendChild(rowFloor1);
+
+          // Append the table body to the table
+          table.appendChild(tbody);
+
+          // Append the table to the floor wrapper
+          floorWrapper.appendChild(table);
+
+          // Finally, append the floor wrapper to the seats container
+          seatsContainer.appendChild(floorWrapper);
+        }
+
+        function renderCarriageClassEquals3(seats) {
+          console.log(seats)
+          const seatsContainer = document.getElementById('seats-container');
+          seatsContainer.innerHTML = ''; // Clear previous content
+
+          // Create the container for the floors and compartment layout
+          const floorWrapper = document.createElement('div');
+          floorWrapper.className = 'row floor-wrapper';
+
+          // Create the bed heading (Tầng 2 and Tầng 1)
+          const bedHeading = document.createElement('div');
+          bedHeading.className = 'bed-heading';
+          bedHeading.style.width = '100px';
+          bedHeading.innerHTML = `
+                <div></div>
+                <div>Tầng 3</div>
+                <div>Tầng 2</div>
+                <div>Tầng 1</div>
+            `;
+          floorWrapper.appendChild(bedHeading);
+
+          // Create the table to hold the compartments and beds
+          const table = document.createElement('table');
+          table.className = 'table';
+          table.style.width = 'calc(100% - 100px)';
+
+          // Create the table header for the compartments (Khoang 1 to Khoang 7)
+          const thead = document.createElement('thead');
+          thead.innerHTML = `
+          <tr>
+              <th scope="col" colspan="2">Khoang 1</th>
+              <th scope="col" colspan="2">Khoang 2</th>
+              <th scope="col" colspan="2">Khoang 3</th>
+              <th scope="col" colspan="2">Khoang 4</th>
+              <th scope="col" colspan="2">Khoang 5</th>
+              <th scope="col" colspan="2">Khoang 6</th>
+              <th scope="col" colspan="2">Khoang 7</th>
+          </tr>
+      `;
+          table.appendChild(thead);
+
+          // Create the table body for both floor 1 and floor 2
+          const tbody = document.createElement('tbody');
+
+          // Helper function to create a bed element
+          const createBedElement = (seatNumber) => {
+            return `
+              <div class="bed-wrapper">
+                  <div class="bed-outer">
+                      <div class="bed">${seatNumber}</div>
+                      <div class="bed-illu"></div>
+                  </div>
+              </div>
+          `;
+          };
+          // Generate the first row (Tầng 2)
+          const rowFloor3 = document.createElement('tr');
+          for (let i = 0; i < 14; i++) {
+            const td = document.createElement('td');
+            td.innerHTML = i % 2 === 0 ? createBedElement(seats[i]?.seatNumber || '-') : createBedElement(seats[i]?.seatNumber || '-');
+            rowFloor3.appendChild(td);
+          }
+          // Generate the first row (Tầng 2)
+          const rowFloor2 = document.createElement('tr');
+          for (let i = 14; i < 28; i++) {
+            const td = document.createElement('td');
+            td.innerHTML = i % 2 === 0 ? createBedElement(seats[i]?.seatNumber || '-') : createBedElement(seats[i]?.seatNumber || '-');
+            rowFloor2.appendChild(td);
+          }
+
+          // Generate the second row (Tầng 1)
+          const rowFloor1 = document.createElement('tr');
+          for (let i = 28; i < 42; i++) {
+            const td = document.createElement('td');
+            td.innerHTML = i % 2 === 0 ? createBedElement(seats[i]?.seatNumber || '-') : createBedElement(seats[i]?.seatNumber || '-');
+            rowFloor1.appendChild(td);
+          }
+
+          tbody.appendChild(rowFloor3);
+          tbody.appendChild(rowFloor2);
+          tbody.appendChild(rowFloor1);
+
+          table.appendChild(tbody);
+
+          floorWrapper.appendChild(table);
+
+          seatsContainer.appendChild(floorWrapper);
+        }
+
+    </script>
+</div>
+</body>
+
+</html>
