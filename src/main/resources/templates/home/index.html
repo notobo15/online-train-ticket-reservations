@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <h1 class="mb-4">Train Booking</h1>
+        <form th:action="@{/search/results}" th:object="${trainBookingForm}" method="post">
+
+            <div class="form-group">
+                <label for="departureStation">Departure Station:</label>
+                <select class="form-control" th:field="*{departureStationId}" id="departureStation" required>
+                    <option value="">Select Departure Station</option>
+                    <option th:each="station : ${stations}"
+                            th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('departureStationId')}" class="text-danger">
+                    <p th:errors="*{departureStationId}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="destinationStation">Destination Station:</label>
+                <select class="form-control" th:field="*{destinationStationId}" id="destinationStation" required>
+                    <option value="">Select Destination Station</option>
+                    <option th:each="station : ${stations}"
+                            th:value="${station.stationId}"
+                            th:text="${station.stationName}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('destinationStationId')}" class="text-danger">
+                    <p th:errors="*{destinationStationId}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Trip Type:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" th:field="*{tripType}" id="oneway" value="oneway">
+                    <label class="form-check-label" for="oneway">
+                        One-way
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" th:field="*{tripType}" id="roundtrip"
+                           value="roundtrip">
+                    <label class="form-check-label" for="roundtrip">
+                        Round-trip
+                    </label>
+                </div>
+                <div th:if="${#fields.hasErrors('tripType')}" class="text-danger">
+                    <p th:errors="*{tripType}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="departureDate">Departure Date:</label>
+                <input type="date" class="form-control" th:field="*{departureDate}" id="departureDate" required>
+                <div th:if="${#fields.hasErrors('departureDate')}" class="text-danger">
+                    <p th:errors="*{departureDate}"></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="returnDate">Return Date:</label>
+                <input type="date" class="form-control" th:field="*{returnDate}" id="returnDate" disabled>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search Trains</button>
+        </form>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function() {
+          $('input[name="tripType"]').change(function() {
+            if ($('#oneway').is(':checked')) {
+              $('#returnDate').prop('disabled', true);
+            } else {
+              $('#returnDate').prop('disabled', false);
+            }
+          });
+        });
+    </script>
+</div>
+
+</body>
+</html>
