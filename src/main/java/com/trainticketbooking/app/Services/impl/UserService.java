@@ -5,6 +5,8 @@ import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,13 @@ public class UserService implements IUserService {
     }
 
     public User save(User user) {
+        if(user.getUsername().isEmpty()){
+            throw new IllegalArgumentException("Username cannot be empty");
+        } else if (user.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }else if (user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
         return userRepository.save(user);
     }
 
@@ -53,5 +62,9 @@ public class UserService implements IUserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }
