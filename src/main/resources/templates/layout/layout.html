@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Booking Train" />
+
+    <title>Booking Train</title>
+
+
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+
+
+    <div th:replace="~{fragments/_link-lib}"></div>
+    <div layout:fragment="head"></div>
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- partial -->
+        <div layout:fragment="content" class="page-content"></div>
+
+        <!-- partial:partials/_footer.html -->
+        <div th:replace="~{fragments/_footer}"></div>
+        <!-- partial -->
+
+    </div>
+    </div>
+    <div th:replace="~{fragments/_script-lib}"></div>
+    <div layout:fragment="scripts"></div>
+</body>
+
+</html>

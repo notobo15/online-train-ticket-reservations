@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/layout}">
+
+<body>
+<div layout:fragment="content">
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/admin/trains}">Trains</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+        <h3>Trains Management</h3>
+        <button type="button"
+                class="btn btn-outline-primary btn-icon-text mr-2 d-none d-flex align-items-center justify-content-center">
+            <i class="btn-icon-prepend" data-feather="plus"></i>
+            <span>Create</span>
+        </button>
+    </div>
+    <a class="btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center" th:href="@{/admin/trains/index}">
+        <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+        <span>Back</span>
+    </a>
+    <div class="row">
+        <div class="col-md-10">
+            <form th:action="@{/admin/trains/create}" th:object="${train}" method="post">
+                <div class="form-group mb-3">
+                    <label for="trainNumber" class="control-label">Train Number:</label>
+                    <input type="text" th:field="*{trainNumber}" id="trainNumber" class="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="trainType" class="control-label">Train Type:</label>
+                    <input type="text" th:field="*{trainType}" id="trainType" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-warning" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+</body>
+
+</html>

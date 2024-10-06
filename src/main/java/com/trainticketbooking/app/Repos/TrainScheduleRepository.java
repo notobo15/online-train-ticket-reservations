@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface TrainScheduleRepository extends JpaRepository<TrainSchedule, Long> {
-    List<TrainSchedule> findByRoute_StartStationAndRoute_EndStationAndDepartureTimeBetween(Station startStation, Station endStation, LocalDateTime startTime, LocalDateTime endTime);
+//    List<TrainSchedule> findByRoute_StartStationAndRoute_EndStationAndDepartureTimeBetween(Station startStation, Station endStation, LocalDateTime startTime, LocalDateTime endTime);
 }

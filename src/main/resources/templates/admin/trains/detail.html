@@ -1,0 +1,44 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+  xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content">
+
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/admin/trains}">Trains</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Detail#<span th:text="${train.trainId}"></span></li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <h3>Trains Management</h3>
+    <button type="button"
+      class="btn btn-outline-primary btn-icon-text mr-2 d-none d-md-flex align-items-center justify-content-center">
+      <i class="btn-icon-prepend" data-feather="plus"></i>
+      <span>Create</span>
+    </button>
+  </div>
+  <a class="btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center" th:href="@{/admin/trains/index}">
+    <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+    <span>Back</span>
+  </a>
+  <div class="row">
+    <dt class="col-sm-2">Id</dt>
+    <dd th:text="${train.trainId}" class="col-sm-10"></dd>
+
+    <dt class="col-sm-2">Number</dt>
+    <dd th:text="${train.trainNumber}" class="col-sm-10"></dd>
+
+    <dt class="col-sm-2">Type</dt>
+    <dd th:text="${train.trainType}" class="col-sm-10"></dd>
+
+    <dt class="col-sm-2">Number of Routes</dt>
+    <dd th:text="${#lists.size(train.railwayRoutes)}" class="col-sm-10"></dd>
+
+    <dt class="col-sm-2">Number of Carriages</dt>
+    <dd th:text="${#lists.size(train.carriages)}" class="col-sm-10"></dd>
+  </div>
+
+</div>
+
+</html>

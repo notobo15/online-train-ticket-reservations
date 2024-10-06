@@ -14,14 +14,14 @@ public class Carriage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "carriage_id")
-    private Long carriageId;
+    private Integer carriageId;
 
     @ManyToOne
     @JoinColumn(name = "train_id", nullable = false)
     private Train train;
 
     @ManyToOne
-    @JoinColumn(name = "class_id")
+    @JoinColumn(name = "carriage_class_Id")
     private CarriageClass carriageClass;
 
     @Column(name = "car_number", nullable = false)
@@ -32,6 +32,9 @@ public class Carriage {
 
     @Column(name = "total_floors")
     private int totalFloors;
+
+    @OneToMany(mappedBy = "carriage")
+    private List<Seat> seats;
 
 //    @OneToMany(mappedBy = "carriage")
 //    private List<Compartment> compartments;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+
+    <title>Admin Booking Train Online Management</title>
+
+
+    <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
+
+
+    <div th:replace="~{admin/fragments/_link-lib}"></div>
+    <div layout:fragment="head"></div>
+
+</head>
+
+<body>
+    <div th:replace="~{fragments/_loading}"></div>
+    <div class="main-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <div th:replace="~{admin/fragments/_sidebar}"></div>
+        <!-- partial -->
+
+        <div class="page-wrapper">
+            <!-- partial:partials/_navbar.html -->
+
+            <div th:replace="~{admin/fragments/_navbar}"></div>
+            <!-- partial -->
+            <div layout:fragment="content" class="page-content"></div>
+
+            <!-- partial:partials/_footer.html -->
+            <div th:replace="~{admin/fragments/_footer}"></div>
+            <!-- partial -->
+
+        </div>
+    </div>
+    <div th:replace="~{admin/fragments/_script-lib}"></div>
+
+    <div layout:fragment="scripts"></div>
+    <script th:src="@{/js/loading.js}"></script>
+</body>
+
+</html>

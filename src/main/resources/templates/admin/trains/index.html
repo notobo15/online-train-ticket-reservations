@@ -1,0 +1,109 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item" th:href="@{/admin/trains}">Trains</li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+        <h3>Trains Management</h3>
+        <a th:href="@{/admin/trains/create}" type="button"
+           class="btn btn-outline-primary btn-icon-text mr-2 d-none d-md-flex align-items-center justify-content-center">
+            <i class="btn-icon-prepend" data-feather="plus"></i>
+            <span>Create</span>
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table">
+                            <thead>
+                            <tr>
+                                <th>Train Id</th>
+                                <th>Train Name</th>
+                                <th>Train Type</th>
+                                <th style="width: 60px;">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="train : ${trains}">
+                                <td th:text="${train.trainId}"></td>
+                                <td th:text="${train.trainNumber}"></td>
+                                <td th:text="${train.trainType}"></td>
+                                <td class="actions" >
+                                    <a th:href="@{/admin/trains/detail/{id}(id=${train.trainId})}">
+                                        <i class="btn-icon-prepend text-primary" data-feather="eye"></i>
+                                    </a>
+                                    <a th:href="@{/admin/trains/edit/{id}(id=${train.trainId})}">
+                                        <i class="btn-icon-prepend text-warning" data-feather="edit"></i>
+                                    </a>
+                                    <form th:action="@{/admin/trains/delete/{id}(id=${train.trainId})}" method="post"
+                                          class="deleteForm">
+                                        <div type="button" class="deleteBtn">
+                                            <i class="btn-icon-prepend text-danger" data-feather="trash-2"></i>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <nav class="d-flex justify-content-between align-items-center mt-3">
+                        <!-- Sizing -->
+                        <div th:replace="~{/admin/fragments/_table-size}"></div>
+                        <!-- Pagination -->
+                        <div th:replace="~{/admin/fragments/_pagination}"></div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function () {
+            $('#dataTableExample').DataTable({
+                "paging": false,
+                "info": false,
+
+            });
+
+            $('.deleteBtn').on('click', function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+
+                $.confirm({
+                    title: 'Xác nhận xóa',
+                    content: 'Bạn có chắc chắn muốn xóa mục này?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Hủy',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+
+</html>
