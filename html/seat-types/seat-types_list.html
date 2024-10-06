@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách loại ghế</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<style>
+    .seat-type-row {
+        cursor: pointer;
+    }
+
+    .seat-type-row:hover {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<body>
+
+<!-- Popover Content -->
+
+<div id="popover-content" style="display: none;" >
+    <button class='btn btn-sm btn-outline-primary mb-2'><i class="bi bi-file-earmark-arrow-up-fill"></i>  Nhập file</button><br>
+    <button class='btn btn-sm btn-outline-primary'><i class="bi bi-file-earmark-excel-fill"></i>  Xuất file</button>
+</div>
+
+<!-- Popover Content -->
+
+
+
+
+    <div class="container-fluid mt-4">
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-4">
+                <div class="d-flex align-items-baseline gap-1">
+                    <h6 class="">Danh sách loại ghế</h6>
+                    <button class="btn btn-outline-primary border-0" data-bs-toggle="popover" data-bs-placement="bottom"
+                        data-bs-content="#popover-content">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Tìm kiếm...">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-funnel"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-md-right">
+                        <li><a class="dropdown-item" href="#">Đã xuất hóa đơn</a></li>
+                        <li><a class="dropdown-item" href="#">Đã vào sổ</a></li>
+                        <li><a class="dropdown-item" href="#">Đã hủy</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Ngày đặt hàng</a></li>
+                        <li><a class="dropdown-item" href="#">Thêm bộ lọc tùy chỉnh</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="seat-types_create.html" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Tạo mới
+                </a>
+                <div class="btn-group ms-2" role="group">
+                    <button type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-list-ul"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary">
+                        <i class="bi bi-grid"></i>
+                    </button>
+                </div>
+                <span class="ms-2">1-5 / 5</span>
+                <button class="btn btn-outline-primary ms-2">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-primary">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Loại ghế</th>
+                    <th>Mã</th>
+                    <th>Mô tả</th>
+                    <th>Giá</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="seat-type-row" onclick="window.location='seat-types_detail.html?id=1'">
+                    <td>1</td>
+                    <td>Ghế ngồi mềm</td>
+                    <td>GSM</td>
+                    <td>Ghế ngồi mềm điều hòa</td>
+                    <td>50</td>
+                </tr>
+                <tr class="seat-type-row" onclick="window.location='seat-types_detail.html?id=2'">
+                    <td>2</td>
+                    <td>Giường nằm</td>
+                    <td>GN</td>
+                    <td>Giường nằm điều hòa</td>
+                    <td>30</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+          let popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl, {
+                html: true,
+                sanitize: false,
+                content: function () {
+                    return document.querySelector(this.getAttribute('data-bs-content')).innerHTML;
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

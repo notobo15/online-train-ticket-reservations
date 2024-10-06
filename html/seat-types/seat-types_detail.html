@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết loại ghế</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid mt-4">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h2>Chi tiết loại ghế: Ghế ngồi mềm</h2>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="seat-types_list.html" class="btn btn-secondary ">
+                    <i class="bi bi-arrow-left me-1"></i>Quay lại
+                </a>
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i>Xóa
+                </button>
+                <button class="btn btn-primary">
+                    <i class="bi bi-pencil-square me-1"></i>Cập nhật
+                </button>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID:</strong> 1</p>
+                        <p><strong>Loại ghế:</strong> Ghế ngồi mềm</p>
+                        <p><strong>Mã:</strong> GSM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Mô tả:</strong> Ghế ngồi mềm điều hòa</p>
+                        <p><strong>Giá:</strong> 50</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Danh sách ghế</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Số ghế</th>
+                    <th>Toa</th>
+                    <th>Khoang</th>
+                    <th>Tầng</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>A1</td>
+                    <td>Toa 1</td>
+                    <td>Khoang 1</td>
+                    <td>1</td>
+                    <td><span class="badge bg-success">Trống</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>A2</td>
+                    <td>Toa 1</td>
+                    <td>Khoang 1</td>
+                    <td>1</td>
+                    <td><span class="badge bg-danger">Đã đặt</span></td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

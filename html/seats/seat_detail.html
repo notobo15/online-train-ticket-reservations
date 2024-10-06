@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết ghế</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<style>
+    .seat-type-item {
+        transition: background-color 0.1s ease;
+    }
+
+    .seat-type-item:hover {
+        background-color: rgba(26, 4, 23, 0.1);
+        cursor: pointer;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection--single {
+        height: calc(3.5rem + 2px);
+        padding: 1rem 0.75rem;
+        font-size: 1rem;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+        padding: 0;
+        line-height: 1.5;
+    }
+
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+        height: calc(3.5rem + 2px);
+    }
+
+    .select2-container--bootstrap-5 .select2-results__options {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .select2-container--bootstrap-5 .select2-results>.select2-results__options {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+</style>
+
+<body>
+    <div class="container-fluid mt-4">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h2>Chi tiết ghế A1</h2>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="seat_list.html" class="btn btn-secondary ">
+                    <i class="bi bi-arrow-left me-1"></i>Quay lại
+                </a>
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i>Xóa
+                </button>
+                <button class="btn btn-primary">
+                    <i class="bi bi-pencil-square me-1"></i>Cập nhật
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Mã ghế:</strong> 1</p>
+                        <p><strong>Số ghế:</strong> A1</p>
+                        <p><strong>Toa:</strong> Toa 1</p>
+                        <p><strong>Khoang:</strong> Khoang 1</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3 row align-items-center ">
+                            <label for="seatTypeSelect" class="col-sm-2 col-form-label"><strong>Loại
+                                    ghế:</strong></label>
+                            <div class="col-sm-10">
+                                <select id="seatTypeSelect" class="form-select select2" aria-label="Chọn loại ghế">
+                                    <option value="">Chọn loại ghế</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p><strong>Tầng:</strong> 1</p>
+                        <p><strong>Số khoang:</strong> 1</p>
+                        <p><strong>Trạng thái:</strong> <span class="badge bg-success">Trống</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets"
+                    type="button" role="tab" aria-controls="tickets" aria-selected="true">Vé</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button"
+                    role="tab" aria-controls="info" aria-selected="false">Thông tin đoàn tàu</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"
+                    role="tab" aria-controls="notes" aria-selected="false">Ghi chú</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets-tab">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Mã vé</th>
+                            <th>Hành khách</th>
+                            <th>Giá</th>
+                            <th>Ngày đặt</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-bs-toggle="modal" data-bs-target="#ticketModal1001" style="cursor: pointer;">
+                            <td>1001</td>
+                            <td>John Doe</td>
+                            <td>500,000 ₫</td>
+                            <td>2024-09-30 16:23:14</td>
+                            <td><span class="badge bg-success">Đã đặt</span></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#ticketModal1001">
+                                    <i class="bi bi-exclamation-circle"></i> Xem chi tiết
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Mã đoàn tàu:</strong> 102</p>
+                        <p><strong>Số đoàn tàu:</strong> SE1</p>
+                        <p><strong>Tên đoàn tàu:</strong> Tàu tốc hành Hà Nội - Sài Gòn</p>
+                        <p><strong>Toa:</strong> 1</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Khoang:</strong> 1</p>
+                        <p><strong>Tầng:</strong> 1</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                <p>Ghi chú về ghế sẽ được hiển thị ở đây.</p>
+            </div>
+        </div>
+       
+    </div>
+    </div>
+
+    <!-- Modal for ticket details -->
+    <div class="modal fade" id="ticketModal1001" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="ticketModalLabel">Chi tiết vé</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0">Thông tin vé</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Mã vé:</strong> 1001</p>
+                                    <p class="mb-1"><strong>Giá:</strong> 500,000 ₫</p>
+                                    <p class="mb-1"><strong>Ngày đặt:</strong> 2024-09-30 16:23:14</p>
+                                    <p class="mb-0"><strong>Trạng thái:</strong> <span class="badge bg-success">Đã
+                                            đặt</span></p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">Thông tin hành khách</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Tên:</strong> John Doe</p>
+                                    <p class="mb-1"><strong>Email:</strong> john.doe@example.com</p>
+                                    <p class="mb-0"><strong>Điện thoại:</strong> 123-456-7890</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">Thông tin ghế</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Số ghế:</strong> A1</p>
+                                    <p class="mb-1"><strong>Loại ghế:</strong> Ghế ngồi mềm</p>
+                                    <p class="mb-1"><strong>Toa:</strong> Toa 1</p>
+                                    <p class="mb-1"><strong>Khoang:</strong> Khoang 1</p>
+                                    <p class="mb-0"><strong>Tầng:</strong> 1</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0">Thông tin đoàn tàu</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Mã đoàn tàu:</strong> 102</p>
+                                    <p class="mb-1"><strong>Số đoàn tàu:</strong> SE1</p>
+                                    <p class="mb-0"><strong>Tên đoàn tàu:</strong> Tàu tốc hành Hà Nội - Sài Gòn</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            const data = [
+                {
+                    id: 1,
+                    text: 'Tầng 1, khoang có 4 giường',
+                    price: 500000,
+                    code: 'A1'
+                },
+                {
+                    id: 2,
+                    text: 'Tầng 1, khoang có 4 giường vip',
+                    price: 500000,
+                    code: 'A2'
+                },
+                {
+                    id: 3,
+                    text: 'Tầng 2, khoang có 4 giường',
+                    price: 500000,
+                    code: 'B1'
+                },
+                {
+                    id: 4,
+                    text: 'Tầng 2, khoang có 4 giường vip',
+                    price: 500000
+                },
+                {
+                    id: 5,
+                    text: 'Ngồi mềm',
+                    price: 500000,
+                    code: 'C1'
+                },
+                {
+                    id: 5,
+                    text: 'Ngồi mềm',
+                    price: 500000,
+                    code: 'C1'
+                },
+                {
+                    id: 5,
+                    text: 'Ngồi mềm',
+                    price: 500000,
+                    code: 'C1'
+                },
+                {
+                    id: 5,
+                    text: 'Ngồi mềm',
+                    price: 500000,
+                    code: 'C1'
+                },
+                {
+                    id: 5,
+                    text: 'Ngồi mềm',
+                    price: 500000,
+                    code: 'C1'
+                },
+            ]
+
+
+
+            $('#seatTypeSelect').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                dropdownAutoWidth: true,
+                // ajax: {
+                //     url: '/api/seat-types',
+                //     dataType: 'json',
+                //     delay: 250,
+                //     processResults: function(data) {
+                //         return {
+                //             results: data.map(function(item) {
+                //                 return {
+                //                     id: item.seatTypeId,
+                //                     text: item.description + ' (' + item.code + ')',
+                //                     price: item.price
+                //                 };
+                //             })
+                //         };
+                //     },
+                //     cache: true
+                // },
+                data: data,
+                placeholder: 'Chọn loại ghế',
+                minimumInputLength: 0,
+                templateResult: formatSeatType,
+                templateSelection: formatSeatTypeSelection
+            });
+
+
+            function formatSeatType(seatType) {
+                if (!seatType.id) return seatType.text;
+                return $(`
+                <div class="d-flex justify-content-between align-items-center p-2 rounded seat-type-item">
+                    <div>
+                        <strong>${seatType.text}</strong>
+                        <br>
+                        <small class="text-muted">Mã: ${seatType.code}</small>
+                    </div>
+                    <span class="badge bg-primary">${(seatType.price)} ₫</span>
+                </div>
+            `);
+            }
+
+
+            function formatSeatTypeSelection(seatType) {
+                if (!seatType.id) return seatType.text;
+                return `${seatType.text} (${seatType.code})`;
+            }
+
+
+        });
+    </script>
+</body>
+
+</html>
