@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -101,7 +102,7 @@ public class AdminUsersController {
     }
 
     @GetMapping("detail/{id}")
-    public String getDetails(@PathVariable("id") Integer id, Model model) {
+    public String viewDetailUser(@PathVariable("id") Integer id, Model model) {
         log.info("Start detail user");
         try {
             Optional<User> userOptional = userService.getById(id);
@@ -113,6 +114,22 @@ public class AdminUsersController {
                     "View detail user fail!  " + e.getMessage());
         }
         return "admin/users/detail";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            userService.deleteById(id);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    String.format("Delete user success with id = %d", id)
+            );
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Delete user fail!  " + e.getMessage());
+        }
+        return "redirect:/admin/users/index";
     }
 
 }

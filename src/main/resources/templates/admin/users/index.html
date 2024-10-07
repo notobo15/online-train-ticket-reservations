@@ -18,7 +18,13 @@
             <span>Create</span>
         </a>
     </div>
-
+    <!-- Kiểm tra nếu có thông báo thành công -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
@@ -102,20 +108,17 @@
             $('#dataTableExample').DataTable({
                 "paging": false,
                 "info": false,
-
             });
-
             $('.deleteBtn').on('click', function (e) {
                 e.preventDefault();
                 var form = $(this).closest('form');
-
                 $.confirm({
                     title: 'Xác nhận xóa',
                     content: 'Bạn có chắc chắn muốn xóa mục này?',
                     type: 'red',
                     buttons: {
                         ok: {
-                            text: 'OK',
+                            text: 'Delete',
                             btnClass: 'btn-danger',
                             action: function () {
                                 form.submit();
