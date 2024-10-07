@@ -34,8 +34,8 @@
                                     <th style="width: 60px;">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr th:each="user : ${users}">
+                            <tbody th:if="${users}">
+                                <tr th:each=" user : ${users}">
                                     <td th:text="${user.userId}"></td>
                                     <td th:text="${user.fullName}"></td>
                                     <td th:text="${user.gender}"></td>

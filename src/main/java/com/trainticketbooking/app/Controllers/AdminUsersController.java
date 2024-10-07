@@ -96,18 +96,23 @@ public class AdminUsersController {
                     "errorMessage",
                     "User edited fail!  " + e.getMessage());
         }
-//        model.addAttribute("user", user);
+//        model.addAttribute("user", user); ko cần dòng này vì @ModelAttribute sẽ tự add user vào model
         return "admin/users/edit";
     }
 
-//    @GetMapping("detail/{id}")
-//    public String getDetails(@PathVariable("id") Integer id, Model model) {
-//        Optional<Train> train = trainService.getById(id);
-//        if (train.isPresent()) {
-//            model.addAttribute("train", train.get());
-//            return "admin/trains/detail";
-//        }
-//        return "admin/trains/index";
-//    }
+    @GetMapping("detail/{id}")
+    public String getDetails(@PathVariable("id") Integer id, Model model) {
+        log.info("Start detail user");
+        try {
+            Optional<User> userOptional = userService.getById(id);
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "View detail user fail!  " + e.getMessage());
+        }
+        return "admin/users/detail";
+    }
 
 }
