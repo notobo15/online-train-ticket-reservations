@@ -6,11 +6,14 @@ import com.trainticketbooking.app.Dtos.SeatDto;
 import com.trainticketbooking.app.Dtos.TrainDto;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Seat;
+import com.trainticketbooking.app.Entities.Station;
 import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Services.impl.CarriageService;
 import com.trainticketbooking.app.Services.impl.RailwayRouteService;
+import com.trainticketbooking.app.Services.impl.StationService;
 import com.trainticketbooking.app.Services.impl.TrainService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +21,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class BookingApiController {
 
     @Autowired
@@ -40,6 +41,10 @@ public class BookingApiController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private StationService stationService;
+
+
     @GetMapping("/trains/{trainId}/carriages/{carriageId}/available-seats")
     public ResponseEntity<Map<String, Object>> getAvailableSeatsByCarriage(
             @PathVariable("trainId") Integer trainId,
@@ -53,7 +58,7 @@ public class BookingApiController {
                 .collect(Collectors.toList());
 
         List<SeatDto> seatDtos = emptySeats.stream()
-                .map(seat -> modelMapper.map(seat, SeatDto.class))  
+                .map(seat -> modelMapper.map(seat, SeatDto.class))
                 .collect(Collectors.toList());
 
         Map<String, Object> response = new HashMap<>();
@@ -120,5 +125,15 @@ public class BookingApiController {
                 .map(train -> modelMapper.map(train, TrainDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(trainDTOs);
+    }
+
+    @GetMapping("/stations/list")
+    public List<Station> getStations(@RequestParam(required = false) String search) {
+        List<Station> stationList;
+        if (search != null && !search.isEmpty()) {
+            stationList = stationService.searchStations(search);
+        }
+        stationList = stationService.getAll();
+        return stationList;
     }
 }

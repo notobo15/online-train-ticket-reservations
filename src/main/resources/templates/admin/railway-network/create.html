@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/railway-network}">Railway Network</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+            <h3>Railway Network Management</h3>
+            <button type="button"
+                class="btn btn-outline-primary btn-icon-text mr-2 d-none d-flex align-items-center justify-content-center">
+                <i class="btn-icon-prepend" data-feather="plus"></i>
+                <span>Create</span>
+            </button>
+        </div>
+        <a class="btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/railway-network/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+        <div class="row">
+            <div class="col-md-10">
+                <form th:action="@{/admin/railway-network/create}" th:object="${railwayNetwork}" method="post">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Name:</h5>
+                                    <input th:field="*{name}" placeholder="Name" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">departure_station:</h5>
+                                    <select name="railway-network" class="form-control cbb-station">
+                                        <!-- <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                            th:text="${station.stationName}">Station Name</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">destination_station:</h5>
+                                    <select name="railway-network" class="form-control cbb-station">
+                                        <!-- <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                            th:text="${station.stationName}">Station Name</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-lg">
+                        <i class="fas fa-plus"></i> Create
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+        <!-- Thêm Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.cbb-station').select2({
+                    ajax: {
+                        url: 'http://localhost:8080/api/stations/list',
+                        data: function (params) {
+                            return {
+                                search: params.term // Gửi từ khóa tìm kiếm tới server
+                            };
+                        },
+                        processResults: function (data) {
+                            console.log(data);
+                            return {
+                                results: data.map(function (station) {
+                                    return { id: station.stationId, text: station.stationName };
+                                })
+                            };
+                        }
+                    },
+                    placeholder: 'Select a station',
+                    allowClear: true
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
