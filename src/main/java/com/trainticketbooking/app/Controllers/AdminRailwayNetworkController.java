@@ -2,7 +2,8 @@ package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Entities.RailwayNetwork;
 import com.trainticketbooking.app.Services.IRailwayNetworkService;
-import com.trainticketbooking.app.Services.IStationService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/railway-network")
 @RequiredArgsConstructor
@@ -20,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AdminRailwayNetworkController {
     IRailwayNetworkService railwayNetworkService;
-    IStationService stationService;
 
     @GetMapping({"", "/index"})
     public String getAllRailwayNetworks(Model model, Pageable pageable) {
@@ -38,26 +40,33 @@ public class AdminRailwayNetworkController {
     @GetMapping("/create")
     public String createRailwayNetwork(Model model) {
         model.addAttribute("railwayNetwork", new RailwayNetwork());
-//        model.addAttribute("stations", stationService.getAll());
         return "admin/railway-network/create";
     }
 
-//    @PostMapping("/create")
-//    public String saveCreateUser(Model model, @ModelAttribute User user) {
-//        try {
-//            User userResponse = userService.save(user);
-//            model.addAttribute("user", new User());
-//            model.addAttribute(
-//                    "successMessage",
-//                    "User created successfully!");
-//        } catch (Exception e) {
-//            model.addAttribute(
-//                    "errorMessage",
-//                    "User created fail!  " + e.getMessage());
-//        }
-//        return "admin/users/create";
-//    }
-//
+    @PostMapping("/create")
+    public String saveCreateRailwayNetwork(Model model, @ModelAttribute RailwayNetwork railwayNetwork) {
+        try {
+            RailwayNetwork railwayNetworkResponse = railwayNetworkService.save(railwayNetwork);
+            model.addAttribute("railwayNetwork", new RailwayNetwork());
+            model.addAttribute(
+                    "successMessage",
+                    "Railway Network created successfully with id = " + railwayNetworkResponse.getRailwayId());
+        } catch (ConstraintViolationException ex) {
+            // Lấy các lỗi validation
+            List<String> errors = ex.getConstraintViolations().stream()
+                    .map(ConstraintViolation::getMessage)  // Lấy thông báo lỗi từ từng violation
+                    .toList();
+            model.addAttribute(
+                    "errorMessage",
+                    "Railway Network created fail!  " + errors.get(0));
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Railway Network created fail!  " + e.getMessage());
+        }
+        return "admin/railway-network/create";
+    }
+
 //    @GetMapping("/edit/{id}")
 //    public String editUser(@PathVariable("id") Integer id, Model model) {
 //        log.info("Start edit user");

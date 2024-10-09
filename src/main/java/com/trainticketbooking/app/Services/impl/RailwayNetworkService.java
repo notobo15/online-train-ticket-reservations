@@ -3,6 +3,7 @@ package com.trainticketbooking.app.Services.impl;
 import com.trainticketbooking.app.Entities.RailwayNetwork;
 import com.trainticketbooking.app.Repos.RailwayNetworkRepository;
 import com.trainticketbooking.app.Services.IRailwayNetworkService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,8 @@ public class RailwayNetworkService implements IRailwayNetworkService {
 
     @Override
     public RailwayNetwork save(RailwayNetwork railwayNetwork) {
+    public RailwayNetwork save(@Valid RailwayNetwork railwayNetwork) {
+        // Save a new railway network or update an existing one
         return railwayNetworkRepository.save(railwayNetwork);
     }
 
