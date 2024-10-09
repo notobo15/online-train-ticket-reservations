@@ -50,4 +50,9 @@ public class StationService implements IStationService {
             throw new RuntimeException("Station not found with ID: " + station.getStationId());
         }
     }
+
+    @Override
+    public List<Station> searchStations(String search) {
+        return stationRepository.searchStations(search);
+    }
 }

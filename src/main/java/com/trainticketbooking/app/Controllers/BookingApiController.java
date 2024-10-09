@@ -5,16 +5,26 @@ import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Services.ITrainJourneyService;
 import com.trainticketbooking.app.Services.impl.CarriageService;
 import com.trainticketbooking.app.Services.impl.TrainService;
+import com.trainticketbooking.app.Entities.Seat;
+import com.trainticketbooking.app.Entities.Station;
+import com.trainticketbooking.app.Entities.Train;
+import com.trainticketbooking.app.Services.impl.CarriageService;
+import com.trainticketbooking.app.Services.impl.RailwayRouteService;
+import com.trainticketbooking.app.Services.impl.StationService;
+import com.trainticketbooking.app.Services.impl.TrainService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class BookingApiController {
 
     @Autowired
@@ -55,6 +65,34 @@ public class BookingApiController {
 
 //        return ResponseEntity.ok(response);
 //    }
+    @Autowired
+    private StationService stationService;
+
+
+    @GetMapping("/trains/{trainId}/carriages/{carriageId}/available-seats")
+    public ResponseEntity<Map<String, Object>> getAvailableSeatsByCarriage(
+            @PathVariable("trainId") Integer trainId,
+            @PathVariable("carriageId") Long carriageId) {
+
+        List<Seat> availableSeats = trainService.findSeatsByTrainId(trainId);
+
+        List<Seat> emptySeats = availableSeats.stream()
+                .filter(seat -> seat.getCarriage().getCarriageId().equals(carriageId)) // Lọc theo toa
+//                .filter(seat -> seat.isStatus())  // Giả sử 'status' = true nghĩa là ghế còn trống
+                .collect(Collectors.toList());
+
+        List<SeatDto> seatDtos = emptySeats.stream()
+                .map(seat -> modelMapper.map(seat, SeatDto.class))
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("trainId", trainId);
+        response.put("carriageId", carriageId);
+        response.put("availableSeatCount", seatDtos.size());
+        response.put("availableSeats", seatDtos);
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/trains/{trainId}/carriages")
     public ResponseEntity<List<CarriageDto>> getCarriages(@PathVariable Integer trainId) {
@@ -112,4 +150,35 @@ public class BookingApiController {
 //                .collect(Collectors.toList());
 //        return ResponseEntity.ok(trainDTOs);
 //    }
+    @PostMapping("/search/results")
+    public ResponseEntity<?> searchTrains(@Valid @RequestBody BookingFormDto form, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
+        List<Train> availableTrains = railwayRouteService.findRailwayRouteWithStations(
+                form.getDepartureStationId(),
+                form.getDestinationStationId(),
+                form.getDepartureDate());
+
+        if (availableTrains.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No trains found for the given criteria.");
+        }
+
+        List<TrainDto> trainDTOs = availableTrains.stream()
+                .map(train -> modelMapper.map(train, TrainDto.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(trainDTOs);
+    }
+
+    @GetMapping("/stations/list")
+    public List<Station> getStations(@RequestParam(required = false) String search) {
+        List<Station> stationList;
+        if (search != null && !search.isEmpty()) {
+            stationList = stationService.searchStations(search);
+        }
+        stationList = stationService.getAll();
+        return stationList;
+    }
 }
