@@ -69,32 +69,9 @@
                         <!-- Sizing -->
                         <div th:replace="~{/admin/fragments/_table-size}"></div>
                         <!-- Pagination -->
-                        <!-- <div th:replace="~{/admin/fragments/_pagination}"></div> -->
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                <a class="page-link"
-                                    th:href="@{/admin/users/index(page=${currentPage - 1}, size=${size})}"
-                                    aria-label="Previous">
-                                    <span aria-hidden="true">
-                                        <i class="btn-icon-prepend" data-feather="chevron-left"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:text="${i + 1}"
-                                    th:href="@{/admin/users/index(page=${i}, size=${size})}">1</a>
-                            </li>
-                            <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                                <a class="page-link"
-                                    th:href="@{/admin/users/index(page=${currentPage + 1}, size=${size})}"
-                                    aria-label="Next">
-                                    <span aria-hidden="true">
-                                        <i class="btn-icon-prepend" data-feather="chevron-right"></i>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
+                        <div
+                            th:replace="/admin/fragments/_pagination :: pagination(url='/admin/users/index', currentPage=${currentPage}, size=${size}, totalPages=${totalPages})">
+                        </div>
                     </nav>
                 </div>
             </div>
