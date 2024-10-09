@@ -1,9 +1,6 @@
 package com.trainticketbooking.app.Controllers;
 
-import com.trainticketbooking.app.Dtos.BookingFormDto;
-import com.trainticketbooking.app.Dtos.CarriageDto;
-import com.trainticketbooking.app.Dtos.SeatDto;
-import com.trainticketbooking.app.Dtos.TrainDto;
+import com.trainticketbooking.app.Dtos.*;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.Station;
@@ -12,6 +9,7 @@ import com.trainticketbooking.app.Services.impl.CarriageService;
 import com.trainticketbooking.app.Services.impl.RailwayRouteService;
 import com.trainticketbooking.app.Services.impl.StationService;
 import com.trainticketbooking.app.Services.impl.TrainService;
+import com.trainticketbooking.app.mapper.StationMapper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -44,6 +42,8 @@ public class BookingApiController {
     @Autowired
     private StationService stationService;
 
+    @Autowired
+    private StationMapper stationMapper;
 
     @GetMapping("/trains/{trainId}/carriages/{carriageId}/available-seats")
     public ResponseEntity<Map<String, Object>> getAvailableSeatsByCarriage(
@@ -128,12 +128,13 @@ public class BookingApiController {
     }
 
     @GetMapping("/stations/list")
-    public List<Station> getStations(@RequestParam(required = false) String search) {
+    public List<StationDto> getStations(@RequestParam(required = false) String search) {
         List<Station> stationList;
         if (search != null && !search.isEmpty()) {
             stationList = stationService.searchStations(search);
+        } else {
+            stationList = stationService.getAll();
         }
-        stationList = stationService.getAll();
-        return stationList;
+        return stationMapper.toStationDtoList(stationList);
     }
 }
