@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 @Controller
 @RequestMapping("/admin/railway-network")
@@ -56,9 +57,11 @@ public class AdminRailwayNetworkController {
             List<String> errors = ex.getConstraintViolations().stream()
                     .map(ConstraintViolation::getMessage)  // Lấy thông báo lỗi từ từng violation
                     .toList();
+            StringJoiner stringJoiner = new StringJoiner(" / ");
+            errors.forEach(stringJoiner::add);
             model.addAttribute(
                     "errorMessage",
-                    "Railway Network created fail!  " + errors.get(0));
+                    "Railway Network created fail! / " + stringJoiner.toString());
         } catch (Exception e) {
             model.addAttribute(
                     "errorMessage",
