@@ -86,22 +86,14 @@
 
     <div layout:fragment="scripts">
         <script>
-            let isDisabled = false;
-            document
-                .getElementById("togglePassword")
-                .addEventListener("click", function () {
-                    const passwordInput = document.getElementById("password");
-                    const eyeIcon = document.getElementById("eyeIcon");
-
-                    // Toggle the type attribute
-                    const type =
-                        passwordInput.getAttribute("type") === "password" ? "text" : "password";
-                    passwordInput.setAttribute("type", type);
-
-                    // Toggle the eye icon
-                    eyeIcon.classList.toggle("fa-eye-slash");
-                    eyeIcon.classList.toggle("fa-eye");
+            $(document).ready(function () {
+                $("#togglePassword").click(function () {
+                    const $passwordInput = $("#password");
+                    const isPassword = $passwordInput.attr("type") === "password";
+                    $passwordInput.attr("type", isPassword ? "text" : "password");
+                    $("#eyeIcon").toggleClass("fa-eye fa-eye-slash");
                 });
+            });
         </script>
     </div>
 </body>
