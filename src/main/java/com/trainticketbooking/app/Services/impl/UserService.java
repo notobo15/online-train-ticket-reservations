@@ -1,13 +1,17 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -21,10 +25,21 @@ public class UserService implements IUserService {
     }
 
     public Optional<User> getById(Integer id) {
-        return userRepository.findById(id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new NoSuchElementException("User with id " + id + " not found");
+        }
+        return userOptional;
     }
 
     public User save(User user) {
+        if (user.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        } else if (user.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        } else if (user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
         return userRepository.save(user);
     }
 
@@ -54,4 +69,18 @@ public class UserService implements IUserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public User adminUpdateUser(User user) {
+        User userTemp = getById(user.getUserId()).get();
+        user.setPassword(userTemp.getPassword());
+        return userRepository.save(user);
+    }
+
+
 }
