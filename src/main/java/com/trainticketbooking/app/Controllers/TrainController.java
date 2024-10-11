@@ -2,6 +2,7 @@ package com.trainticketbooking.app.Controllers;
 
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Services.ITrainService;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/trains")
 public class TrainController {
@@ -35,6 +37,11 @@ public class TrainController {
         model.addAttribute("trains", trainPage.getContent());
         model.addAttribute("currentPage", pageable.getPageNumber());
         model.addAttribute("totalPages", trainPage.getTotalPages());
+
+        log.info("trains" + trainPage.getContent());
+        log.info("trainPage.getTotalPages()" + trainPage.getTotalPages());
+        log.info("trainPage.currentPage()" + pageable.getPageNumber());
+        log.info("size" + size);
         model.addAttribute("size", size);
         return "admin/trains/index";
     }
