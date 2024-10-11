@@ -3,6 +3,8 @@ package com.trainticketbooking.app.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name = "seat_types")
 @Data
@@ -21,4 +23,8 @@ public class SeatType {
 
     @Column(name = "description")
     private String description;
+
+
+    @OneToMany(mappedBy = "seatType")
+    private List<SeatType> seatTypes;
 }

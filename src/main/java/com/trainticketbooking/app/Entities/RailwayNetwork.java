@@ -11,21 +11,27 @@ import java.util.List;
 public class RailwayNetwork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "railway_id")
+    @Column(name = "railway_neworks_id")
     private Integer railwayId;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "departure_station")
-    private Station departureStation;
-
-    @ManyToOne
-    @JoinColumn(name = "destination_station")
-    private Station destinationStation;
+//    @ManyToOne
+//    @JoinColumn(name = "departure_station")
+//    private Station departureStation;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "destination_station")
+//    private Station destinationStation;
 
     @OneToMany(mappedBy = "railwayNetwork")
-    private List<RailwayRoute> railwayRoutes;
+    private List<TrainJourney> trainJourneys;
+
+//    @OneToMany(mappedBy = "railwayNetwork")
+//    private List<Route> routes;
+
+    @Column(name = "status")
+    private String status; // Active, Maintenance, Suspended
 }
 

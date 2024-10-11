@@ -24,4 +24,7 @@ public class Passenger {
 
     @OneToMany(mappedBy = "passenger")
     private List<Ticket> tickets;
+
+    @Column(name = "identity_card_number", nullable = false, unique = true)
+    private String identityCardNumber;
 }

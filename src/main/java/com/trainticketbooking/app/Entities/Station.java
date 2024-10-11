@@ -34,4 +34,7 @@ public class Station {
 
     @OneToMany(mappedBy = "endStation")
     private List<Route> endRoutes;
+
+    @Column(name = "ggmap_link", nullable = false)
+    private String GGMapLink;
 }

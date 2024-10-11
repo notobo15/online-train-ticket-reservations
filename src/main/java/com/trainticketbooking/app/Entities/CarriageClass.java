@@ -13,7 +13,7 @@ public class CarriageClass {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "carriage_class_id")
-        private Integer CarriageClassId;
+        private Integer carriageClassId;
 
         private String name;
 

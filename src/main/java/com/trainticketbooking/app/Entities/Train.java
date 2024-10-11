@@ -22,7 +22,7 @@ public class Train {
     private String trainType;
 
     @OneToMany(mappedBy = "train")
-    private List<RailwayRoute> railwayRoutes;
+    private List<TrainJourney> trainJourneys;
 
     @OneToMany(mappedBy = "train")
     private List<Carriage> carriages;

@@ -33,16 +33,22 @@ public class Route {
     @Column(name = "departure_time", nullable = false)
     private LocalTime departureTime;
 
-    @ManyToOne
-    @JoinColumn(name = "railway_route_id")
-    private RailwayRoute railwayRoute;
+//    @ManyToOne
+//    @JoinColumn(name = "railway_network_id")
+//    private RailwayNetwork railwayNetwork;
 
     @Column(name = "station_number")
     private int stationNumber;
 
+    @Column(name = "status")
+    private String status;  // Active, Maintenance, Suspended
+
     @Column(name = "date_number")
     private int dateNumber;
 
-    @OneToMany(mappedBy = "route")
+    @OneToMany(mappedBy = "price")
     private List<Price> prices;
+
+    @OneToMany(mappedBy = "route")
+    private List<TrainJourneyRouteMapping> trainJourneyMappings;
 }
