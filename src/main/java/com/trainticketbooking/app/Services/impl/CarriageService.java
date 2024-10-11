@@ -60,10 +60,10 @@ public class CarriageService implements ICarriageService {
     }
 
 
-    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
-        Carriage carriage = carriageRepository.findById(carriageId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid carriage ID: " + carriageId));
-
-        return seatRepository.findByCarriage(carriage);
-    }
+//    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
+//        Carriage carriage = carriageRepository.findById(carriageId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid carriage ID: " + carriageId));
+//
+//        return seatRepository.findByCarriage(carriage);
+//    }
 }

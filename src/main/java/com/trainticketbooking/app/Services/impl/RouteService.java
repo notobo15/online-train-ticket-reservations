@@ -48,7 +48,6 @@ public class RouteService implements IRouteService {
             updatedRoute.setDistance(route.getDistance());
             updatedRoute.setArrivalTime(route.getArrivalTime());
             updatedRoute.setDepartureTime(route.getDepartureTime());
-            updatedRoute.setRailwayRoute(route.getRailwayRoute());
             updatedRoute.setStationNumber(route.getStationNumber());
             updatedRoute.setDateNumber(route.getDateNumber());
             return routeRepository.save(updatedRoute);

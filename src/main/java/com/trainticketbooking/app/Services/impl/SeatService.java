@@ -41,14 +41,13 @@ public class SeatService implements ISeatService {
         if (existingSeat.isPresent()) {
             Seat updatedSeat = existingSeat.get();
             updatedSeat.setSeatNumber(seat.getSeatNumber());
-            updatedSeat.setCarriage(seat.getCarriage());
             updatedSeat.setFloor(seat.getFloor());
             return seatRepository.save(updatedSeat);
         }
         throw new RuntimeException("Seat not found with id: " + seat.getSeatId());
     }
 
-    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
-        return seatRepository.findByCarriageCarriageId(carriageId);
-    }
+//    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
+//        return seatRepository.findByCarriageCarriageId(carriageId);
+//    }
 }
