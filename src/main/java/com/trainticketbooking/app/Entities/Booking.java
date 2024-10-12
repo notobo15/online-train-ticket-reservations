@@ -15,9 +15,6 @@ public class Booking {
     @Column(name = "booking_id")
     private Long bookingId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "passenger_id", nullable = false)
-//    private Passenger passenger;
 
     @Column(name = "booking_time", nullable = false)
     private LocalDateTime bookingTime;
@@ -30,4 +27,8 @@ public class Booking {
 
     @OneToOne(mappedBy = "booking")
     private Payment payment;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

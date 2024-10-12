@@ -1,10 +1,16 @@
 package com.trainticketbooking.app.Entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.time.LocalTime;
-import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "routes")
@@ -14,7 +20,7 @@ public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "route_id")
-    private Long routeId;
+    private Integer routeId;
 
     @ManyToOne
     @JoinColumn(name = "start_station_id", nullable = false)
@@ -33,10 +39,6 @@ public class Route {
     @Column(name = "departure_time", nullable = false)
     private LocalTime departureTime;
 
-//    @ManyToOne
-//    @JoinColumn(name = "railway_network_id")
-//    private RailwayNetwork railwayNetwork;
-
     @Column(name = "station_number")
     private int stationNumber;
 
@@ -46,9 +48,9 @@ public class Route {
     @Column(name = "date_number")
     private int dateNumber;
 
-    @OneToMany(mappedBy = "price")
-    private List<Price> prices;
 
-    @OneToMany(mappedBy = "route")
-    private List<TrainJourneyRouteMapping> trainJourneyMappings;
+    @ManyToOne
+    @JoinColumn(name = "train_id", nullable = false)
+    private Train train;
+
 }

@@ -12,7 +12,7 @@ public class PassengerType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long passengerTypeId;
+    private Integer passengerTypeId;
 
     private String passengerType;
 

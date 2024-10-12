@@ -25,7 +25,7 @@ public class RouteService implements IRouteService {
 
     @Override
     public Optional<Route> getById(Integer id) {
-        return routeRepository.findById(id.longValue());
+        return routeRepository.findById(id);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class RouteService implements IRouteService {
 
     @Override
     public void deleteById(Integer id) {
-        routeRepository.deleteById(id.longValue());
+        routeRepository.deleteById(id);
     }
 
     @Override
@@ -49,6 +49,7 @@ public class RouteService implements IRouteService {
             updatedRoute.setArrivalTime(route.getArrivalTime());
             updatedRoute.setDepartureTime(route.getDepartureTime());
             updatedRoute.setStationNumber(route.getStationNumber());
+            updatedRoute.setStatus(route.getStatus());
             updatedRoute.setDateNumber(route.getDateNumber());
             return routeRepository.save(updatedRoute);
         } else {

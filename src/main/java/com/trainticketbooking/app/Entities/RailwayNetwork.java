@@ -1,9 +1,15 @@
 package com.trainticketbooking.app.Entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "railway_networks")
@@ -17,19 +23,8 @@ public class RailwayNetwork {
     @Column(name = "name")
     private String name;
 
-//    @ManyToOne
-//    @JoinColumn(name = "departure_station")
-//    private Station departureStation;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "destination_station")
-//    private Station destinationStation;
-
     @OneToMany(mappedBy = "railwayNetwork")
-    private List<TrainJourney> trainJourneys;
-
-//    @OneToMany(mappedBy = "railwayNetwork")
-//    private List<Route> routes;
+    private List<Train> trains;
 
     @Column(name = "status")
     private String status; // Active, Maintenance, Suspended

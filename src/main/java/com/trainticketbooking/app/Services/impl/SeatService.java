@@ -46,8 +46,4 @@ public class SeatService implements ISeatService {
         }
         throw new RuntimeException("Seat not found with id: " + seat.getSeatId());
     }
-
-//    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
-//        return seatRepository.findByCarriageCarriageId(carriageId);
-//    }
 }
