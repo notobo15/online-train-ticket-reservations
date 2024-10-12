@@ -29,16 +29,6 @@ public class RailwayNetwork {
     @NotBlank(message = "Name cannot be empty")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "departure_station")
-    @NotNull(message = "Departure Station cannot be empty")
-    private Station departureStation;
-
-    @ManyToOne
-    @JoinColumn(name = "destination_station")
-    @NotNull(message = "Destination Station cannot be empty")
-    private Station destinationStation;
-
     @OneToMany(mappedBy = "railwayNetwork")
     private List<Train> trains;
 
