@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface StationMapper {
 
-    @Mapping(source = "provinceCode.code", target = "provinceCode")
-    @Mapping(source = "provinceCode.fullName", target = "provinceFullName")
+    @Mapping(source = "province.provinceId", target = "provinceCode")
+    @Mapping(source = "province.fullName", target = "provinceFullName")
     StationDto toStationDto(Station station);
 
     List<StationDto> toStationDtoList(List<Station> stations);

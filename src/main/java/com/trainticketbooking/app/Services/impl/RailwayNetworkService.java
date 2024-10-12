@@ -32,7 +32,6 @@ public class RailwayNetworkService implements IRailwayNetworkService {
     }
 
     @Override
-    public RailwayNetwork save(RailwayNetwork railwayNetwork) {
     public RailwayNetwork save(@Valid RailwayNetwork railwayNetwork) {
         // Save a new railway network or update an existing one
         return railwayNetworkRepository.save(railwayNetwork);

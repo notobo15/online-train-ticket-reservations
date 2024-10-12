@@ -9,10 +9,7 @@ import com.trainticketbooking.app.Services.impl.TrainService;
 import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.Station;
 import com.trainticketbooking.app.Entities.Train;
-import com.trainticketbooking.app.Services.impl.CarriageService;
-import com.trainticketbooking.app.Services.impl.RailwayRouteService;
 import com.trainticketbooking.app.Services.impl.StationService;
-import com.trainticketbooking.app.Services.impl.TrainService;
 import com.trainticketbooking.app.mapper.StationMapper;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 import java.util.*;
@@ -66,7 +64,7 @@ public class BookingApiController {
 //        response.put("availableSeatCount", seatDtos.size());
 //        response.put("availableSeats", seatDtos);
 
-//        return ResponseEntity.ok(response);
+    //        return ResponseEntity.ok(response);
 //    }
     @Autowired
     private StationService stationService;
@@ -134,7 +132,7 @@ public class BookingApiController {
 //    }
 
 
-//    @PostMapping("/search/results")
+    //    @PostMapping("/search/results")
 //    public ResponseEntity<?> searchTrains(@Valid @RequestBody BookingFormDto form, BindingResult bindingResult) {
 //
 //        if (bindingResult.hasErrors()) {
