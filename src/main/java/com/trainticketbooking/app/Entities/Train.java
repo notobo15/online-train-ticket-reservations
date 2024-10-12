@@ -26,4 +26,11 @@ public class Train {
 
     @OneToMany(mappedBy = "train")
     private List<Carriage> carriages;
+
+    @OneToMany(mappedBy = "train")
+    private List<Route> routes;
+
+    @ManyToOne
+    @JoinColumn(name = "railway_network_id", nullable = false)
+    private RailwayNetwork railwayNetwork;
 }

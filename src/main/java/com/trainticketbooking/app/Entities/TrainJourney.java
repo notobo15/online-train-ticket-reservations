@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "train_journeys")
@@ -21,9 +19,6 @@ public class TrainJourney {
     @JoinColumn(name = "train_id", nullable = false)
     private Train train;
 
-    @ManyToOne
-    @JoinColumn(name = "railway_network_id")
-    private RailwayNetwork railwayNetwork;
 
     @Column(name = "departure_date")
     private LocalDate departureDate;
@@ -32,8 +27,5 @@ public class TrainJourney {
     private LocalDate arrivalDate;
 
     @Column(name = "status")
-    private String status; // Open, Closed, Delayed
-
-    @OneToMany(mappedBy = "trainJourney")
-    private List<TrainJourneyRouteMapping> trainJourneyMappings;
+    private String status; // Open, Closed, Delayed, Upcoming, Cancelled, In Progress
 }

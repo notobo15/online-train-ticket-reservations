@@ -12,14 +12,14 @@ public class CarriageSeatMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "carriage_seat_id")
-    private Long carriageSeatId;
+    private Integer carriageSeatId;
 
     @ManyToOne
-    @JoinColumn(name = "carriage_id", nullable = false)
+    @JoinColumn(name = "carriage_id")
     private Carriage carriage;
 
     @ManyToOne
-    @JoinColumn(name = "seat_id", nullable = false)
+    @JoinColumn(name = "seat_id")
     private Seat seat;
 
     @Column(name = "status")
