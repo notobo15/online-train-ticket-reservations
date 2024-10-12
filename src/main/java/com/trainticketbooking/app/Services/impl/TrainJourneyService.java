@@ -85,17 +85,18 @@ public class TrainJourneyService implements ITrainJourneyService {
 
     @Override
     public TrainJourney update(TrainJourney trainJourney) {
-        Optional<TrainJourney> existingJourney = trainJourneyRepository.findById(trainJourney.getTrainJourneyId());
-        if (existingJourney.isPresent()) {
-            TrainJourney updatedJourney = existingJourney.get();
-            updatedJourney.setTrain(trainJourney.getTrain());
-            updatedJourney.setRailwayNetwork(trainJourney.getRailwayNetwork());
-            updatedJourney.setDepartureDate(trainJourney.getDepartureDate());
-            updatedJourney.setArrivalDate(trainJourney.getArrivalDate());
-            updatedJourney.setStatus(trainJourney.getStatus());
-            return trainJourneyRepository.save(updatedJourney);
-        } else {
-            throw new RuntimeException("Train Journey not found with ID: " + trainJourney.getTrainJourneyId());
-        }
+//        Optional<TrainJourney> existingJourney = trainJourneyRepository.findById(trainJourney.getTrainJourneyId());
+//        if (existingJourney.isPresent()) {
+//            TrainJourney updatedJourney = existingJourney.get();
+//            updatedJourney.setTrain(trainJourney.getTrain());
+//            updatedJourney.setRailwayNetwork(trainJourney.getRailwayNetwork());
+//            updatedJourney.setDepartureDate(trainJourney.getDepartureDate());
+//            updatedJourney.setArrivalDate(trainJourney.getArrivalDate());
+//            updatedJourney.setStatus(trainJourney.getStatus());
+//            return trainJourneyRepository.save(updatedJourney);
+//        } else {
+//            throw new RuntimeException("Train Journey not found with ID: " + trainJourney.getTrainJourneyId());
+//        }
+        return null;
     }
 }
