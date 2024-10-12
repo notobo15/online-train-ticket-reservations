@@ -47,6 +47,4 @@ public class Price {
 
         return basePrice;
     }
-        console.log("🚀 ~ Price ~ DoublecalTotalPrice ~ thu:", thu)
-        console.log("🚀 ~ Price ~ DoublecalTotalPrice ~ thu:", thu)
 }
