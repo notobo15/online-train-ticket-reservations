@@ -1,4 +1,5 @@
 package com.trainticketbooking.app.Entities;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import jakarta.persistence.*;
