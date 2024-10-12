@@ -7,6 +7,6 @@ import com.trainticketbooking.app.Entities.Route;
 import com.trainticketbooking.app.Entities.Station;
 
 @Repository
-public interface RouteRepository extends JpaRepository<Route, Long> {
+public interface RouteRepository extends JpaRepository<Route, Integer> {
     List<Route> findByStartStationAndEndStation(Station startStation, Station endStation);
 }
