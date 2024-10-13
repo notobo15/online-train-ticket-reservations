@@ -49,17 +49,14 @@ public class UserService implements IUserService {
 
     @Override
     public User update(User user) {
-        // Kiểm tra xem user có tồn tại trong cơ sở dữ liệu không
         Optional<User> existingUser = userRepository.findById(user.getUserId());
 
         if (existingUser.isPresent()) {
             User updatedUser = existingUser.get();
-            // Cập nhật các thông tin cần thiết từ đối tượng `user` được truyền vào
             updatedUser.setFullName(user.getFullName());
             updatedUser.setUsername(user.getUsername());
             updatedUser.setEmail(user.getEmail());
-            updatedUser.setPassword(user.getPassword());  // Nếu cần cập nhật mật khẩu
-            // Thực hiện lưu lại bản ghi đã cập nhật
+            updatedUser.setPassword(user.getPassword());
             return userRepository.save(updatedUser);
         } else {
             throw new RuntimeException("User not found with id: " + user.getUserId());
@@ -68,6 +65,11 @@ public class UserService implements IUserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByUsername(email);
     }
 
     @Override
