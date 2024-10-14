@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,27 +18,29 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf( csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/admin/login", "/admin/register", "/admin/forget-password").permitAll()
+                    .requestMatchers("/register").permitAll()
                     .requestMatchers( "/css/**", "/js/**", "/fonts/**", "/icons/**", "/images/**", "/vendors/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/**").permitAll()
-                    .anyRequest().authenticated()
+//                  .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                    .loginPage("/admin/login")
+                    .loginPage("/login")
                     .defaultSuccessUrl("/admin")
                     .failureHandler(new CustomAuthenticationFailureHandler())
                     .permitAll()
             )
             .logout(logout -> logout
-                    .logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/home/login?logout")
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login?logout=true")
                     .permitAll()
             )
             .exceptionHandling(exceptionHandling -> exceptionHandling

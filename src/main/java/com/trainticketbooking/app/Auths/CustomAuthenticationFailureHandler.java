@@ -17,11 +17,11 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         if (exception instanceof BadCredentialsException) {
-            response.sendRedirect("/admin/login?error=invalid_password");
+            response.sendRedirect("/login?error=invalid_password");
         } else if (exception instanceof UsernameNotFoundException) {
-            response.sendRedirect("/admin/login?error=user_not_found");
+            response.sendRedirect("/login?error=user_not_found");
         } else {
-            response.sendRedirect("/admin/login?error=true");
+            response.sendRedirect("/login?error=true");
         }
     }
 }

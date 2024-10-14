@@ -1,24 +1,36 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Entities.ResetToken;
 import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.User;
+import com.trainticketbooking.app.Repos.ResetTokenRepository;
 import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IUserService;
 
+import com.trainticketbooking.app.Utils.DateUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ResetTokenRepository resetTokenRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getAll() {
         return userRepository.findAll();
@@ -69,7 +81,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByUsername(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -84,5 +96,32 @@ public class UserService implements IUserService {
         return userRepository.save(user);
     }
 
+    public String generateResetToken(User user) {
+        String token = UUID.randomUUID().toString();
 
+        ResetToken resetToken = new ResetToken();
+        resetToken.setToken(token);
+        resetToken.setUser(user);
+        resetToken.setExpiryDate(DateUtils.calExpiryDate(12 * 60));
+        resetTokenRepository.save(resetToken);
+
+        return token;
+    }
+
+    @Transactional
+    public void updatePassword(User user, String newPassword) {
+        user.setPassword(newPassword);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    public ResetToken findByResetToken(String token) {
+        return resetTokenRepository.findByToken(token);
+
+    }
+
+    @Transactional
+    public void deleteResetToken(String token) {
+        resetTokenRepository.deleteByToken(token);
+    }
 }
