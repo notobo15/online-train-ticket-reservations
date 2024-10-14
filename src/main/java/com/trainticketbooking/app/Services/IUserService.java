@@ -10,4 +10,5 @@ public interface IUserService extends IService<User> {
     public User findByEmail(String email);
     Page<User> findAll(Pageable pageable);
     public User adminUpdateUser(User user);
+    public String generateResetToken(User user);
 }
