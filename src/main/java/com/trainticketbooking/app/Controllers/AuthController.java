@@ -29,18 +29,18 @@ public class AuthController {
     @Autowired
     private IRoleService roleService;
 
-    @GetMapping("/admin/login")
+    @GetMapping("/login")
     public String showLoginPage() {
         return "admin/auth/login";
     }
 
-    @GetMapping("/admin/register")
+    @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("userModel", new UserModel());
         return "admin/auth/register";
     }
 
-    @PostMapping("/admin/register")
+    @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("userModel") UserModel userModel, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -70,7 +70,7 @@ public class AuthController {
 
         userService.save(user);
 
-        return "redirect:/admin/login";
+        return "redirect:/login";
     }
 
 }
