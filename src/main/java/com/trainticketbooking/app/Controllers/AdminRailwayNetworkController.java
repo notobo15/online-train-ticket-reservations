@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 @Controller
@@ -70,76 +72,78 @@ public class AdminRailwayNetworkController {
         return "admin/railway-network/create";
     }
 
-//    @GetMapping("/edit/{id}")
-//    public String editUser(@PathVariable("id") Integer id, Model model) {
-//        log.info("Start edit user");
-//        try {
-//            Optional<User> userOptional = userService.getById(id);
-//            User user = userOptional.get();
-//            model.addAttribute("user", user);
-//        } catch (Exception e) {
-//            model.addAttribute(
-//                    "errorMessage",
-//                    "User edited fail!  " + e.getMessage());
-//        }
-//        return "admin/users/edit";
-//    }
-//
-//    @PostMapping("/edit/{id}")
-//    public String saveEditUser(@PathVariable("id") Integer id,
-//                               @ModelAttribute User user,
-//                               @RequestParam(value = "dob", required = false) LocalDate dob,
-//                               Model model) {
-//        log.info("Start save edit user");
-//        user.setUserId(id);
-//        if (dob != null) {
-//            log.info("check dob: {}", dob.toString());
-//            user.setDateOfBirth(dob);
-//        }
-//        try {
-//            log.info("User update: {}", user.toString());
-//            userService.adminUpdateUser(user);
-//            model.addAttribute(
-//                    "successMessage",
-//                    String.format("Edited user with id = %d successfully!", user.getUserId())
-//            );
-//        } catch (Exception e) {
-//            model.addAttribute(
-//                    "errorMessage",
-//                    "User edited fail!  " + e.getMessage());
-//        }
-////        model.addAttribute("user", user); ko cần dòng này vì @ModelAttribute sẽ tự add user vào model
-//        return "admin/users/edit";
-//    }
-//
-//    @GetMapping("detail/{id}")
-//    public String viewDetailUser(@PathVariable("id") Integer id, Model model) {
-//        log.info("Start detail user");
-//        try {
-//            Optional<User> userOptional = userService.getById(id);
-//            User user = userOptional.get();
-//            model.addAttribute("user", user);
-//        } catch (Exception e) {
-//            model.addAttribute(
-//                    "errorMessage",
-//                    "View detail user fail!  " + e.getMessage());
-//        }
-//        return "admin/users/detail";
-//    }
-//
-//    @PostMapping("/delete/{id}")
-//    public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-//        try {
-//            userService.deleteById(id);
-//            redirectAttributes.addFlashAttribute(
-//                    "successMessage",
-//                    String.format("Delete user success with id = %d", id)
-//            );
-//        } catch (Exception e) {
-//            redirectAttributes.addFlashAttribute(
-//                    "errorMessage",
-//                    "Delete user fail!  " + e.getMessage());
-//        }
-//        return "redirect:/admin/users/index";
-//    }
+    @GetMapping("/edit/{id}")
+    public String editRailwayNetwork(@PathVariable("id") Integer id, Model model) {
+        log.info("Start edit railway-network");
+        try {
+            Optional<RailwayNetwork> railwayNetworkOptional = railwayNetworkService.getById(id);
+            RailwayNetwork railwayNetwork = railwayNetworkOptional.get();
+            model.addAttribute("railwayNetwork", railwayNetwork);
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "railway-network edited fail!  " + e.getMessage());
+        }
+        return "admin/railway-network/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String saveEditRailwayNetwork(@PathVariable("id") Integer id,
+                                         @ModelAttribute RailwayNetwork railwayNetwork,
+                                         Model model) {
+        try {
+            railwayNetwork.setRailwayId(id);
+            log.info("RailwayNetwork update: {}", railwayNetwork.toString());
+            RailwayNetwork railwayNetworkResponse = railwayNetworkService.save(railwayNetwork);
+            model.addAttribute(
+                    "successMessage",
+                    String.format("Edited railwayNetwork successfully with id = %d", railwayNetworkResponse.getRailwayId())
+            );
+        } catch (ConstraintViolationException ex) {
+            // Lấy các lỗi validation
+            List<String> errors = ex.getConstraintViolations().stream()
+                    .map(ConstraintViolation::getMessage)  // Lấy thông báo lỗi từ từng violation
+                    .toList();
+            StringJoiner stringJoiner = new StringJoiner(" / ");
+            errors.forEach(stringJoiner::add);
+            model.addAttribute(
+                    "errorMessage",
+                    "Railway Network created fail! / " + stringJoiner.toString());
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Railway Network created fail!  " + e.getMessage());
+        }
+        return "admin/railway-network/edit";
+    }
+
+    @GetMapping("detail/{id}")
+    public String viewDetailRailwayNetwork(@PathVariable("id") Integer id, Model model) {
+        try {
+            Optional<RailwayNetwork> railwayNetworkOptional = railwayNetworkService.getById(id);
+            RailwayNetwork railwayNetwork = railwayNetworkOptional.get();
+            model.addAttribute("railwayNetwork", railwayNetwork);
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "View detail railwayNetwork fail!  " + e.getMessage());
+        }
+        return "admin/railway-network/detail";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            railwayNetworkService.deleteById(id);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    String.format("Delete railwayNetwork success with id = %d", id)
+            );
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Delete railwayNetwork fail!  " + e.getMessage());
+        }
+        return "redirect:/admin/railway-network/index";
+    }
 }

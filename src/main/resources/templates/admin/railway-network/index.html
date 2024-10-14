@@ -35,8 +35,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>departure_station</th>
-                                    <th>destination_station</th>
+                                    <th>status</th>
                                     <th style="width: 60px;">Actions</th>
                                 </tr>
                             </thead>
@@ -44,8 +43,14 @@
                                 <tr th:each="railwayNetwork : ${railwayNetworks}">
                                     <td th:text="${railwayNetwork.railwayId}"></td>
                                     <td th:text="${railwayNetwork.name}"></td>
-                                    <td th:text="${railwayNetwork.departureStation.stationName}"></td>
-                                    <td th:text="${railwayNetwork.destinationStation.stationName}"></td>
+                                    <td>
+                                        <span th:if="${railwayNetwork.status == 'Active'}"
+                                            class="badge bg-success">Active</span>
+                                        <span th:if="${railwayNetwork.status == 'Maintenance'}"
+                                            class="badge bg-warning text-dark">Maintenance</span>
+                                        <span th:if="${railwayNetwork.status == 'Suspended'}"
+                                            class="badge bg-danger">Suspended</span>
+                                    </td>
                                     <td class="actions">
                                         <a
                                             th:href="@{/admin/railway-network/detail/{id}(id=${railwayNetwork.railwayId})}">

@@ -4,8 +4,7 @@
 
 <head>
     <title>Create Railway Network</title>
-    <!-- Thêm Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- font-awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
@@ -33,7 +32,7 @@
             <span>Back</span>
         </a>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-5">
                 <!-- Kiểm tra nếu có thông báo thành công -->
                 <div th:if="${successMessage}" class="alert alert-success" role="alert">
                     <span th:text="${successMessage}"></span>
@@ -51,25 +50,31 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title text-primary">departure_station:</h5>
-                                    <select id="departureStation" th:field="*{departureStation.stationId}"
-                                        name="railway-network" class="form-control cbb-station">
-                                        <!-- select2 ajax sẽ call api đổ data option vào đây -->
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">destination_station:</h5>
-                                    <select id="destinationStation" th:field="*{destinationStation.stationId}"
-                                        name="railway-network" class="form-control cbb-station">
-                                        <!-- select2 ajax sẽ call api đổ data option vào đây -->
-                                    </select>
+                                    <h5 class="card-title text-primary">Status:</h5>
+                                    <div class="form-check mb-3">
+                                        <input th:field="*{status}" class="form-check-input" type="radio" name="status"
+                                            id="active" value="Active">
+                                        <label class="form-check-label badge bg-success" for="active">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input th:field="*{status}" class="form-check-input" type="radio" name="status"
+                                            id="maintenance" value="Maintenance">
+                                        <label class="form-check-label badge bg-warning text-dark" for="maintenance">
+                                            Maintenance
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input th:field="*{status}" class="form-check-input" type="radio" name="status"
+                                            id="suspended" value="Suspended">
+                                        <label class="form-check-label badge bg-danger" for="suspended">
+                                            Suspended
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -79,59 +84,11 @@
                     </button>
                 </form>
             </div>
-
         </div>
-        <input type="hidden" id="departureId" th:value="${railwayNetwork.departureStation.stationId}" />
-        <input type="hidden" id="destinationId" th:value="${railwayNetwork.destinationStation.stationId}" />
     </div>
 
     <div layout:fragment="scripts">
-        <!-- Thêm Select2 JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                // Gọi API để lấy dữ liệu từ server ngay khi trang load
-                $.ajax({
-                    url: 'http://localhost:8080/api/stations/list',
-                    type: 'GET',
-                    success: function (data) {
-                        // Lấy dữ liệu từ server và format lại để phù hợp với Select2
-                        let formattedData = data.map(function (station) {
-                            let displayStr = `${station.stationName} - ${station.provinceCode} (${station.provinceFullName})`;
-                            return { id: station.stationId, text: displayStr };
-                        });
 
-                        // Khởi tạo Select2 với dữ liệu đã lấy
-                        $('.cbb-station').select2({
-                            data: formattedData,  // Truyền dữ liệu đã lấy được vào đây
-                            placeholder: 'Select a station',
-                            ajax: {
-                                url: 'http://localhost:8080/api/stations/list',
-                                data: function (params) {
-                                    return {
-                                        search: params.term // Gửi từ khóa tìm kiếm tới server
-                                    };
-                                },
-                                processResults: function (data) {
-                                    return {
-                                        results: data.map(function (station) {
-                                            let displayStr = `${station.stationName} - ${station.provinceCode} (${station.provinceFullName})`;
-                                            return { id: station.stationId, text: displayStr };
-                                        })
-                                    };
-                                }
-                            }
-                        });
-                        let selectedDepartureId = $('#departureId').val();
-                        let selectedDestinationId = $('#destinationId').val();
-                        $('#departureStation').val(selectedDepartureId).trigger('change');
-                        $('#destinationStation').val(selectedDestinationId).trigger('change');
-                        console.log("selectedDepartureId: " + selectedDepartureId);
-                        console.log("selectedDestinationId: " + selectedDestinationId);
-                    }
-                });
-            });
-        </script>
     </div>
 </body>
 
