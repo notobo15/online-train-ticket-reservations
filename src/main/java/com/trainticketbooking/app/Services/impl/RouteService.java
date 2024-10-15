@@ -7,6 +7,8 @@ import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Services.IRouteService;
 import com.trainticketbooking.app.Services.ISeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,5 +57,10 @@ public class RouteService implements IRouteService {
         } else {
             throw new RuntimeException("Route not found with ID: " + route.getRouteId());
         }
+    }
+
+    @Override
+    public Page<Route> findAll(Pageable pageable) {
+        return routeRepository.findAll(pageable);
     }
 }

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Create Route</title>
+
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/routes}">Routes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h3>Create Route</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/routes/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Kiểm tra nếu có thông báo thành công -->
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <form th:action="@{/admin/routes/create}" th:object="${route}" method="post">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Start Station:</h5>
+                                    <select id="startStation" th:field="*{startStation.stationId}"
+                                        class="form-control cbb-station">
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                            th:text="${station.stationName} + ' (' + ${station.province.fullName} + ') '">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">End Station:</h5>
+                                    <select id="endStation" th:field="*{endStation.stationId}"
+                                        class="form-control cbb-station">
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                            th:text="${station.stationName} + ' (' + ${station.province.fullName} + ') '">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Train:</h5>
+                                    <select id="train" th:field="*{train.trainId}" class="form-control cbb-train">
+                                        <option th:each="train : ${trains}" th:value="${train.trainId}"
+                                            th:text="${train.trainNumber} + ' (' + ${train.trainType} + ') '">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Arrival Time:</h5>
+                                    <input th:field="*{arrivalTime}" type="time" class="timePicker form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Departure Time:</h5>
+                                    <input th:field="*{departureTime}" type="text" class="timePicker form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Distance:</h5>
+                                    <div class="input-group">
+                                        <input th:field="*{distance}" placeholder="Enter distance" type="number"
+                                            class="form-control" min="0" />
+                                        <span class="input-group-text">Km</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Date Number:</h5>
+                                    <input th:field="*{dateNumber}" placeholder="Enter dateNumber" type="number"
+                                        class="form-control" min="0" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Station Number:</h5>
+                                    <input th:field="*{stationNumber}" placeholder="Enter stationNumber" type="number"
+                                        class="form-control" min="0" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Status:</h5>
+                                    <div class="form-check mb-3 d-flex align-items-center">
+                                        <input th:field="*{status}" class="form-check-input" type="radio" name="status"
+                                            id="active" value="Active">
+                                        <label class="form-check-label badge bg-success ms-2" for="active">
+                                            Active
+                                        </label>
+                                        <input th:field="*{status}" class="form-check-input ms-3" type="radio"
+                                            name="status" id="maintenance" value="Maintenance">
+                                        <label class="form-check-label badge bg-warning text-dark ms-2"
+                                            for="maintenance">
+                                            Maintenance
+                                        </label>
+                                        <input th:field="*{status}" class="form-check-input ms-3" type="radio"
+                                            name="status" id="suspended" value="Suspended">
+                                        <label class="form-check-label badge bg-danger ms-2" for="suspended">
+                                            Suspended
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-lg" type="submit">
+                        <i class="fas fa-plus"></i> Create
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+
+        <!-- JS của Flatpickr -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <!-- Thêm Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- js time picker -->
+        <script>
+            flatpickr(".timePicker", {
+                enableTime: true,
+                noCalendar: true,
+                time_24hr: true,
+                dateFormat: "H:i",
+                minuteIncrement: 1,  // Cộng 1 phút mỗi lần thay đổi
+            });
+        </script>
+
+        <!-- js select2 -->
+        <script>
+            $(document).ready(function () {
+                $('#train').select2({
+                    placeholder: "Select a train",
+                });
+                $('.cbb-station').select2({
+                    placeholder: "Select a station",
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
