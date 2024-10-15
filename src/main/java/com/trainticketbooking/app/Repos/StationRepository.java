@@ -11,7 +11,4 @@ import java.util.List;
 @Repository
 public interface StationRepository extends JpaRepository<Station, Integer> {
     List<Station> findAll();
-
-    @Query("SELECT s FROM Station s WHERE LOWER(s.stationName) LIKE LOWER(CONCAT('%', :search, '%'))")
-    List<Station> searchStations(@Param("search") String search);
 }

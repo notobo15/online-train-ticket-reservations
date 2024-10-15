@@ -1,28 +1,18 @@
 package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Dtos.CarriageDto;
-import com.trainticketbooking.app.Dtos.*;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Services.ITrainJourneyService;
 import com.trainticketbooking.app.Services.impl.CarriageService;
 import com.trainticketbooking.app.Services.impl.TrainService;
-import com.trainticketbooking.app.Entities.Seat;
-import com.trainticketbooking.app.Entities.Station;
-import com.trainticketbooking.app.Entities.Train;
-import com.trainticketbooking.app.Services.impl.StationService;
-import com.trainticketbooking.app.mapper.StationMapper;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,12 +31,6 @@ public class BookingApiController {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private StationService stationService;
-
-    @Autowired
-    private StationMapper stationMapper;
 
 //    @GetMapping("/trains/{trainId}/carriages/{carriageId}/available-seats")
 //    public ResponseEntity<Map<String, Object>> getAvailableSeatsByCarriage(
@@ -132,16 +116,4 @@ public class BookingApiController {
 //                .collect(Collectors.toList());
 //        return ResponseEntity.ok(trainDTOs);
 //    }
-
-
-    @GetMapping("/stations/list")
-    public List<StationDto> getStations(@RequestParam(required = false) String search) {
-        List<Station> stationList;
-        if (search != null && !search.isEmpty()) {
-            stationList = stationService.searchStations(search);
-        } else {
-            stationList = stationService.getAll();
-        }
-        return stationMapper.toStationDtoList(stationList);
-    }
 }
