@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Create Route</title>
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/routes}">Routes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detail</li>
+            </ol>
+        </nav>
+        <h3>Route Detail</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/routes/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+
+        <div class="row">
+            <div class="col-md-8">
+                <!-- thông báo thất bại -->
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div th:if="${route}" class="card">
+                    <div class="card-header text-center">
+                        <h1 class="text-center text-danger">
+                            Route Details
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-id-badge"></i> Route ID</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.routeId}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-map-marker-alt"></i>
+                                Start Station
+                            </label>
+                            <div class="col-sm-9">
+                                <p
+                                    th:text="${route.startStation.stationName + ' (' + route.startStation.province.fullName + ')'}">
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-map-marker-alt"></i>
+                                End Station
+                            </label>
+                            <div class="col-sm-9">
+                                <p
+                                    th:text="${route.endStation.stationName + ' (' + route.endStation.province.fullName + ')'}">
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-ruler"></i> Distance (km)</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.distance}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-clock"></i> Arrival Time</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.arrivalTime}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-clock"></i> Departure Time</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.departureTime}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-list-ol"></i> Station Number</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.stationNumber}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-exclamation-circle"></i>
+                                Status
+                            </label>
+                            <div class="col-sm-9">
+                                <label th:if="${#strings.toLowerCase(route.status)} == 'active'"
+                                    class="form-check-label badge bg-success">
+                                    Active
+                                </label>
+                                <label th:if="${#strings.toLowerCase(route.status)} == 'maintenance'"
+                                    class="form-check-label badge bg-warning text-dark">
+                                    Maintenance
+                                </label>
+                                <label th:if="${#strings.toLowerCase(route.status)} == 'suspended'"
+                                    class="form-check-label badge bg-danger">
+                                    Suspended
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-calendar-alt"></i>
+                                Date Number
+                            </label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.dateNumber}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"><i class="fas fa-train"></i> Train</label>
+                            <div class="col-sm-9">
+                                <p th:text="${route.train.trainNumber} + ' (' + ${route.train.trainType} + ') '">></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout:fragment="scripts">
+        <script>
+        </script>
+    </div>
+</body>
+
+</html>
