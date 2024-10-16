@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.StringJoiner;
 
@@ -140,5 +139,27 @@ public class AdminRoutesController {
                             e.getMessage());
         }
         return "admin/routes/edit";
+    }
+
+    @GetMapping("detail/{id}")
+    public String viewDetailRoute(@PathVariable("id") Integer id, Model model) {
+        log.info("Start detail route");
+        try {
+            Optional<Route> routeOptional = routeService.getById(id);
+            if (routeOptional.isPresent()) {
+                Route route = routeOptional.get();
+                model.addAttribute("route", route);
+            } else {
+                model.addAttribute(
+                        "errorMessage",
+                        String.format("route id = %d does not exist", id)
+                );
+            }
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "View detail route fail!  " + e.getMessage());
+        }
+        return "admin/routes/detail";
     }
 }
