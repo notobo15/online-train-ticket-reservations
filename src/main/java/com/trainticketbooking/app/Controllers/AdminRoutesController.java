@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -161,5 +162,21 @@ public class AdminRoutesController {
                     "View detail route fail!  " + e.getMessage());
         }
         return "admin/routes/detail";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteRoute(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            routeService.deleteById(id);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    String.format("Delete route success with id = %d", id)
+            );
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Delete route fail!  " + e.getMessage());
+        }
+        return "redirect:/admin/routes/index";
     }
 }
