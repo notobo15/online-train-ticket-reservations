@@ -1,8 +1,10 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.Train;
+import com.trainticketbooking.app.Mappers.CarriageMapper;
 import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Repos.TrainRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarriageService implements ICarriageService {
@@ -22,6 +25,9 @@ public class CarriageService implements ICarriageService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private TrainRepository trainRepository;
 
     @Override
     public List<Carriage> getAll() {
@@ -66,4 +72,15 @@ public class CarriageService implements ICarriageService {
 //
 //        return seatRepository.findByCarriage(carriage);
 //    }
+
+    public List<CarriageDTO> searchCarriagesByTrain(Integer trainId) {
+        // Tìm Train dựa trên trainId
+        Train train = trainRepository.findById(trainId)
+                .orElseThrow(() -> new RuntimeException("Train not found"));
+
+        // Lấy danh sách các toa từ Train
+        return train.getCarriages().stream()
+                .map(CarriageMapper.INSTANCE::toCarriageDTO)
+                .collect(Collectors.toList());
+    }
 }
