@@ -577,7 +577,6 @@ public class ExcelReader {
                     Integer carriageSeatId = Integer.parseInt(carriageSeatIdStr);
                     Integer carriageId = Integer.parseInt(carriageIdStr);
                     Integer seatId = Integer.parseInt(seatIdStr);
-                    boolean status = Boolean.parseBoolean(statusStr);
 
                     // Fetch related Carriage and Seat entities
                     Optional<Carriage> carriage = carriageService.getById(carriageId);
@@ -588,7 +587,7 @@ public class ExcelReader {
                         mapping.setCarriageSeatId(carriageSeatId);
                         mapping.setCarriage(carriage.get());
                         mapping.setSeat(seat.get());
-                        mapping.setStatus(status);
+                        mapping.setStatus(statusStr);
 
                         carriageSeatMappingService.save(mapping);
                     } else {
