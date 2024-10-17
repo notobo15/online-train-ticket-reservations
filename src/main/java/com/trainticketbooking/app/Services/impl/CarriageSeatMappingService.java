@@ -42,7 +42,7 @@ public class CarriageSeatMappingService implements ICarriageSeatMappingService {
             CarriageSeatMapping updatedMapping = existingMapping.get();
             updatedMapping.setCarriage(carriageSeatMapping.getCarriage());
             updatedMapping.setSeat(carriageSeatMapping.getSeat());
-            updatedMapping.setStatus(carriageSeatMapping.isStatus());
+            updatedMapping.setStatus(carriageSeatMapping.getStatus());
             return carriageSeatMappingRepository.save(updatedMapping);
         } else {
             throw new RuntimeException("CarriageSeatMapping not found with ID: " + carriageSeatMapping.getCarriageSeatId());
