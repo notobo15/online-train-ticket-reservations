@@ -13,10 +13,10 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id")
-    private Long ticketId;
+    private Integer ticketId;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id", nullable = false)
+    @JoinColumn(name = "booking_id", nullable = true)
     private Booking booking;
 
     @ManyToOne
@@ -26,14 +26,19 @@ public class Ticket {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "booking_date", nullable = false)
+    @Column(name = "booking_datetime", nullable = false)
     private LocalDateTime bookingDate;
 
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "booking_time", nullable = false)
-    private LocalDateTime bookingTime;
+    @ManyToOne
+    @JoinColumn(name = "start_station_id")
+    private Station startStation;
+
+    @ManyToOne
+    @JoinColumn(name = "end_station_id")
+    private Station endStation;
 
     @ManyToOne
     @JoinColumn(name = "carriage_seat_id", nullable = false)
