@@ -42,7 +42,8 @@
                                 </tr>
                             </thead>
                             <tbody th:if="${routes}">
-                                <tr th:each=" route : ${routes}">
+                                <tr th:each=" route : ${routes}"
+                                    th:data-train="${route.train.trainId + ' - ' + route.train.trainNumber + ' - ' + route.train.trainType}">
                                     <td th:text="${route.routeId}"></td>
                                     <td
                                         th:text="${route.startStation.stationName + ' (' + route.startStation.province.fullName + ')'}">
@@ -91,6 +92,28 @@
             $('#dataTableExample').DataTable({
                 "paging": false,
                 "info": false,
+                "drawCallback": function (settings) {
+                    console.log("Table is redrawn!");
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes();
+                    var last = null;
+
+                    // Xóa tất cả các hàng train-row đã thêm trước đó
+                    $('.train-row').remove();
+
+                    // Lấy dữ liệu của cột "train" từ mỗi hàng và kiểm tra khi nhóm mới bắt đầu
+                    api.rows({ page: 'current' }).data().each(function (data, i) {
+                        var train = $(api.row(i).node()).data('train');
+
+                        // check thử có phải group mới không
+                        if (last !== train) {
+                            $(rows).eq(i).before(
+                                '<tr class="train-row"><td colspan="6" class="text-bg-secondary fw-bold text-center">' + train + '</td></tr>'
+                            );
+                            last = train;
+                        }
+                    });
+                },
             });
             $('.deleteBtn').on('click', function (e) {
                 e.preventDefault();

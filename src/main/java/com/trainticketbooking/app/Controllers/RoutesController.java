@@ -26,14 +26,13 @@ import java.util.StringJoiner;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class AdminRoutesController {
+public class RoutesController {
     IRouteService routeService;
     ITrainService trainService;
     IStationService stationService;
 
     @GetMapping({"", "/index"})
     public String getAllRoutes(Model model, Pageable pageable) {
-
         Page<Route> routePage = routeService.findAll(pageable);
 
         model.addAttribute("routes", routePage.getContent());

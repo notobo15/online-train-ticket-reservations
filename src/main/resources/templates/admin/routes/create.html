@@ -128,23 +128,29 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title text-primary">Status:</h5>
-                                    <div class="form-check mb-3 d-flex align-items-center">
-                                        <input th:field="*{status}" class="form-check-input" type="radio" name="status"
-                                            id="active" value="Active">
-                                        <label class="form-check-label badge bg-success ms-2" for="active">
-                                            Active
-                                        </label>
-                                        <input th:field="*{status}" class="form-check-input ms-3" type="radio"
-                                            name="status" id="maintenance" value="Maintenance">
-                                        <label class="form-check-label badge bg-warning text-dark ms-2"
-                                            for="maintenance">
-                                            Maintenance
-                                        </label>
-                                        <input th:field="*{status}" class="form-check-input ms-3" type="radio"
-                                            name="status" id="suspended" value="Suspended">
-                                        <label class="form-check-label badge bg-danger ms-2" for="suspended">
-                                            Suspended
-                                        </label>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="form-check me-3 mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                name="status" id="active" value="Active">
+                                            <label class="form-check-label badge bg-success" for="active">
+                                                Active
+                                            </label>
+                                        </div>
+                                        <div class="form-check me-3 mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                name="status" id="maintenance" value="Maintenance">
+                                            <label class="form-check-label badge bg-warning text-dark"
+                                                for="maintenance">
+                                                Maintenance
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                name="status" id="suspended" value="Suspended">
+                                            <label class="form-check-label badge bg-danger" for="suspended">
+                                                Suspended
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -182,9 +188,11 @@
             $(document).ready(function () {
                 $('#train').select2({
                     placeholder: "Select a train",
+                    width: '100%'
                 });
                 $('.cbb-station').select2({
                     placeholder: "Select a station",
+                    width: '100%'
                 });
             });
         </script>
