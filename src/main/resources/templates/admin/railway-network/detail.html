@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Create Railway Network</title>
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/railway-network}">Railway Network</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detail</li>
+            </ol>
+        </nav>
+        <h3>Railway Network Detail</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/railway-network/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+
+        <div class="row">
+            <div class="col-md-6">
+                <!-- thông báo thất bại -->
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div class="card" th:if="${railwayNetwork}">
+                    <div class="card-header text-center">
+                        <h1 class="text-center text-danger">Railway Network Details</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>ID:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-id-badge icon me-2"></i>
+                                <span th:text="${railwayNetwork.railwayId}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Name:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fa-solid fa-road me-2"></i>
+                                <span th:text="${railwayNetwork.name}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Status:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fa-solid fa-gear me-2"></i>
+                                <span th:if="${railwayNetwork.status == 'Active'}"
+                                    class="badge bg-success">Active</span>
+                                <span th:if="${railwayNetwork.status == 'Maintenance'}"
+                                    class="badge bg-warning text-dark">Maintenance</span>
+                                <span th:if="${railwayNetwork.status == 'Suspended'}"
+                                    class="badge bg-danger">Suspended</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+        <script>
+        </script>
+    </div>
+</body>
+
+</html>

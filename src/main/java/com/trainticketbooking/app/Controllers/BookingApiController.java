@@ -5,16 +5,19 @@ import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Services.ITrainJourneyService;
 import com.trainticketbooking.app.Services.impl.CarriageService;
 import com.trainticketbooking.app.Services.impl.TrainService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class BookingApiController {
 
     @Autowired
@@ -53,8 +56,9 @@ public class BookingApiController {
 //        response.put("availableSeatCount", seatDtos.size());
 //        response.put("availableSeats", seatDtos);
 
-//        return ResponseEntity.ok(response);
+    //        return ResponseEntity.ok(response);
 //    }
+
 
     @GetMapping("/trains/{trainId}/carriages")
     public ResponseEntity<List<CarriageDto>> getCarriages(@PathVariable Integer trainId) {
@@ -91,7 +95,7 @@ public class BookingApiController {
 //    }
 
 
-//    @PostMapping("/search/results")
+    //    @PostMapping("/search/results")
 //    public ResponseEntity<?> searchTrains(@Valid @RequestBody BookingFormDto form, BindingResult bindingResult) {
 //
 //        if (bindingResult.hasErrors()) {

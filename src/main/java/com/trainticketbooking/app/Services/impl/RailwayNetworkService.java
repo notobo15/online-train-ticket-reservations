@@ -5,6 +5,8 @@ import com.trainticketbooking.app.Repos.RailwayNetworkRepository;
 import com.trainticketbooking.app.Services.IRailwayNetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ public class RailwayNetworkService implements IRailwayNetworkService {
 
     @Override
     public RailwayNetwork save(RailwayNetwork railwayNetwork) {
+        // Save a new railway network or update an existing one
         return railwayNetworkRepository.save(railwayNetwork);
     }
 
@@ -45,5 +48,10 @@ public class RailwayNetworkService implements IRailwayNetworkService {
         } else {
             throw new RuntimeException("Railway network not found with ID: " + railwayNetwork.getRailwayId());
         }
+    }
+
+    @Override
+    public Page<RailwayNetwork> findAll(Pageable pageable) {
+        return railwayNetworkRepository.findAll(pageable);
     }
 }
