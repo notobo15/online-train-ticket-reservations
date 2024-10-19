@@ -1,10 +1,6 @@
 package com.trainticketbooking.app.Dtos.Train;
 
-import com.trainticketbooking.app.Entities.Carriage;
-import com.trainticketbooking.app.Entities.RailwayNetwork;
-import com.trainticketbooking.app.Entities.Route;
-import com.trainticketbooking.app.Entities.TrainJourney;
-import jakarta.persistence.*;
+import com.trainticketbooking.app.Dtos.TrainJourney.TrainJourneyDTO;
 import lombok.Data;
 
 import java.time.LocalTime;
@@ -19,4 +15,5 @@ public class TrainDTO {
     private LocalTime arrivalTime;
     private String totalDuration;
     private double totalDistance;
+    private List<TrainJourneyDTO> journeys;
 }
