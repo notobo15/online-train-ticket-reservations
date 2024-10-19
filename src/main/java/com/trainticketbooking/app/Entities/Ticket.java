@@ -3,6 +3,7 @@ package com.trainticketbooking.app.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +21,7 @@ public class Ticket {
     private Booking booking;
 
     @ManyToOne
-    @JoinColumn(name = "passenger_id", nullable = false)
+    @JoinColumn(name = "passenger_id", nullable = true)
     private Passenger passenger;
 
     @Column(name = "price", nullable = false)
@@ -28,6 +29,9 @@ public class Ticket {
 
     @Column(name = "booking_datetime", nullable = false)
     private LocalDateTime bookingDate;
+
+    @Column(name = "departure_date")
+    private LocalDate departureDate;
 
     @Column(name = "status", nullable = false)
     private String status;
@@ -43,4 +47,12 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "carriage_seat_id", nullable = false)
     private CarriageSeatMapping carriageSeatMapping;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "return_ticket_id", referencedColumnName = "ticket_id", nullable = true)
+    private Ticket returnTicket;
+
+    @ManyToOne
+    @JoinColumn(name = "ticket_type", nullable = false)
+    private TicketType ticketType;
 }
