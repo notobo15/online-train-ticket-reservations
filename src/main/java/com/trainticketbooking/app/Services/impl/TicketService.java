@@ -5,10 +5,12 @@ import com.trainticketbooking.app.Repos.TicketRepository;
 import com.trainticketbooking.app.Services.ITicketService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TicketService implements ITicketService {
 
     @Autowired

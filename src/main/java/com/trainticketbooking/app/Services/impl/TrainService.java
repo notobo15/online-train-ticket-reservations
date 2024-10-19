@@ -1,21 +1,16 @@
 package com.trainticketbooking.app.Services.impl;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.trainticketbooking.app.Entities.Carriage;
+import com.trainticketbooking.app.Entities.Train;
+import com.trainticketbooking.app.Repos.*;
+import com.trainticketbooking.app.Services.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.trainticketbooking.app.Entities.Carriage;
-import com.trainticketbooking.app.Entities.Seat;
-import com.trainticketbooking.app.Entities.Train;
-import com.trainticketbooking.app.Repos.CarriageRepository;
-import com.trainticketbooking.app.Repos.SeatRepository;
-import com.trainticketbooking.app.Repos.TrainRepository;
-import com.trainticketbooking.app.Services.ITrainService;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TrainService implements ITrainService {
@@ -28,6 +23,11 @@ public class TrainService implements ITrainService {
 
     @Autowired
     private CarriageRepository carriageRepository;
+
+    @Autowired
+    private PriceRepository priceRepository;
+
+    private RouteRepository routeRepository;
 
 //    public List<Seat> findSeatsByTrainId(Integer trainId) {
 //        return seatRepository.findSeatsByTrainId(trainId);
@@ -73,5 +73,4 @@ public class TrainService implements ITrainService {
     public Page<Train> findAll(Pageable pageable) {
         return trainRepository.findAll(pageable);
     }
-
 }
