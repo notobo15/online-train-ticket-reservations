@@ -246,6 +246,26 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#roles" role="button" aria-expanded="false"
+                    aria-controls="seats">
+                    <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/role.svg}" alt="">
+
+                    <span class="link-title">Roles</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" data-bs-parent="#sidebarNav" id="roles">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/roles/index}" class="nav-link">List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/roles/create}" class="nav-link">Create</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <!--            <li class="nav-item">-->
             <!--                <a href="pages/apps/calendar.html" class="nav-link">-->
             <!--                    <i class="link-icon" data-feather="calendar"></i>-->
