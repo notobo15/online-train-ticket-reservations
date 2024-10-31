@@ -22,7 +22,7 @@ public class Carriage {
     @JoinColumn(name = "train_id", nullable = false)
     private Train train;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "carriage_class_Id")
     private CarriageClass carriageClass;
 
@@ -36,9 +36,5 @@ public class Carriage {
     private int totalFloors;
 
     @OneToMany(mappedBy = "carriage")
-    private List<Seat> seats;
-
-//    @OneToMany(mappedBy = "carriage")
-//    private List<Compartment> compartments;
-
+    private List<CarriageSeatMapping> carriageSeatMappings;
 }

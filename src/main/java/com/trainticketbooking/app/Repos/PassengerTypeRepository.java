@@ -1,9 +1,9 @@
 package com.trainticketbooking.app.Repos;
 
+import com.trainticketbooking.app.Entities.PassengerType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.trainticketbooking.app.Entities.Compartment;
 
 @Repository
-public interface CompartmentRepository extends JpaRepository<Compartment, Long> {
+public interface PassengerTypeRepository extends JpaRepository<PassengerType, Integer> {
 }

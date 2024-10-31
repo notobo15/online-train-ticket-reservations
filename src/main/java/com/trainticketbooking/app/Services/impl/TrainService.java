@@ -29,9 +29,9 @@ public class TrainService implements ITrainService {
     @Autowired
     private CarriageRepository carriageRepository;
 
-    public List<Seat> findSeatsByTrainId(Integer trainId) {
-        return seatRepository.findSeatsByTrainId(trainId);
-    }
+//    public List<Seat> findSeatsByTrainId(Integer trainId) {
+//        return seatRepository.findSeatsByTrainId(trainId);
+//    }
 
     public List<Carriage> findCarriagesByTrainId(Integer trainId) {
         return carriageRepository.findByTrainTrainId(trainId);

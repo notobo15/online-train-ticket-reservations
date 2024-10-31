@@ -1,11 +1,22 @@
 package com.trainticketbooking.app.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import jakarta.persistence.*;
 import lombok.ToString;
-
 import java.math.BigDecimal;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "stations")
@@ -16,22 +27,22 @@ public class Station {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer stationId;
 
-    @Column(name = "station_name")
+    @Column(name = "name")
     private String stationName;
 
+    @Column(name = "code", nullable = true)
+    private String code;
+
     @ManyToOne
-    @JoinColumn(name = "province_code")
-    private Province provinceCode;
-
-    @Column(name = "latitude", precision = 9, scale = 6)
-    private BigDecimal latitude; // Vĩ độ
-
-    @Column(name = "longitude", precision = 9, scale = 6)
-    private BigDecimal longitude; // Kinh độ
+    @JoinColumn(name = "province_id", nullable = true)
+    private Province province;
 
     @OneToMany(mappedBy = "startStation")
     private List<Route> startRoutes;
 
     @OneToMany(mappedBy = "endStation")
     private List<Route> endRoutes;
+
+    @Column(name = "ggmap_link", nullable = true)
+    private String GGMapLink;
 }

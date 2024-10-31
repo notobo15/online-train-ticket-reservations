@@ -16,8 +16,8 @@ public class Ticket {
     private Long ticketId;
 
     @ManyToOne
-    @JoinColumn(name = "seat_id", nullable = false)
-    private Seat seat;
+    @JoinColumn(name = "booking_id", nullable = false)
+    private Booking booking;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id", nullable = false)
@@ -31,4 +31,11 @@ public class Ticket {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "booking_time", nullable = false)
+    private LocalDateTime bookingTime;
+
+    @ManyToOne
+    @JoinColumn(name = "carriage_seat_id", nullable = false)
+    private CarriageSeatMapping carriageSeatMapping;
 }

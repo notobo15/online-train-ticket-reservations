@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Create User</title>
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/users}">Users</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detail</li>
+            </ol>
+        </nav>
+        <h3>User Detail</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/users/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+
+        <div class="row">
+            <div class="col-md-6">
+                <!-- thông báo thất bại -->
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div class="card" th:if="${user}">
+                    <div class="card-header text-center">
+                        <h1 class="text-center text-danger">User Details</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>ID:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-id-badge icon me-2"></i>
+                                <span th:text="${user.userId}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Username:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-user icon me-2"></i>
+                                <span th:text="${user.username}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Email:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-envelope icon me-2"></i>
+                                <span th:text="${user.email}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Full Name:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-address-card icon me-2"></i>
+                                <span th:text="${user.fullName}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Gender:</strong></div>
+                            <div class="col-md-9">
+                                <span th:class="${user.gender == 'male' ? 'fa-solid fa-mars' : 'fa-solid fa-venus'}"
+                                    class="icon me-2"></span>
+                                <span th:text="${user.gender}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Phone:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-phone icon me-2"></i>
+                                <span th:text="${user.phone}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-end text-secondary"><strong>Date of Birth:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-birthday-cake icon me-2"></i>
+                                <span th:text="${user.dateOfBirth}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 text-end text-secondary"><strong>Address:</strong></div>
+                            <div class="col-md-9">
+                                <i class="fas fa-home icon me-2"></i>
+                                <span th:text="${user.address}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+        <script>
+        </script>
+    </div>
+</body>
+
+</html>

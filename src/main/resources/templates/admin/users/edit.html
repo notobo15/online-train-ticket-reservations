@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Edit User</title>
+
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/users}">Users</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </nav>
+        <h3>Edit User</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/users/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Kiểm tra nếu có thông báo thành công -->
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div th:if="${user}">
+                    <form th:action="@{/admin/users/edit/{id}(id=${user.userId})}" th:object="${user}" method="post">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">ID:</h5>
+                                        <span th:text="*{userId}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Username:</h5>
+                                        <input th:field="*{username}" placeholder="Enter Username" type="text"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Full Name:</h5>
+                                        <input th:field="*{fullName}" placeholder="Enter Full Name" type="text"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Email:</h5>
+                                        <input th:field="*{email}" placeholder="Enter Email" type="email"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Gender:</h5>
+                                        <div class="mb-3 input-group">
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="radio" th:field="*{gender}"
+                                                    id="genderMale" value="male" />
+                                                <label class="form-check-label" for="genderMale">
+                                                    <i class="fa-solid fa-mars"></i>
+                                                    Male
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" th:field="*{gender}"
+                                                    id="genderFemale" value="female" />
+                                                <label class="form-check-label" for="genderFemale">
+                                                    <i class="fa-solid fa-venus"></i>
+                                                    Female
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Phone:</h5>
+                                        <input th:field="*{phone}" placeholder="Enter Phone Number" type="text"
+                                            class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Date Of Birth:</h5>
+                                        <input name="dob" th:value="*{dateOfBirth}" type="date" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Address:</h5>
+                                        <input th:field="*{address}" id="address" placeholder="Enter Address"
+                                            type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-check"></i> Save Edit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,7 +1,14 @@
 package com.trainticketbooking.app.Entities;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
@@ -23,4 +30,9 @@ public class SeatType {
 
     @Column(name = "description")
     private String description;
+
+
+    @OneToMany(mappedBy = "seatType")
+    private List<Price> prices;
+
 }

@@ -22,8 +22,15 @@ public class Train {
     private String trainType;
 
     @OneToMany(mappedBy = "train")
-    private List<RailwayRoute> railwayRoutes;
+    private List<TrainJourney> trainJourneys;
 
     @OneToMany(mappedBy = "train")
     private List<Carriage> carriages;
+
+    @OneToMany(mappedBy = "train")
+    private List<Route> routes;
+
+    @ManyToOne
+    @JoinColumn(name = "railway_network_id", nullable = false)
+    private RailwayNetwork railwayNetwork;
 }

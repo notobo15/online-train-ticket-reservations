@@ -12,7 +12,8 @@ import java.util.List;
 public class Province {
 
     @Id
-    private String code;
+    @Column(name = "province_id")
+    private Integer provinceId;
 
     @Column(name = "name")
     private String name;
@@ -29,7 +30,7 @@ public class Province {
     @Column(name = "code_name")
     private String codeName;
 
-    @OneToMany(mappedBy = "provinceCode")
+    @OneToMany(mappedBy = "province")
     private List<Station> stations;
 
 }

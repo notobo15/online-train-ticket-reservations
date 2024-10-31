@@ -7,6 +7,8 @@ import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Services.IRouteService;
 import com.trainticketbooking.app.Services.ISeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class RouteService implements IRouteService {
 
     @Override
     public Optional<Route> getById(Integer id) {
-        return routeRepository.findById(id.longValue());
+        return routeRepository.findById(id);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class RouteService implements IRouteService {
 
     @Override
     public void deleteById(Integer id) {
-        routeRepository.deleteById(id.longValue());
+        routeRepository.deleteById(id);
     }
 
     @Override
@@ -48,12 +50,17 @@ public class RouteService implements IRouteService {
             updatedRoute.setDistance(route.getDistance());
             updatedRoute.setArrivalTime(route.getArrivalTime());
             updatedRoute.setDepartureTime(route.getDepartureTime());
-            updatedRoute.setRailwayRoute(route.getRailwayRoute());
             updatedRoute.setStationNumber(route.getStationNumber());
+            updatedRoute.setStatus(route.getStatus());
             updatedRoute.setDateNumber(route.getDateNumber());
             return routeRepository.save(updatedRoute);
         } else {
             throw new RuntimeException("Route not found with ID: " + route.getRouteId());
         }
+    }
+
+    @Override
+    public Page<Route> findAll(Pageable pageable) {
+        return routeRepository.findAll(pageable);
     }
 }

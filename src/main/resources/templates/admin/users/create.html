@@ -1,28 +1,101 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
 <head>
     <title>Create User</title>
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
-<h1>Create New User</h1>
-<form th:action="@{/users/save}" th:object="${user}" method="post">
-    <label>Username:</label>
-    <input type="text" th:field="*{username}" required />
-    <label>Password:</label>
-    <input type="password" th:field="*{password}" required />
-    <label>Email:</label>
-    <input type="email" th:field="*{email}" required />
-    <label>Phone:</label>
-    <input type="text" th:field="*{phone}" />
-    <label>Full Name:</label>
-    <input type="text" th:field="*{fullName}" />
-    <label>Address:</label>
-    <input type="text" th:field="*{address}" />
-    <label>Date of Birth:</label>
-    <input type="date" th:field="*{dateOfBirth}" />
-    <label>Gender:</label>
-    <input type="text" th:field="*{gender}" />
-    <button type="submit">Save</button>
-</form>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/users}">Users</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create</li>
+            </ol>
+        </nav>
+        <h3>Create User</h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/users/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Kiểm tra nếu có thông báo thành công -->
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <form th:action="@{/admin/users/create}" th:object="${user}" method="post">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Username:</h5>
+                                    <input th:field="*{username}" placeholder="Enter Username" type="text"
+                                        class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Email:</h5>
+                                    <input th:field="*{email}" placeholder="Enter Email" type="email"
+                                        class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- input password -->
+                                    <div class="input-group">
+                                        <h5 for="pwd" class="form-label text-primary">Password</h5>
+                                        <div class="input-group">
+                                            <input th:field="*{password}" id="password" class="form-control"
+                                                type="password" placeholder="Enter Password" />
+
+                                            <!-- Button show password -->
+                                            <div class="input-group-append">
+                                                <button id="togglePassword" class="btn btn-outline-secondary"
+                                                    type="button">
+                                                    <i class="fas fa-eye-slash" id="eyeIcon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-lg" type="submit">
+                        <i class="fas fa-plus"></i> Create
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+        <script>
+            $(document).ready(function () {
+                $("#togglePassword").click(function () {
+                    const $passwordInput = $("#password");
+                    const isPassword = $passwordInput.attr("type") === "password";
+                    $passwordInput.attr("type", isPassword ? "text" : "password");
+                    $("#eyeIcon").toggleClass("fa-eye fa-eye-slash");
+                });
+            });
+        </script>
+    </div>
 </body>
+
 </html>

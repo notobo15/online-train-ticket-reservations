@@ -8,6 +8,7 @@ import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,14 +43,15 @@ public class CarriageClassService implements ICarriageClassService {
 
     @Override
     public CarriageClass update(CarriageClass carriage) {
-        Optional<CarriageClass> existingCarriage = carriageClassRepository.findById(carriage.getCarriageClassId());
-        if (existingCarriage.isPresent()) {
-            CarriageClass updatedCarriage = existingCarriage.get();
-            updatedCarriage.setName(carriage.getName());
-            return carriageClassRepository.save(updatedCarriage);
-        } else {
-            throw new RuntimeException("Carriage class not found with ID: " + carriage.getCarriageClassId());
-        }
+        // Tìm kiếm đối tượng CarriageClass bằng ID hoặc ném ngoại lệ nếu không tìm thấy
+        CarriageClass existingCarriage = carriageClassRepository.findById(carriage.getCarriageClassId())
+                .orElseThrow(() -> new EntityNotFoundException("Carriage class not found with ID: " + carriage.getCarriageClassId()));
+
+        // Cập nhật thông tin
+        existingCarriage.setName(carriage.getName());
+
+        // Lưu và trả về đối tượng đã cập nhật
+        return carriageClassRepository.save(existingCarriage);
     }
 
 }

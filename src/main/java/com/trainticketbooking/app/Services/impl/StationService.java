@@ -44,9 +44,7 @@ public class StationService implements IStationService {
         if (existingStation.isPresent()) {
             Station updatedStation = existingStation.get();
             updatedStation.setStationName(station.getStationName());
-            updatedStation.setLatitude(station.getLatitude());
-            updatedStation.setLongitude(station.getLongitude());
-            updatedStation.setProvinceCode(station.getProvinceCode());
+            updatedStation.setProvince(station.getProvince());
             return stationRepository.save(updatedStation);
         } else {
             throw new RuntimeException("Station not found with ID: " + station.getStationId());
