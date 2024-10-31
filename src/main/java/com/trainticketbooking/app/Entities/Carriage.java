@@ -1,5 +1,6 @@
 package com.trainticketbooking.app.Entities;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ public class Carriage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "carriage_id")
+    @NotNull(message = "Carriage ID is required")
     private Integer carriageId;
 
     @ManyToOne

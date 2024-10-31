@@ -1,0 +1,152 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/seats/index}">Seats</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${seat.seatId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-4 d-flex align-items-center ">
+                <a th:href="@{/admin/seats/index}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3"
+                    th:text=" ${'Seat Edit ' +  seat.seatId + ' - ' + seat.seatNumber}"> </h3>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(successMessages)}" class="col-md-4 alert alert-success">
+                <ul>
+                    <li th:each="message : ${successMessages}" class="success-message" th:text="${message}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <form id="seatDetailForm" class="card" th:action="@{/admin/seats/edit/{id}(id=${seat.seatId})}"
+              th:object="${seat}" method="post">
+
+
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="seatNumber" class="form-label"><strong>Seat Number:</strong></label>
+                            <input type="text" class="form-control" id="seatNumber" th:field="*{seatNumber}"
+                                   th:value="${seat.seatNumber}">
+                            <span  th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}" class="text-small text-danger"></span>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="carriageId" class="form-label"><strong>Carriage ID:</strong></label>
+                            <input type="text" class="form-control" id="carriageId" th:field="*{carriage.carriageId}">
+<!--                            <span th:if="${#fields.hasErrors('carriage')}" th:errors="*{carriage}" class="text-small text-danger"></span>-->
+                            <span th:if="${#fields.hasErrors('carriage.carriageId')}" th:errors="*{carriage.carriageId}" class="text-small text-danger"></span>
+                            <span th:if="${errorMap.containsKey('carriage')}" th:text="${errorMap.get('carriage')}" class="text-small text-danger"></span>
+
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="compartmentNumber" class="form-label"><strong>Compartment
+                                Number:</strong></label>
+                            <input type="text" class="form-control" id="compartmentNumber"
+                                   th:field="*{compartmentNumber}" >
+                            
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="seatTypeId" class="form-label"><strong>Seat Type:</strong></label>
+                            <select id="seatTypeId" th:field="*{seatType.seatTypeId}" class="form-select select2"
+                                    aria-label="Choose Seat Type">
+                                <option value="" th:value="-1" disabled>Choose Seat Type</option>
+                                <option th:each="seatType : ${getSeatTypes}" th:value="${seatType.seatTypeId}"
+                                        th:text="${seatType.seatType + ' (' + seatType.code + ')'}"
+                                        th:data-code="${seatType.code}" th:data-description="${seatType.description}">
+                                </option>
+                            </select>
+                            <span th:if="${#fields.hasErrors('seatType.seatTypeId')}" th:errors="*{seatType.seatTypeId}" class="text-small text-danger"></span>
+                            
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="floor" class="form-label"><strong>Floor:</strong></label>
+                            <input type="text" class="form-control" id="floor" th:field="*{floor}">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="status" class="form-label"><strong>Status:</strong></label>
+                            <div>
+                                <span th:class="${seat.status ? 'badge bg-danger' : 'badge bg-success'}"
+                                      th:text="${seat.status ? 'Đã đặt' : 'Trống'}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" th:data-url="@{/admin/seats/delete/{id}(id=${seat.seatId})}"
+                        class="btn btn-outline-danger deleteBtn">
+                    <i class="bi bi-trash me-1"></i>Delete
+                </button>
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-save me-1"></i>Update
+                </button>
+            </div>
+        </form>
+
+        <form th:action="@{/admin/seats/delete/{id}(id=${seat.seatId})}" method="post" class="deleteForm">
+            <input type="hidden" name="seatId" th:value="${seat.seatId}">
+        </form>
+
+    </div>
+
+
+
+</div>
+
+<div layout:fragment="scripts">
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.deleteBtn').on('click', function (e) {
+                let form = $('.deleteForm');
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this item?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Hủy',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+</div>
+
+
+</html>

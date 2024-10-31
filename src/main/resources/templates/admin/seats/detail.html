@@ -1,0 +1,197 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/seats/index}">Seats</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detail#<span th:text="${seat.seatId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-4 d-flex align-items-center ">
+                <a th:href="@{/admin/seats/index}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3"
+                    th:text=" ${'Seat Detail ' +  seat.seatId + ' - ' + seat.seatNumber}"> </h3>
+            </div>
+        </div>
+
+
+
+        <div class="card" th:object="${seat}">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group mt-3">
+                            <label for="seatNumber" class="form-label"><strong>Seat Number:</strong></label>
+                            <input type="text" class="form-control" id="seatNumber" th:field="*{seatNumber}"
+                                th:value="${seat.seatNumber}" readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="carriageId" class="form-label"><strong>Carriage ID:</strong></label>
+                            <input type="text" class="form-control" id="carriageId" th:field="*{carriage.carriageId}"
+                                readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="compartmentNumber" class="form-label"><strong>Compartment
+                                    Number:</strong></label>
+                            <input type="text" class="form-control" id="compartmentNumber"
+                                th:field="*{compartmentNumber}" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="seatTypeId" class="form-label"><strong>Seat Type:</strong></label>
+                            <select id="seatTypeId" th:field="*{seatType.seatTypeId}" class="form-select select2"
+                                aria-label="Choose Seat Type" disabled>
+                                <option value="" th:value="-1" disabled>Choose Seat Type</option>
+                                <option th:each="seatType : ${getSeatTypes}" th:value="${seatType.seatTypeId}"
+                                    th:text="${seatType.seatType + ' (' + seatType.code + ')'}"
+                                    th:data-code="${seatType.code}" th:data-description="${seatType.description}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="floor" class="form-label"><strong>Floor:</strong></label>
+                            <input type="text" class="form-control" id="floor" th:field="*{floor}" readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="status" class="form-label"><strong>Status:</strong></label>
+                            <div>
+                                <span th:class="${seat.status ? 'badge bg-danger' : 'badge bg-success'}"
+                                    th:text="${seat.status ? 'Đã đặt' : 'Trống'}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <form th:action="@{/admin/seats/delete/{id}(id=${seat.seatId})}" method="post" class="deleteForm">
+                    <button type="button" th:data-url="@{/admin/seats/delete/{id}(id=${seat.seatId})}"
+                        class="btn btn-outline-danger deleteBtn">
+                        <i class="bi bi-trash me-1"></i>Delete
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+
+
+
+        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets"
+                    type="button" role="tab" aria-controls="tickets" aria-selected="true">Tickets</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button"
+                    role="tab" aria-controls="info" aria-selected="false">Train Information</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"
+                    role="tab" aria-controls="notes" aria-selected="false">Notes</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets-tab">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tick ID</th>
+                            <th>Booking Date</th>
+                            <th>Price</th>
+                            <th>Passenger</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ticket : ${tickets}">
+                            <td th:text="${ticket.ticketId}"></td>
+                            <td th:text="${ticket.bookingDate}"></td>
+                            <td th:text="${ticket.price}"></td>
+                            <td th:text="${ticket.passenger.fullName}"></td>
+                            <td><span th:class="${ticket.status ? 'badge bg-danger' : 'badge bg-success'}"
+                                    th:text="${ticket.status ? 'Đã đặt' : 'Đã hoàn vé'}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Train ID:</strong> <span th:text="${train.trainId}">102</span></p>
+                        <p><strong>Train Number:</strong> <span th:text="${train.trainNumber}">SE1</span></p>
+                        <p><strong>Train Type:</strong> <span th:text="${train.trainType}">Tàu tốc hành Hà Nội - Sài
+                                Gòn</span></p>
+                        <p><strong>Carriage ID:</strong> <span th:text="${seat.carriage.carriageId}">1</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Compartment Number:</strong> <span th:text="${seat.compartmentNumber}">1</span></p>
+                        <p><strong>Floor:</strong> <span th:text="${seat.floor}">1</span></p>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                <p>abc</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for ticket details -->
+
+</div>
+
+<div layout:fragment="scripts">
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.deleteBtn').on('click', function (e) {
+                let form = $('.deleteForm');
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this item?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Hủy',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+</div>
+
+
+</html>
