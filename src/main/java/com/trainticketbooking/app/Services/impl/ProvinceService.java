@@ -2,12 +2,15 @@ package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Province;
+import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.ProvinceRepository;
 import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Services.ICarriageService;
 import com.trainticketbooking.app.Services.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,5 +65,16 @@ public class ProvinceService implements IProvinceService {
     @Override
     public boolean existsByProvinceId(Integer provinceId) {
         return provinceRepository.existsByProvinceId(provinceId);
+    }
+
+    @Override
+    public Page<Province> findAll(Pageable pageable) {
+        return provinceRepository.findAll(pageable);
+    }
+
+    @Override
+    public Province adminUpdateProvince(Province province) {
+        Province provinceTemp = getById(province.getProvinceId()).get();
+        return provinceRepository.save(province);
     }
 }
