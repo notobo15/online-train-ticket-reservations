@@ -4,7 +4,8 @@ import com.trainticketbooking.app.Dtos.SeatDto;
 import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.SeatType;
 import com.trainticketbooking.app.Entities.Train;
-import com.trainticketbooking.app.Exceptions.CarriageNotFoundException;
+
+import com.trainticketbooking.app.Exceptions.SeatTypeNotFoundException;
 import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Repos.SeatTypeRepository;
@@ -41,6 +42,10 @@ public class SeatService implements ISeatService {
 
     @Override
     public Seat save(Seat seat) {
+        Optional<SeatType> existingSeatTypeOpt = seatTypeRepository.findById(seat.getSeatType().getSeatTypeId());
+        seat.setSeatType(existingSeatTypeOpt.orElseThrow(
+                () -> new SeatTypeNotFoundException("Seat Type not found with id: " + seat.getSeatType().getSeatTypeId())
+        ));
         return seatRepository.save(seat);
     }
 
@@ -51,37 +56,26 @@ public class SeatService implements ISeatService {
 
     @Override
     public Seat update(Seat seat) {
-        if (!this.checkCarriageIfExist(seat.getCarriage().getCarriageId())) {
-            throw new CarriageNotFoundException("Carrige does not exist!!");
-        }
-
         Optional<Seat> existingSeatOpt = seatRepository.findById(seat.getSeatId());
         Optional<SeatType> existingSeatTypeOpt = seatTypeRepository.findById(seat.getSeatType().getSeatTypeId());
-        if (existingSeatOpt.isPresent()) {
-            Seat existingSeat = existingSeatOpt.get();
-            existingSeat.setSeatNumber(seat.getSeatNumber());
-            existingSeat.setCarriage(seat.getCarriage());
-            existingSeat.setFloor(seat.getFloor());
-            existingSeat.setSeatType(existingSeatTypeOpt.orElseThrow(
-                    () -> new RuntimeException("Seat Type not found with id: " + seat.getSeatType().getSeatTypeId())
-            ));
-            return seatRepository.save(existingSeat);
-        }
-        throw new RuntimeException("Seat not found with id: " + seat.getSeatId());
+
+        Seat existingSeat = existingSeatOpt.orElseThrow(
+                () -> new RuntimeException("Seat not found with id: " + seat.getSeatId())
+        );
+        existingSeat.setSeatNumber(seat.getSeatNumber());
+        existingSeat.setFloor(seat.getFloor());
+        existingSeat.setCompartmentNumber(seat.getCompartmentNumber());
+        existingSeat.setStatus(seat.getStatus());
+        existingSeat.setSeatType(existingSeatTypeOpt.orElseThrow(
+                () -> new SeatTypeNotFoundException("Seat Type not found with id: " + seat.getSeatType().getSeatTypeId())
+        ));
+        return seatRepository.save(existingSeat);
+
     }
 
     @Override
     public Page<Seat> findAll(Pageable pageable) {
         return seatRepository.findAll(pageable);
     }
-
-    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
-        return seatRepository.findByCarriageCarriageId(carriageId);
-    }
-
-    public Boolean checkCarriageIfExist(Integer id) {
-        return carriageRepository.existsById(id);
-    }
-
 
 }

@@ -22,7 +22,7 @@
 
         <div class="row mb-2">
             <div class="col-md-4 d-flex align-items-center ">
-                <a th:href="@{/admin/seats/index}" class="btn btn-secondary">
+                <a th:href="@{${session.previousSeatsPage}}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left me-1"></i>Back
                 </a>
                 <h3 class="d-inline-block me-2 ms-3"
@@ -40,11 +40,6 @@
                             <label for="seatNumber" class="form-label"><strong>Seat Number:</strong></label>
                             <input type="text" class="form-control" id="seatNumber" th:field="*{seatNumber}"
                                 th:value="${seat.seatNumber}" readonly>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="carriageId" class="form-label"><strong>Carriage ID:</strong></label>
-                            <input type="text" class="form-control" id="carriageId" th:field="*{carriage.carriageId}"
-                                readonly>
                         </div>
                         <div class="form-group mt-3">
                             <label for="compartmentNumber" class="form-label"><strong>Compartment
@@ -74,7 +69,7 @@
                             <label for="status" class="form-label"><strong>Status:</strong></label>
                             <div>
                                 <span th:class="${seat.status ? 'badge bg-danger' : 'badge bg-success'}"
-                                    th:text="${seat.status ? 'Đã đặt' : 'Trống'}"></span>
+                                    th:text="${seat.status ? 'Locked' : 'Available'}"></span>
                             </div>
                         </div>
                     </div>
@@ -92,69 +87,31 @@
         </div>
 
 
-
-
-        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets"
-                    type="button" role="tab" aria-controls="tickets" aria-selected="true">Tickets</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button"
-                    role="tab" aria-controls="info" aria-selected="false">Train Information</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"
-                    role="tab" aria-controls="notes" aria-selected="false">Notes</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets-tab">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Tick ID</th>
-                            <th>Booking Date</th>
-                            <th>Price</th>
-                            <th>Passenger</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="ticket : ${tickets}">
-                            <td th:text="${ticket.ticketId}"></td>
-                            <td th:text="${ticket.bookingDate}"></td>
-                            <td th:text="${ticket.price}"></td>
-                            <td th:text="${ticket.passenger.fullName}"></td>
-                            <td><span th:class="${ticket.status ? 'badge bg-danger' : 'badge bg-success'}"
-                                    th:text="${ticket.status ? 'Đã đặt' : 'Đã hoàn vé'}"></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Train ID:</strong> <span th:text="${train.trainId}">102</span></p>
-                        <p><strong>Train Number:</strong> <span th:text="${train.trainNumber}">SE1</span></p>
-                        <p><strong>Train Type:</strong> <span th:text="${train.trainType}">Tàu tốc hành Hà Nội - Sài
-                                Gòn</span></p>
-                        <p><strong>Carriage ID:</strong> <span th:text="${seat.carriage.carriageId}">1</span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Compartment Number:</strong> <span th:text="${seat.compartmentNumber}">1</span></p>
-                        <p><strong>Floor:</strong> <span th:text="${seat.floor}">1</span></p>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-                <p>abc</p>
-            </div>
-        </div>
+<!--        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">-->
+<!--            <li class="nav-item" role="presentation">-->
+<!--                <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets"-->
+<!--                    type="button" role="tab" aria-controls="tickets" aria-selected="true">Tickets</button>-->
+<!--            </li>-->
+<!--            <li class="nav-item" role="presentation">-->
+<!--                <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button"-->
+<!--                    role="tab" aria-controls="info" aria-selected="false">Train Information</button>-->
+<!--            </li>-->
+<!--            <li class="nav-item" role="presentation">-->
+<!--                <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes" type="button"-->
+<!--                    role="tab" aria-controls="notes" aria-selected="false">Notes</button>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--        <div class="tab-content" id="myTabContent">-->
+<!--            <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets-tab">-->
+<!--                -->
+<!--            </div>-->
+<!--            <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">-->
+<!--               -->
+<!--            </div>-->
+<!--            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">-->
+<!--                <p>abc</p>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
     <!-- Modal for ticket details -->

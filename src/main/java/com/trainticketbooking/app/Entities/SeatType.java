@@ -2,13 +2,7 @@ package com.trainticketbooking.app.Entities;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -19,7 +13,6 @@ public class SeatType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_type_id")
-    @NotNull(message = "Seat Type ID is required")
     private Long seatTypeId;
 
     @Column(name = "seat_type", nullable = false)
@@ -32,7 +25,7 @@ public class SeatType {
     private String description;
 
 
-    @OneToMany(mappedBy = "seatType")
-    private List<Price> prices;
+    @OneToOne
+    private Price price;
 
 }

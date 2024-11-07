@@ -9,5 +9,4 @@ import java.util.List;
 
 public interface ISeatService extends IService<Seat> {
     Page<Seat> findAll(Pageable pageable);
-    List<Seat> findSeatsByCarriageId(Integer carriageId);
 }

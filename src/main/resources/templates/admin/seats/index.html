@@ -46,8 +46,6 @@
                                     <th>Seat Type</th>
                                     <th>Floor</th>
                                     <th>Compartment Number</th>
-                                    <th>Cariage</th>
-
                                     <th>Status</th>
                                     <th style="width: 60px;">Actions</th>
                                 </tr>
@@ -56,13 +54,12 @@
                                 <tr th:each="seat : ${seats}">
                                     <td th:text="${seat.seatId}"></td>
                                     <td th:text="${seat.seatNumber}"></td>
-                                    <td th:text="${seat.seatType.seatType}"></td>
+                                    <td th:text="${seat.seatType.code} + ' (' + ${seat.seatType.seatType} + ')'"></td>
                                     <td th:text="${seat.floor}"></td>
                                     <td th:text="${seat.compartmentNumber}"></td>
-                                    <td th:text="${seat.carriage.carriageId}"></td>
                                     <td>
                                         <span th:class="${seat.status ? 'badge bg-danger' : 'badge bg-success'}"
-                                            th:text="${seat.status ? 'Đã đặt' : 'Trống'}"></span>
+                                            th:text="${seat.status ? 'Locked' : 'Available'}"></span>
                                     </td>
                                     <td class="actions">
                                         <a th:href="@{/admin/seats/detail/{id}(id=${seat.seatId})}">
@@ -138,6 +135,28 @@
         </div>
     </div>
 
+
+    <!--  Success notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong class="me-auto">Success Notifications</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul class="list-unstyled m-0">
+                    <li th:each="message : ${successMessages}" class="success-message">
+                        <i class="bi bi-check2 me-2"></i>
+                        <span th:text="${message}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- Popover Content -->
     <div id="popover-content" style="display: none;">
         <button class='btn btn-sm btn-outline-primary mb-2'><i class="btn-icon-prepend" data-feather="upload"></i>
@@ -190,6 +209,17 @@
                     }
                 })
             })
+
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            // Khởi tạo toast
+            $('.toast').toast({
+                delay: 3000
+            });
         });
     </script>
 </div>
