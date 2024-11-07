@@ -115,7 +115,7 @@ public class ProvinceController {
         }
         return "admin/provinces/detail";
     }
-
+git
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
