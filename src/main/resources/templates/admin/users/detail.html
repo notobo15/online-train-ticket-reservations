@@ -93,12 +93,11 @@
                                 <span th:text="${user.address}"></span>
                             </div>
                         </div>
-                        <!-- Thêm Role -->
                         <div class="row mb-3">
                             <div class="col-md-3 text-end text-secondary"><strong>Role:</strong></div>
                             <div class="col-md-9">
                                 <i class="fas fa-user-tag icon me-2"></i>
-                                <span th:text="${user.role.name}"></span> <!-- Hiển thị tên role -->
+                                <span th:if="${user.role}" th:text="${user.role.name}"></span>
                             </div>
                         </div>
                     </div>
