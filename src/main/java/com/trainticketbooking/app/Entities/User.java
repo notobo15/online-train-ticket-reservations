@@ -1,6 +1,7 @@
 package com.trainticketbooking.app.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+
+import com.trainticketbooking.app.Validations.ValidationGroups.*;
 
 @Entity
 @Table(name = "users")
@@ -20,12 +23,15 @@ public class User implements UserDetails {
     private Integer userId;
 
     @Column(name = "username", unique = true, nullable = false, length = 50)
+    @NotBlank(message = "Username cannot be empty")
     private String username;
 
     @Column(name = "password", nullable = false, length = 255)
+    @NotBlank(message = "Password cannot be empty", groups = onCreate.class)
     private String password;
 
     @Column(name = "email", unique = true, nullable = false, length = 100)
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
     @Column(name = "phone", length = 20)

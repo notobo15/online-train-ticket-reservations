@@ -1,7 +1,6 @@
 package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.ResetToken;
-import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.ResetTokenRepository;
 import com.trainticketbooking.app.Repos.UserRepository;
@@ -15,9 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -45,13 +41,7 @@ public class UserService implements IUserService {
     }
 
     public User save(User user) {
-        if (user.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        } else if (user.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        } else if (user.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
