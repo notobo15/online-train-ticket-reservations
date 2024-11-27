@@ -44,15 +44,19 @@ public class Ticket {
     @JoinColumn(name = "end_station_id")
     private Station endStation;
 
-    @ManyToOne
-    @JoinColumn(name = "carriage_seat_id", nullable = false)
-    private CarriageSeatMapping carriageSeatMapping;
+//    @ManyToOne
+//    @JoinColumn(name = "carriage_seat_id", nullable = false)
+//    private CarriageSeatMapping carriageSeatMapping;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "seat_id", nullable = false)
+    private Seat seat;
+
+    @OneToOne()
     @JoinColumn(name = "return_ticket_id", referencedColumnName = "ticket_id", nullable = true)
     private Ticket returnTicket;
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_type", nullable = false)
-    private TicketType ticketType;
+//    @ManyToOne
+//    @JoinColumn(name = "ticket_type", nullable = false)
+//    private TicketType ticketType;
 }

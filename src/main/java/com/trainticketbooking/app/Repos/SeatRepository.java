@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Integer> {
-//    List<Seat> findByCarriageCarriageId(Integer carriageId);
+    List<Seat> findByCarriageCarriageId(Integer carriageId);
 
 //    List<Seat> findBySeatTypeSeatTypeId(Integer seatTypeId);
 

@@ -9,5 +9,5 @@ public class SeatDTO {
     private String seatType;
     private Integer floor;
     private Integer compartmentNumber;
-    private boolean status;
+    private String status; // "Booked," "Reserved," "Available"
 }

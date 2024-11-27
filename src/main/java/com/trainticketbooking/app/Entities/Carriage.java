@@ -1,5 +1,8 @@
 package com.trainticketbooking.app.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import jakarta.persistence.*;
@@ -17,22 +20,29 @@ public class Carriage {
     private Integer carriageId;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "train_id", nullable = false)
     private Train train;
 
     @ManyToOne()
     @JoinColumn(name = "carriage_class_Id")
+    @JsonIgnore
     private CarriageClass carriageClass;
 
-    @Column(name = "car_number", nullable = false)
-    private String carNumber;
+    @Column(name = "carriage_number", nullable = false)
+    private String carriageNumber;
 
-    @Column(name = "set_count", nullable = false)
+    @Column(name = "seat_count", nullable = false)
     private int seatCount;
 
     @Column(name = "total_floors")
     private int totalFloors;
 
+//    @OneToMany(mappedBy = "carriage")
+//    @JsonIgnore
+//    private List<CarriageSeatMapping> carriageSeatMappings;
+
+
     @OneToMany(mappedBy = "carriage")
-    private List<CarriageSeatMapping> carriageSeatMappings;
+    private List<Seat> seats;
 }

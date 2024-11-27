@@ -25,6 +25,6 @@ public class CarriageSeatMapping {
     @Column(name = "status")
     private String status; //  "Booked," "Reserved," and "Available,"
 
-    @OneToMany(mappedBy = "carriageSeatMapping")
-    private List<Ticket> tickets;
+//    @OneToMany(mappedBy = "carriageSeatMapping")
+//    private List<Ticket> tickets;
 }

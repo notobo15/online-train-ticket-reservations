@@ -1,5 +1,6 @@
 package com.trainticketbooking.app.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import jakarta.persistence.*;
 
@@ -25,6 +26,7 @@ public class Train {
     private List<TrainJourney> trainJourneys;
 
     @OneToMany(mappedBy = "train")
+    @JsonManagedReference
     private List<Carriage> carriages;
 
     @OneToMany(mappedBy = "train")
