@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-public class BookingApiController {
+public class BookingController {
 
     @Autowired
     private TrainService trainService;
@@ -60,7 +60,7 @@ public class BookingApiController {
     public ResponseEntity<List<CarriageDto>> getCarriages(@PathVariable Integer trainId) {
         List<Carriage> carriages = trainService.findCarriagesByTrainId(trainId);
         List<CarriageDto> carriageDTOs = carriages.stream()
-                .map(carriage -> new CarriageDto(carriage.getCarriageId(), carriage.getCarNumber()))
+                .map(carriage -> new CarriageDto(carriage.getCarriageId(), carriage.getCarriageNumber()))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(carriageDTOs);

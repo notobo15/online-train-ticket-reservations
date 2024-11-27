@@ -1,15 +1,13 @@
 package com.trainticketbooking.app.Controllers.API;
 
 import com.trainticketbooking.app.Dtos.Ticket.TicketDTO;
-import com.trainticketbooking.app.Entities.CarriageSeatMapping;
-import com.trainticketbooking.app.Entities.Station;
-import com.trainticketbooking.app.Entities.Ticket;
-import com.trainticketbooking.app.Entities.TicketType;
+import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Mappers.TicketMapper;
 import com.trainticketbooking.app.Requests.TicketRequestDTO;
 import com.trainticketbooking.app.Responses.ApiResponse;
 import com.trainticketbooking.app.Services.ITicketService;
 import com.trainticketbooking.app.Services.impl.CarriageSeatMappingService;
+import com.trainticketbooking.app.Services.impl.SeatService;
 import com.trainticketbooking.app.Services.impl.StationService;
 import com.trainticketbooking.app.Services.impl.TicketTypeService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,7 +26,7 @@ public class TicketController {
 
     private ITicketService ticketService;
     private StationService stationService;
-    private CarriageSeatMappingService seatService;
+    private SeatService seatService;
     private TicketMapper ticketMapper;
     private TicketTypeService ticketTypeService;
 
@@ -65,7 +63,7 @@ public class TicketController {
                 .orElseThrow(() -> new EntityNotFoundException("End station not found"));
 
         // Kiểm tra tính hợp lệ của chỗ ngồi
-        CarriageSeatMapping seat = seatService.getById(request.getSeatId())
+        Seat seat = seatService.getById(request.getSeatId())
                 .orElseThrow(() -> new EntityNotFoundException("Seat not found"));
 
         // Tạo vé mới với trạng thái "Đang giữ chỗ"
@@ -74,7 +72,7 @@ public class TicketController {
         ticket.setEndStation(endStation);
         ticket.setPrice(99999D);
         ticket.setDepartureDate(request.getDepartureDate());
-        ticket.setCarriageSeatMapping(seat);
+        ticket.setSeat(seat);
         ticket.setStatus("Đang giữ chỗ");
         ticket.setBookingDate(LocalDateTime.now());
 
@@ -125,8 +123,7 @@ public class TicketController {
         ticket.setEndStation(stationService.getById(request.getEndStationId()).get());
         ticket.setPrice(request.getPrice());
         ticket.setDepartureDate(request.getDepartureDate());
-        ticket.setCarriageSeatMapping(seatService.getById(request.getSeatId()).get());
-        ticket.setTicketType(ticketType); // Thiết lập loại vé (ví dụ: "Khứ hồi")
+        ticket.setSeat(seatService.getById(request.getSeatId()).get());
         ticket.setBookingDate(LocalDateTime.now());
         ticket.setStatus("Đang giữ chỗ");
 
