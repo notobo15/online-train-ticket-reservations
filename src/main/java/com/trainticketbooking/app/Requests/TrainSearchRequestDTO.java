@@ -7,8 +7,8 @@ import java.time.LocalDate;
 public class TrainSearchRequestDTO {
     private LocalDate departureDate;
     private LocalDate arrivalDate;
-    private Integer startStation;
-    private Integer endStation;
+    private String startStationCode;
+    private String endStationCode;
     private int passengerCount;
     private boolean isRoundTrip;
 }
