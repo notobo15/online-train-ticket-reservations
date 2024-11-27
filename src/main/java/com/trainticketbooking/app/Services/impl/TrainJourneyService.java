@@ -106,24 +106,23 @@ public class TrainJourneyService implements ITrainJourneyService {
         return null;
     }
     public List<TrainDTO> findTrainJourneys(TrainSearchRequestDTO request) {
-        List<TrainJourney> trainJourneys = trainJourneyRepository.findTrainJourneys(
+        List<TrainJourney> trainJourneys = trainJourneyRepository.findAvailableTrainJourneys(
                 request.getDepartureDate(),
-                request.isRoundTrip() ? request.getArrivalDate() : null, // Chỉ cần ngày về nếu là khứ hồi
-                request.getStartStation(), // ID của ga đi
-                request.getEndStation(),   // ID của ga đến
-                request.isRoundTrip());
+                request.getStartStationCode(), // ID của ga đi
+                request.getEndStationCode()   // ID của ga đến
+                );
 
         return trainJourneys.stream()
                 .map(trainJourney -> TrainMapper.INSTANCE.toTrainDTO(trainJourney.getTrain()))
                 .collect(Collectors.toList());
     }
+
+
     public List<TrainDTO> searchTrains(TrainSearchRequestDTO request) {
-        List<TrainJourney> trainJourneys = trainJourneyRepository.findTrainJourneys(
+        List<TrainJourney> trainJourneys = trainJourneyRepository.findAvailableTrainJourneys(
                 request.getDepartureDate(),
-                request.isRoundTrip() ? request.getArrivalDate() : null, // Chỉ cần ngày về nếu là khứ hồi
-                request.getStartStation(),
-                request.getEndStation(),
-                request.isRoundTrip());
+                request.getStartStationCode(),
+                request.getEndStationCode());
 
         return trainJourneys.stream()
                 .map(trainJourney -> TrainMapper.INSTANCE.mapToTrainDTOWithDetails(trainJourney.getTrain()))
