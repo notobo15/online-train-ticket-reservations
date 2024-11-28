@@ -15,92 +15,41 @@
         <nav class="page-breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/admin/seats/index}">Seats</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${seat.seatId}"></span></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/carriage-classes/index}">Carriage Classes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${cac.carriageClassId}"></span></li>
             </ol>
         </nav>
 
         <div class="row mb-2">
-            <div class="col-md-4 d-flex align-items-center ">
-                <a th:href="@{${session.previousSeatsPage}}" class="btn btn-secondary">
+            <div class="col-md-6 d-flex align-items-center ">
+                <a th:href="@{${session.previousCarriageClassesPage}}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left me-1"></i>Back
                 </a>
                 <h3 class="d-inline-block me-2 ms-3"
-                    th:text=" ${'Seat Edit #' +  seat.seatId + ' - ' + seat.seatNumber}"> </h3>
+                    th:text=" ${'Carriage Classes Edit #' +  cac.carriageClassId}"> </h3>
             </div>
         </div>
 
-        <form id="seatDetailForm" class="card" th:action="@{/admin/seats/edit/{id}(id=${seat.seatId})}"
-            th:object="${seat}" method="post">
+        <form id="carriageClassEditForm" class="card" th:action="@{/admin/carriage-classes/edit/{id}(id=${cac.carriageClassId})}"
+            th:object="${cac}" method="post">
 
 
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="form-group ">
-                            <label for="seatNumber" class="form-label"><strong>Seat Number:</strong></label>
-                            <input type="text" class="form-control" id="seatNumber" th:field="*{seatNumber}"
+                            <label for="name" class="form-label"><strong>Carriage Class name:</strong></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}"
                               >
-                            <span th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}"
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                                 class="text-small text-danger"></span>
                         </div>
-                        <div class="form-group mt-2">
-                            <label for="compartmentNumber" class="form-label"><strong>Compartment
-                                    Number:</strong></label>
-                            <input type="text" class="form-control" id="compartmentNumber"
-                                th:field="*{compartmentNumber}">
-                            <span th:if="${#fields.hasErrors('compartmentNumber')}" th:errors="*{compartmentNumber}"
-                                class="text-small text-danger"></span>
 
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="seatTypeId" class="form-label"><strong>Seat Type:</strong></label>
-                            <select id="seatTypeId" th:field="*{seatType.seatTypeId}" class="form-select select2"
-                                aria-label="Choose Seat Type">
-                                <option value="" th:value="-1" disabled>Choose Seat Type</option>
-                                <option th:each="seatType : ${getSeatTypes}" th:value="${seatType.seatTypeId}"
-                                    th:text="${seatType.seatType + ' (' + seatType.code + ')'}"
-                                    th:data-code="${seatType.code}" th:data-description="${seatType.description}">
-                                </option>
-                            </select>
-                            <span th:if="${#fields.hasErrors('seatType.seatTypeId')}" th:errors="*{seatType.seatTypeId}"
-                                class="text-small text-danger"></span>
-                            <span th:if="${errorMap.containsKey('seatType')}" th:text="${errorMap.get('seatType')}"
-                                class="text-small text-danger"></span>
-                        </div>
-                        <div class="form-group mt-2">
-                            <label for="floor" class="form-label"><strong>Floor:</strong></label>
-                            <input type="text" class="form-control" id="floor" th:field="*{floor}">
-                            <span th:if="${#fields.hasErrors('floor')}" th:errors="*{floor}"
-                                class="text-small text-danger"></span>
-                        </div>
-                        <div class="form-group mt-2">
-                            <label for="status" class="form-label"><strong>Status:</strong></label>
-                            <div class="form-check">
-                                <input class="form-check-input " type="radio" name="status" id="statusFalse"
-                                    th:field="*{status}" th:value="0">
-                                <label class="form-check-label badge bg-success" for="statusFalse">
-                                    Available
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input " type="radio" name="status" id="statusTrue"
-                                    th:field="*{status}" th:value="1">
-                                <label class="form-check-label badge bg-danger" for="statusTrue">
-                                    Locked
-                                </label>
-                            </div>
-                            <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}"
-                                class="text-small text-danger"></span>
-                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-footer text-end">
-                <button type="button" th:data-url="@{/admin/seats/delete/{id}(id=${seat.seatId})}"
+                <button type="button" th:data-url="@{/admin/carriage-classes/delete/{id}(id=${cac.carriageClassId})}"
                     class="btn btn-outline-danger deleteBtn">
                     <i class="bi bi-trash me-1"></i>Delete
                 </button>
@@ -111,8 +60,8 @@
             </div>
         </form>
 
-        <form th:action="@{/admin/seats/delete/{id}(id=${seat.seatId})}" method="post" class="deleteForm">
-            <input type="hidden" name="seatId" th:value="${seat.seatId}">
+        <form th:action="@{/admin/carriage-classes/delete/{id}(id=${cac.carriageClassId})}" method="post" class="deleteForm">
+            <input type="hidden" name="carriageClassId" th:value="${cac.carriageClassId}">
         </form>
 
     </div>
@@ -186,8 +135,6 @@
                     }
                 });
             });
-
-
 
             // Tự động ẩn toast sau 3 giây
             setTimeout(function () {

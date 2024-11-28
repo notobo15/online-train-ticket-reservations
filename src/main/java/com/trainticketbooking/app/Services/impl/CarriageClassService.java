@@ -10,6 +10,8 @@ import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +34,8 @@ public class CarriageClassService implements ICarriageClassService {
     }
 
     @Override
-    public CarriageClass save(CarriageClass carriage) {
-        return carriageClassRepository.save(carriage);
+    public CarriageClass save(CarriageClass cac) {
+        return carriageClassRepository.save(cac);
     }
 
     @Override
@@ -42,16 +44,19 @@ public class CarriageClassService implements ICarriageClassService {
     }
 
     @Override
-    public CarriageClass update(CarriageClass carriage) {
-        // Tìm kiếm đối tượng CarriageClass bằng ID hoặc ném ngoại lệ nếu không tìm thấy
-        CarriageClass existingCarriage = carriageClassRepository.findById(carriage.getCarriageClassId())
-                .orElseThrow(() -> new EntityNotFoundException("Carriage class not found with ID: " + carriage.getCarriageClassId()));
+    public CarriageClass update(CarriageClass cac) {
+        CarriageClass existingCarriage = carriageClassRepository
+                .findById(cac.getCarriageClassId())
+                .orElseThrow(() -> new RuntimeException("Carriage class not found with ID: " + cac.getCarriageClassId()));
 
-        // Cập nhật thông tin
-        existingCarriage.setName(carriage.getName());
+        existingCarriage.setName(cac.getName());
 
-        // Lưu và trả về đối tượng đã cập nhật
         return carriageClassRepository.save(existingCarriage);
+    }
+
+    @Override
+    public Page<CarriageClass> findAll(Pageable pageable) {
+        return carriageClassRepository.findAll(pageable);
     }
 
 }

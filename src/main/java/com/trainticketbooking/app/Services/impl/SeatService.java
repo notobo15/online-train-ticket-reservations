@@ -27,9 +27,6 @@ public class SeatService implements ISeatService {
     @Autowired
     private SeatTypeRepository seatTypeRepository;
 
-    @Autowired
-    private CarriageRepository carriageRepository;
-
     @Override
     public List<Seat> getAll() {
         return seatRepository.findAll();

@@ -10,4 +10,5 @@ import java.util.List;
 
 @Repository
 public interface CarriageClassRepository extends JpaRepository<CarriageClass, Integer> {
+    
 }

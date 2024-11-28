@@ -109,11 +109,9 @@ public class SeatAdminController {
     public String create(Model model) {
         Seat seat = new Seat();
         Map<String, String> errorMap = new HashMap<>();
-        List<String> successMessages = new ArrayList<>();
 
         model.addAttribute("seat",seat);
         model.addAttribute("errorMap",errorMap);
-        model.addAttribute("successMessages",successMessages);
         return "admin/seats/create";
     }
 
