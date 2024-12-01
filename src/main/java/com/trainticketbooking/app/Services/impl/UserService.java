@@ -1,24 +1,31 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.UserDto;
 import com.trainticketbooking.app.Entities.ResetToken;
-import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.ResetTokenRepository;
 import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IUserService;
-
 import com.trainticketbooking.app.Utils.DateUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
@@ -30,6 +37,9 @@ public class UserService implements IUserService {
     private ResetTokenRepository resetTokenRepository;
 
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MediaService mediaService;
 
     public List<User> getAll() {
         return userRepository.findAll();
@@ -112,8 +122,68 @@ public class UserService implements IUserService {
 
     }
 
+    public UserDto getCurrentUserDto() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+
+            UserDto dto = new UserDto();
+            dto.setUsername(authentication.getName());
+            dto.setEmail(findByUsername(authentication.getName()).getEmail());
+
+            String role = authentication.getAuthorities().stream()
+                    .map(authority -> authority.getAuthority())
+                    .findFirst()
+                    .orElse("ROLE_USER");
+            dto.setRole(role);
+
+            return dto;
+        }
+
+        return null;
+    }
+
+    public User getCurrentUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            // Lấy thông tin username từ SecurityContext
+            String username = authentication.getName();
+
+            // Tìm người dùng trong cơ sở dữ liệu dựa trên username
+            User currentUser = findByUsername(username);
+
+            return currentUser;
+        }
+        return null; // Trả về null nếu không có thông tin đăng nhập
+    }
+
     @Transactional
     public void deleteResetToken(String token) {
         resetTokenRepository.deleteByToken(token);
+    }
+
+    public void updateProfileInfo(User user) {
+        User currentUser = getCurrentUser();
+        // Cập nhật thông tin người dùng
+        currentUser.setEmail(user.getEmail());
+        currentUser.setFullName(user.getFullName());
+        currentUser.setAddress(user.getAddress());
+        currentUser.setPhone(user.getPhone());
+        userRepository.save(currentUser); // Lưu thay đổi vào cơ sở dữ liệu
+    }
+
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
+
+    public void saveProfileImage(MultipartFile profileImage) {
+        String newFileName = mediaService.saveMedia(profileImage);
+        User currentUser = getCurrentUser();
+        currentUser.setProfileImage(newFileName); // Lưu tên hình ảnh
+        userRepository.save(currentUser);
+    }
+
+    // Cập nhật mật khẩu
+    public void updatePassword(String password) {
+        User currentUser = getCurrentUser();
+        currentUser.setPassword(password); // Giả sử mật khẩu đã được mã hóa
+        userRepository.save(currentUser);
     }
 }

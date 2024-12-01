@@ -7,6 +7,9 @@
 
     <!-- font-awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -123,6 +126,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-danger">Role:</h5>
+                                        <select id="role" th:field="*{role.roleId}" class="form-control">
+                                            <option value=""></option>
+                                            <option th:each="role : ${roles}" th:value="${role.roleId}"
+                                                th:text="${role.name}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fa-solid fa-check"></i> Save Edit
@@ -131,6 +147,21 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div layout:fragment="scripts">
+
+        <!-- Thêm Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- js select2 -->
+        <script>
+            $(document).ready(function () {
+                $('#role').select2({
+                    placeholder: "Select a role",
+                    width: '100%'
+                });
+            });
+        </script>
     </div>
 </body>
 

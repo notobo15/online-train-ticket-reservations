@@ -4,12 +4,15 @@ import com.trainticketbooking.app.Dtos.Province.ProvinceDTO;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Province;
 import com.trainticketbooking.app.Mappers.ProvinceMapper;
+import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.ProvinceRepository;
 import com.trainticketbooking.app.Repos.SeatRepository;
 import com.trainticketbooking.app.Services.ICarriageService;
 import com.trainticketbooking.app.Services.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProvinceService implements IProvinceService {
-
 
     @Autowired
     private ProvinceRepository provinceRepository;
@@ -73,5 +75,16 @@ public class ProvinceService implements IProvinceService {
                 .filter(province -> province.getStations() != null && !province.getStations().isEmpty())
                 .map(ProvinceMapper.INSTANCE::toProvinceDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Province> findAll(Pageable pageable) {
+        return provinceRepository.findAll(pageable);
+    }
+
+    @Override
+    public Province adminUpdateProvince(Province province) {
+        Province provinceTemp = getById(province.getProvinceId()).get();
+        return provinceRepository.save(province);
     }
 }

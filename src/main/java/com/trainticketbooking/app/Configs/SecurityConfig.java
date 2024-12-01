@@ -29,80 +29,81 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+        @Value("${frontend.url}")
+        private String frontendUrl;
 
-    @Autowired
-    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+        @Autowired
+        private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests((auth) -> auth
-                                .requestMatchers("/register").permitAll()
-                                .requestMatchers("/css/**", "/js/**", "/fonts/**", "/icons/**", "/images/**", "/vendors/**").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/**").permitAll()
-//                  .anyRequest().authenticated()
-                                .anyRequest().permitAll()
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .authorizeHttpRequests((auth) -> auth
+                                                .requestMatchers("/register").permitAll()
+                                                .requestMatchers("/css/**", "/js/**", "/fonts/**", "/icons/**",
+                                                                "/images/**", "/vendors/**")
+                                                .permitAll()
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/api/**").permitAll()
+                                                // .anyRequest().authenticated()
+                                                .anyRequest().permitAll()
 
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login").permitAll()
-                        .successHandler(oAuth2LoginSuccessHandler)
-                        .failureUrl("/login?error=true")
+                                )
+                                .oauth2Login(oauth2 -> oauth2
+                                                .loginPage("/login").permitAll()
+                                                .successHandler(oAuth2LoginSuccessHandler)
+                                                .failureUrl("/login?error=true")
 
-                        .failureHandler((request, response, exception) -> {
-                            exception.printStackTrace();
-                            response.sendRedirect("http://localhost:3000/en/home?error=true");
-                        })
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/admin")
-                        .failureHandler(new CustomAuthenticationFailureHandler())
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                        .permitAll()
-                )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedHandler(new CustomAccessDeniedHandler())
-                );
-        return http.build();
-    }
+                                                .failureHandler((request, response, exception) -> {
+                                                        exception.printStackTrace();
+                                                        response.sendRedirect(
+                                                                        "http://localhost:3000/en/home?error=true");
+                                                }))
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/admin")
+                                                .failureHandler(new CustomAuthenticationFailureHandler())
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/login?logout=true")
+                                                .permitAll())
+                                .exceptionHandling(exceptionHandling -> exceptionHandling
+                                                .accessDeniedHandler(new CustomAccessDeniedHandler()));
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+                AuthenticationManagerBuilder authenticationManagerBuilder = http
+                                .getSharedObject(AuthenticationManagerBuilder.class);
+                authenticationManagerBuilder.userDetailsService(customUserDetailsService())
+                                .passwordEncoder(passwordEncoder());
+                return authenticationManagerBuilder.build();
+        }
 
-    @Bean
-    @Primary
-    public UserDetailsService customUserDetailsService() {
-        return new CustomUserDetailsService();
-    }
+        @Bean
+        @Primary
+        public UserDetailsService customUserDetailsService() {
+                return new CustomUserDetailsService();
+        }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(frontendUrl));
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
-        return urlBasedCorsConfigurationSource;
-    }
+        @Bean
+        CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(List.of(frontendUrl));
+                configuration.addAllowedHeader("*");
+                configuration.addAllowedMethod("*");
+                configuration.setAllowCredentials(true);
+                UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+                urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+                return urlBasedCorsConfigurationSource;
+        }
 }

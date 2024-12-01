@@ -1,5 +1,10 @@
 package com.trainticketbooking.app.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import jakarta.persistence.*;
+import lombok.ToString;
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.persistence.Column;

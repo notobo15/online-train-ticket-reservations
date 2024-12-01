@@ -1,5 +1,8 @@
 package com.trainticketbooking.app.Entities;
 
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -9,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 @Entity
 @Table(name = "railway_networks")
@@ -21,12 +23,14 @@ public class RailwayNetwork {
     private Integer railwayId;
 
     @Column(name = "name")
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
     @OneToMany(mappedBy = "railwayNetwork")
     private List<Train> trains;
 
     @Column(name = "status")
+    @NotBlank(message = "Status cannot be empty")
     private String status; // Active, Maintenance, Suspended
 }
 

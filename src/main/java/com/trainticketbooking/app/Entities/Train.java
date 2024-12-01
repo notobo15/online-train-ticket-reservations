@@ -1,6 +1,6 @@
 package com.trainticketbooking.app.Entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import jakarta.persistence.*;
 
@@ -17,16 +17,17 @@ public class Train {
     private Integer trainId;
 
     @Column(name = "train_number", unique = true, length = 20, nullable = false)
+    @NotBlank(message = "Train Number cannot be blank")
     private String trainNumber;
 
     @Column(name = "train_type", length = 50)
+    @NotBlank(message = "Train Type cannot be blank")
     private String trainType;
 
     @OneToMany(mappedBy = "train")
     private List<TrainJourney> trainJourneys;
 
     @OneToMany(mappedBy = "train")
-    @JsonManagedReference
     private List<Carriage> carriages;
 
     @OneToMany(mappedBy = "train")

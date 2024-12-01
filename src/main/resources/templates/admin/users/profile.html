@@ -1,0 +1,97 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<div layout:fragment="content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item" th:href="@{/admin/users}">Users</li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+        </ol>
+    </nav>
+
+    <!-- Kiểm tra nếu có thông báo thành công -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- Form 2: Cập nhật hình ảnh -->
+            <form  class="my-3" th:action="@{/admin/users/update-profile-image}" method="POST" enctype="multipart/form-data">
+                <h4>Update Profile Image</h4>
+
+                <!-- Kiểm tra nếu có ảnh hoặc placeholder -->
+                <div class="form-group py-2">
+                    <label class="form-label"  for="profileImage">Profile Image</label>
+                    <div class="image-upload-wrapper">
+                        <img loading="eager" th:src="@{${updateInfoForm?.profileImage != null ? '/images/profiles/' + updateInfoForm.profileImage : '/images/placeholder.png'}}"
+                             class="img-fluid profile-image rounded-circle" style="width: 150px; height: 150px; object-fit: cover;"
+                             alt="Profile Image"
+                        />
+                    </div>
+                    <input type="file" class="form-control" id="profileImage" name="profileImage">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Image</button>
+            </form>
+
+
+            <form  class="my-3" th:action="@{/admin/users/update-profile-info}" th:object="${updateInfoForm}" method="POST">
+                <h4>Update Information</h4>
+                <div class="form-group py-2">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" th:value="${updateInfoForm.email}"
+                           required>
+                </div>
+
+                <div class="form-group py-2">
+                    <label class="form-label"  for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName"
+                           th:value="${updateInfoForm.fullName}" required>
+                </div>
+
+                <div class="form-group py-2">
+                    <label class="form-label"  for="address">Address</label>
+                    <input type="text" class="form-control" id="address" name="address"
+                           th:value="${updateInfoForm.address}">
+                </div>
+
+                <div class="form-group py-2">
+                    <label class="form-label"  for="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" th:value="${updateInfoForm.phone}">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+
+
+            <!-- Form 3: Thay đổi mật khẩu -->
+            <form class="my-3" th:action="@{/admin/users/update-password}" th:object="${changePasswordForm}" method="POST">
+                <h4>Change Password</h4>
+                <div class="form-group py-2">
+                    <label class="form-label"  for="password">New Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+
+                <div class="form-group py-2">
+                    <label class="form-label"  for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+
+    </script>
+</div>
+
+</html>
