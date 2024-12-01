@@ -135,7 +135,7 @@ public class RoutesController {
         } catch (Exception e) {
             model.addAttribute(
                     "errorMessage",
-                    "Railway Network created fail!  " +
+                    "Edited route fail!  " +
                             e.getMessage());
         }
         return "admin/routes/edit";
