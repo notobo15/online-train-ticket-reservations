@@ -1,5 +1,7 @@
 package com.trainticketbooking.app.Controllers;
 
+import com.trainticketbooking.app.Dtos.ChangePasswordForm;
+import com.trainticketbooking.app.Dtos.UserDto;
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Services.IRoleService;
 import com.trainticketbooking.app.Services.IUserService;
@@ -16,9 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 
@@ -180,6 +184,59 @@ public class AdminUsersController {
                     "Delete user fail!  " + e.getMessage());
         }
         return "redirect:/admin/users/index";
+    }
+    @GetMapping("/profile")
+    public String getProfile(Model model) {
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
+        model.addAttribute("updateInfoForm", userService.findByUsername(currentUser.getUsername()));
+        model.addAttribute("changePasswordForm", new ChangePasswordForm());
+        return "admin/users/profile";
+    }
+
+    // POST 1: Cập nhật thông tin người dùng (Email, Full Name, Address, Phone)
+    @PostMapping("/update-profile-info")
+    public String updateProfileInfo(@ModelAttribute User user, Model model) {
+        // Cập nhật thông tin người dùng
+
+        userService.updateProfileInfo(user);
+        model.addAttribute("successMessage", "Profile information updated successfully.");
+        return "redirect:/admin/users/profile";  // Redirect về trang profile
+    }
+
+    // POST 2: Cập nhật hình ảnh người dùng
+    @PostMapping("/update-profile-image")
+    public String updateProfileImage(@RequestParam("profileImage") MultipartFile profileImage, Model model) {
+        if (profileImage.isEmpty()) {
+            model.addAttribute("errorMessage", "Please select an image to upload.");
+            return "redirect:/admin/users/profile";
+        }
+        UserDto currentUser = userService.getCurrentUserDto();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
+        // Cập nhật hình ảnh người dùng
+        userService.saveProfileImage(profileImage);
+        model.addAttribute("successMessage", "Profile image updated successfully.");
+        return "redirect:/admin/users/profile";
+    }
+
+    // POST 3: Cập nhật mật khẩu
+    @PostMapping("/update-password")
+    public String updatePassword(@RequestParam("password") String password,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 Model model) {
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("errorMessage", "Passwords do not match!");
+            return "redirect:/admin/users/profile";
+        }
+
+        // Cập nhật mật khẩu
+        userService.updatePassword(password);
+        model.addAttribute("successMessage", "Password updated successfully.");
+        return "redirect:/admin/users/profile";
     }
 
 }

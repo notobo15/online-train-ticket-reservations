@@ -3,8 +3,11 @@ package com.trainticketbooking.app.Controllers;
 import java.util.Optional;
 import java.util.StringJoiner;
 
+import com.trainticketbooking.app.Dtos.UserDto;
 import com.trainticketbooking.app.Entities.Route;
+import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Services.IRailwayNetworkService;
+import com.trainticketbooking.app.Services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,9 @@ public class TrainController {
     private ITrainService trainService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private IRailwayNetworkService railwayNetworkService;
 
     @GetMapping({"", "/index"})
@@ -46,6 +52,10 @@ public class TrainController {
         model.addAttribute("totalPages", trainPage.getTotalPages());
         model.addAttribute("size", trainPage.getSize());
 
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
         return "admin/trains/index";
     }
 
@@ -53,6 +63,12 @@ public class TrainController {
     public String createTrain(Model model) {
         model.addAttribute("train", new Train());
         model.addAttribute("railwayNetworks", railwayNetworkService.getAll());
+
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
+
         return "admin/trains/create";
     }
 
@@ -82,6 +98,10 @@ public class TrainController {
                     "errorMessage",
                     "Train created fail!  " + e.getMessage());
         }
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
         return "admin/trains/create";
     }
 
@@ -103,6 +123,11 @@ public class TrainController {
             model.addAttribute(
                     "errorMessage",
                     "Train edited fail!  " + e.getMessage());
+        }
+
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
         }
         return "admin/trains/edit";
     }
@@ -137,6 +162,10 @@ public class TrainController {
                     "Edited train fail!  " +
                             e.getMessage());
         }
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
         return "admin/trains/edit";
     }
 
@@ -153,6 +182,7 @@ public class TrainController {
                     "errorMessage",
                     "Delete train fail!  " + e.getMessage());
         }
+
         return "redirect:/admin/trains/index";
     }
 }

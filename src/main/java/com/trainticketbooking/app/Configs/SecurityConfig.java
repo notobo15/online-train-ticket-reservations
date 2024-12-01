@@ -23,40 +23,39 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf( csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> auth
-                    .requestMatchers("/register").permitAll()
-                    .requestMatchers( "/css/**", "/js/**", "/fonts/**", "/icons/**", "/images/**", "/vendors/**").permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .requestMatchers("/api/**").permitAll()
-//                  .anyRequest().authenticated()
-                    .anyRequest().permitAll()
-            )
-            .formLogin(form -> form
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/admin")
-                    .failureHandler(new CustomAuthenticationFailureHandler())
-                    .permitAll()
-            )
-            .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login?logout=true")
-                    .permitAll()
-            )
-            .exceptionHandling(exceptionHandling -> exceptionHandling
-                    .accessDeniedHandler(new CustomAccessDeniedHandler())
-            );
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/fonts/**", "/icons/**", "/images/**", "/vendors/**")
+                        .permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").permitAll()
+                        // .anyRequest().authenticated()
+                        .anyRequest().permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/admin")
+                        .failureHandler(new CustomAuthenticationFailureHandler())
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .permitAll())
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()));
+
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); 
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManagerBuilder authenticationManagerBuilder = http
+                .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
