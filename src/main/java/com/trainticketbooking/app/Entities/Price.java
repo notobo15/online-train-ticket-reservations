@@ -1,5 +1,6 @@
 package com.trainticketbooking.app.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class Price {
 
     @OneToOne
     @JoinColumn(name = "seat_type_id")
+    @JsonIgnore
     private SeatType seatType;
 
 

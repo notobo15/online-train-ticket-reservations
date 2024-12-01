@@ -2,6 +2,7 @@ package com.trainticketbooking.app.Entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class Seat {
     private Integer seatId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "seat_type_id", nullable = false)
     private SeatType seatType;
 
@@ -36,8 +38,16 @@ public class Seat {
     @Column(name = "compartment_number", nullable = true)
     private Integer compartmentNumber;
 
-    private boolean status;
+    private String status;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "seat")
+//    private List<CarriageSeatMapping> carriageSeatMappings;
 
     @OneToMany(mappedBy = "seat")
-    private List<CarriageSeatMapping> carriageSeatMappings;
+    private List<Ticket> tickets;
+
+    @ManyToOne
+    @JoinColumn(name = "carriage_id")
+    private Carriage carriage;
 }

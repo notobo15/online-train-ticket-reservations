@@ -1,12 +1,17 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.Train.TrainDTO;
+import com.trainticketbooking.app.Dtos.TrainJourney.TrainJourneyDTO;
 import com.trainticketbooking.app.Entities.RailwayNetwork;
 import com.trainticketbooking.app.Entities.Route;
 import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.TrainJourney;
+import com.trainticketbooking.app.Mappers.TrainJourneyMapper;
+import com.trainticketbooking.app.Mappers.TrainMapper;
 import com.trainticketbooking.app.Repos.RailwayNetworkRepository;
 import com.trainticketbooking.app.Repos.RouteRepository;
 import com.trainticketbooking.app.Repos.TrainJourneyRepository;
+import com.trainticketbooking.app.Requests.TrainSearchRequestDTO;
 import com.trainticketbooking.app.Services.ITrainJourneyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainJourneyService implements ITrainJourneyService {
@@ -98,5 +104,28 @@ public class TrainJourneyService implements ITrainJourneyService {
 //            throw new RuntimeException("Train Journey not found with ID: " + trainJourney.getTrainJourneyId());
 //        }
         return null;
+    }
+    public List<TrainDTO> findTrainJourneys(TrainSearchRequestDTO request) {
+        List<TrainJourney> trainJourneys = trainJourneyRepository.findAvailableTrainJourneys(
+                request.getDepartureDate(),
+                request.getStartStationCode(), // ID của ga đi
+                request.getEndStationCode()   // ID của ga đến
+                );
+
+        return trainJourneys.stream()
+                .map(trainJourney -> TrainMapper.INSTANCE.toTrainDTO(trainJourney.getTrain()))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<TrainDTO> searchTrains(TrainSearchRequestDTO request) {
+        List<TrainJourney> trainJourneys = trainJourneyRepository.findAvailableTrainJourneys(
+                request.getDepartureDate(),
+                request.getStartStationCode(),
+                request.getEndStationCode());
+
+        return trainJourneys.stream()
+                .map(trainJourney -> TrainMapper.INSTANCE.mapToTrainDTOWithDetails(trainJourney.getTrain()))
+                .collect(Collectors.toList());
     }
 }

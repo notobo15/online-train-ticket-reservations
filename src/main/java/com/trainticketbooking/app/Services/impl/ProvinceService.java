@@ -1,7 +1,9 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.Province.ProvinceDTO;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Province;
+import com.trainticketbooking.app.Mappers.ProvinceMapper;
 import com.trainticketbooking.app.Entities.User;
 import com.trainticketbooking.app.Repos.CarriageRepository;
 import com.trainticketbooking.app.Repos.ProvinceRepository;
@@ -15,10 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProvinceService implements IProvinceService {
-
 
     @Autowired
     private ProvinceRepository provinceRepository;
@@ -65,6 +67,14 @@ public class ProvinceService implements IProvinceService {
     @Override
     public boolean existsByProvinceId(Integer provinceId) {
         return provinceRepository.existsByProvinceId(provinceId);
+    }
+
+    public List<ProvinceDTO> getProvincesWithStations() {
+        List<Province> provinces = provinceRepository.findAll();
+        return provinces.stream()
+                .filter(province -> province.getStations() != null && !province.getStations().isEmpty())
+                .map(ProvinceMapper.INSTANCE::toProvinceDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

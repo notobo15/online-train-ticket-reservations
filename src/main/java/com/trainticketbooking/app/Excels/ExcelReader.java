@@ -98,11 +98,15 @@ public class ExcelReader {
                 Sheet priceSheet = workbook.getSheetAt(13);
                 readAndInsertPrices(priceSheet);
 
-                Sheet seatsSheet = workbook.getSheetAt(8);
+
+//                Sheet seatsSheet = workbook.getSheetAt(8);
+//                readAndInsertSeats(seatsSheet);
+
+                Sheet seatsSheet = workbook.getSheetAt(18);
                 readAndInsertSeats(seatsSheet);
 
-                Sheet carriageSeatMappingsSheet = workbook.getSheetAt(15);
-                readAndInsertCarriageSeatMappings(carriageSeatMappingsSheet);
+//                Sheet carriageSeatMappingsSheet = workbook.getSheetAt(15);
+//                readAndInsertCarriageSeatMappings(carriageSeatMappingsSheet);
 
                 Sheet routeSheet = workbook.getSheetAt(12);
                 readAndInsertRoutes(routeSheet);
@@ -394,7 +398,7 @@ public class ExcelReader {
                         carriage.setCarriageId(carriageId);
                         carriage.setTrain(train.get());
                         carriage.setCarriageClass(carriageClass.get());
-                        carriage.setCarNumber(carNumber);
+                        carriage.setCarriageNumber(carNumber);
                         carriage.setSeatCount(seatCount);
                         carriage.setTotalFloors(totalFloors);
 
@@ -577,7 +581,6 @@ public class ExcelReader {
                     Integer carriageSeatId = Integer.parseInt(carriageSeatIdStr);
                     Integer carriageId = Integer.parseInt(carriageIdStr);
                     Integer seatId = Integer.parseInt(seatIdStr);
-                    boolean status = Boolean.parseBoolean(statusStr);
 
                     // Fetch related Carriage and Seat entities
                     Optional<Carriage> carriage = carriageService.getById(carriageId);
@@ -588,7 +591,7 @@ public class ExcelReader {
                         mapping.setCarriageSeatId(carriageSeatId);
                         mapping.setCarriage(carriage.get());
                         mapping.setSeat(seat.get());
-                        mapping.setStatus(status);
+                        mapping.setStatus(statusStr);
 
                         carriageSeatMappingService.save(mapping);
                     } else {
@@ -672,29 +675,31 @@ public class ExcelReader {
                     continue;
                 }
 
-                String seatIdStr = dataFormatter.formatCellValue(row.getCell(0));
-                String compartmentNumberStr = dataFormatter.formatCellValue(row.getCell(1));
-                String floorStr = dataFormatter.formatCellValue(row.getCell(2));
-                String seatNumber = dataFormatter.formatCellValue(row.getCell(3));
-//                String status = dataFormatter.formatCellValue(row.getCell(4));
-                String seatTypeIdStr = dataFormatter.formatCellValue(row.getCell(5));
+                String seatIdStr = dataFormatter.formatCellValue(row.getCell(1));
+                String seatNumberStr = dataFormatter.formatCellValue(row.getCell(2));
+                String status = dataFormatter.formatCellValue(row.getCell(3));
+                String seatTypeIdStr = dataFormatter.formatCellValue(row.getCell(4));
+                String carriageIdStr = dataFormatter.formatCellValue(row.getCell(5));
+
+
 
                 try {
                     Integer seatId = Integer.parseInt(seatIdStr);
-                    Integer floor = Integer.parseInt(floorStr);
-                    Integer compartmentNumber = Integer.parseInt(compartmentNumberStr);
-                    Integer seatTypeId = Integer.parseInt(seatTypeIdStr);
+                    Integer seatNumber = Integer.parseInt(seatNumberStr);
+                    Integer typeId = Integer.parseInt(seatTypeIdStr);
+                    Integer carriageId = Integer.parseInt(carriageIdStr);
 
-                    Optional<SeatType> seatType = seatTypeService.getById(seatTypeId);
+                    Optional<SeatType> seatType = seatTypeService.getById(typeId);
+                    Optional<Carriage> carriage = carriageService.getById(carriageId);
 
-                    if (seatType.isPresent()) {
+                    if (seatType.isPresent() && carriage.isPresent()) {
                         Seat seat = new Seat();
                         seat.setSeatId(seatId);
-                        seat.setSeatNumber(seatNumber);
-                        seat.setCompartmentNumber(compartmentNumber);
-                        seat.setFloor(floor);
+                        seat.setSeatNumber(seatNumberStr);
+                        seat.setCarriage(carriage.get());
+//                        seat.setFloor(floor);
                         seat.setSeatType(seatType.get());
-                        seat.setStatus(false);
+                        seat.setStatus(status);
                         seatService.save(seat);
                     } else {
                         System.out.println("Carriage or SeatType not found for Seat ID " + seatId + ". Skipping.");

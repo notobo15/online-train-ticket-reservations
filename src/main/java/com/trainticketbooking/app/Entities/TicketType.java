@@ -3,19 +3,16 @@ package com.trainticketbooking.app.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "tickets")
+@Table(name = "ticket_types")
 @Data
 public class TicketType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_type_id")
-    private Long ticketTypeId;
+    private Integer ticketTypeId;
 
     @Column(name = "name", nullable = false)
     private String name;
-
 }

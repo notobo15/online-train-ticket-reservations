@@ -23,8 +23,8 @@ public class CarriageSeatMapping {
     private Seat seat;
 
     @Column(name = "status")
-    private boolean status;
+    private String status; //  "Booked," "Reserved," and "Available,"
 
-    @OneToMany(mappedBy = "carriageSeatMapping")
-    private List<Ticket> tickets;
+//    @OneToMany(mappedBy = "carriageSeatMapping")
+//    private List<Ticket> tickets;
 }

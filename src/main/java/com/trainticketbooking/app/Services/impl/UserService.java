@@ -36,7 +36,6 @@ public class UserService implements IUserService {
     @Autowired
     private ResetTokenRepository resetTokenRepository;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -55,7 +54,6 @@ public class UserService implements IUserService {
     }
 
     public User save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -84,8 +82,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> findByEmail(String email) {
+        return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
     @Override
@@ -143,6 +141,7 @@ public class UserService implements IUserService {
 
         return null;
     }
+
     public User getCurrentUser() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
@@ -154,13 +153,13 @@ public class UserService implements IUserService {
 
             return currentUser;
         }
-        return null;  // Trả về null nếu không có thông tin đăng nhập
+        return null; // Trả về null nếu không có thông tin đăng nhập
     }
+
     @Transactional
     public void deleteResetToken(String token) {
         resetTokenRepository.deleteByToken(token);
     }
-
 
     public void updateProfileInfo(User user) {
         User currentUser = getCurrentUser();
@@ -171,7 +170,9 @@ public class UserService implements IUserService {
         currentUser.setPhone(user.getPhone());
         userRepository.save(currentUser); // Lưu thay đổi vào cơ sở dữ liệu
     }
+
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
+
     public void saveProfileImage(MultipartFile profileImage) {
         String newFileName = mediaService.saveMedia(profileImage);
         User currentUser = getCurrentUser();
@@ -182,7 +183,7 @@ public class UserService implements IUserService {
     // Cập nhật mật khẩu
     public void updatePassword(String password) {
         User currentUser = getCurrentUser();
-        currentUser.setPassword(password);  // Giả sử mật khẩu đã được mã hóa
+        currentUser.setPassword(password); // Giả sử mật khẩu đã được mã hóa
         userRepository.save(currentUser);
     }
 }

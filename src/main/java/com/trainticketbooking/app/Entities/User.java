@@ -54,6 +54,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Column(name = "avatar_url", length = 255)
+    private String avatarUrl; // Thêm trường avatarUrl
+
+    @Column(name = "login", length = 50)
+    private String login; // Thêm trường login
+
     @Column(name = "profile_image")
     private String profileImage;
 
