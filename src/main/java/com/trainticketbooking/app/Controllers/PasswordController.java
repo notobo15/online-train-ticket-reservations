@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -34,17 +35,17 @@ public class PasswordController {
 
     @PostMapping("/forgot-password")
     public String handleForgotPassword(@RequestParam("email") String email, Model model) {
-        User user = userService.findByEmail(email);
+        Optional<User> user = userService.findByEmail(email);
 
-        if (user == null) {
+        if (user.isEmpty()) {
             model.addAttribute("error", "Email address not found.");
             return "admin/auth/forgot-password";
         }
 
-        String token = userService.generateResetToken(user);
+        String token = userService.generateResetToken(user.get());
 
         try {
-            emailService.sendResetPasswordEmail(user.getEmail(), token);
+            emailService.sendResetPasswordEmail(user.get().getEmail(), token);
         } catch (MessagingException | UnsupportedEncodingException e) {
             log.error("Error sending reset password email: " + e.getMessage());
             model.addAttribute("error", "Failed to send reset password email.");

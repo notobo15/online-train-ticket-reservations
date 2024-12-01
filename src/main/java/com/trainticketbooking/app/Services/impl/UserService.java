@@ -29,7 +29,6 @@ public class UserService implements IUserService {
     @Autowired
     private ResetTokenRepository resetTokenRepository;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public List<User> getAll() {
@@ -45,13 +44,6 @@ public class UserService implements IUserService {
     }
 
     public User save(User user) {
-        if (user.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        } else if (user.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        } else if (user.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
         return userRepository.save(user);
     }
 
@@ -80,8 +72,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> findByEmail(String email) {
+        return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
     @Override
