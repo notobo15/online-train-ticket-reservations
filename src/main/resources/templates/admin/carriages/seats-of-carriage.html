@@ -49,7 +49,7 @@
 
                                     </td>
                                     <td>
-                                        <a th:href="@{/admin/seats/edit/{id}(id=${seat.seatId})}">
+                                        <a th:href="@{/admin/carriages/{carriageId}/seat/{seatId}(carriageId=${car.carriageId},seatId=${seat.seatId})}">
                                             <i class="bi bi-box-arrow-up-right text-primary"></i>
                                         </a>
                                     </td>
@@ -58,6 +58,27 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  Error notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong class="me-auto">Error Notifications</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul class="list-unstyled m-0">
+                    <li th:each="message : ${errorMessages}" class="error-message">
+                        <i class="bi bi-check2 me-2"></i>
+                        <span th:text="${message}"></span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -71,6 +92,18 @@
                 "info": false,
             });
         });
+
+
+
+        // Tự động ẩn toast sau 3 giây
+        setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            // Khởi tạo toast
+            $('.toast').toast({
+                delay: 3000
+            });
     </script>
 </div>
 

@@ -1,11 +1,9 @@
 package com.trainticketbooking.app.Controllers;
 
-import com.trainticketbooking.app.Entities.Carriage;
-import com.trainticketbooking.app.Entities.CarriageClass;
-import com.trainticketbooking.app.Entities.Seat;
-import com.trainticketbooking.app.Entities.Ticket;
+import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
+import com.trainticketbooking.app.Services.ISeatTypeService;
 import com.trainticketbooking.app.Services.impl.CarriageService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -29,6 +27,9 @@ public class CarriageAdminController {
 
     @Autowired
     private ICarriageClassService mCarriageClassService;
+
+    @Autowired
+    private ISeatTypeService mSeatTypeService;
 
 
     @GetMapping({"", "/index"})
@@ -94,10 +95,44 @@ public class CarriageAdminController {
 
         return "redirect:/admin/carriages/edit/" + id;
     }
+
+    @GetMapping("/{carriage-id}/seat/{seat-id}")
+    public String getSeatDetail(@PathVariable("carriage-id") Integer carriageId,
+                                @PathVariable("seat-id") Integer seatId,
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
+
+        try {
+            CarriageSeatMapping csm = mCarriageService.getCSMByCarriageIdAndSeatId(carriageId,seatId);
+
+            Carriage car = csm.getCarriage();
+            Seat seat = csm.getSeat();
+            List<Ticket> tickets = csm.getTickets();
+
+            model.addAttribute("statusOfSeatInCarriage", csm.isStatus());
+            model.addAttribute("car",car);
+            model.addAttribute("seat",seat);
+            model.addAttribute("tickets",tickets);
+            return "admin/carriages/seat-detail";
+        }
+        catch (RuntimeException ex) {
+
+            redirectAttributes.addFlashAttribute("errorMessages",
+                    List.of(ex.getMessage()) );
+            return "redirect:/admin/carriages/" + carriageId
+                    +"/seats";
+        }
+
+    }
     
     @ModelAttribute("getAllCarriageClasses")
     public List<CarriageClass> getAllCarriageClasses() {
         return mCarriageClassService.getAll();
+    }
+    
+    @ModelAttribute("getSeatTypes")
+    public List<SeatType> getAllSeatTypes() {
+        return mSeatTypeService.getAll();
     }
 //
 //    @PostMapping("/edit/{id}")

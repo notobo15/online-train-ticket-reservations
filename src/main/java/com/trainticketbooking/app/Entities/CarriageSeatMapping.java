@@ -27,4 +27,6 @@ public class CarriageSeatMapping {
 
     @OneToMany(mappedBy = "carriageSeatMapping")
     private List<Ticket> tickets;
+
+
 }

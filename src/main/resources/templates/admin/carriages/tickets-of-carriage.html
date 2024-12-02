@@ -47,16 +47,16 @@
                                     <td th:text="${ticket.ticketId}"></td>
                                     <!-- <td th:text="${ticket.ticketTypeId}"></td> -->
                                     <td th:text="${ticket.bookingDate}"></td>
-                                    <td th:text="${ticket.booking.bookingId}"></td>
-                                    <td th:text="${ticket.booking.user.username}"></td>
-                                    <td th:text="${ticket.passenger.identityCardNumber}"></td>
+                                    <td th:text="${ticket.booking != null ? ticket.booking.bookingId : ''}"></td>
+                                    <td th:text="${ticket.booking != null && ticket.booking.user != null ? ticket.booking.user.username : ''}"></td>
+                                    <td th:text="${ticket.passenger != null ? ticket.passenger.identityCardNumber : ''}"></td>
                                     <td th:text="${ticket.price}"></td>
                                     <td>
                                         <span
                                             th:class="${ticket.status == 'Active' ? 'badge bg-success' : 'badge bg-danger'}"
                                             th:text="${ticket.status}"></span>
                                     </td>
-
+            
                                     <td>
                                         <a th:href="@{/admin/tickets/edit/{id}(id=${ticket.ticketId})}">
                                             <i class="bi bi-box-arrow-up-right text-primary"></i>

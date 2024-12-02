@@ -94,4 +94,16 @@ public class CarriageService implements ICarriageService {
 
         return seats;
     }
+
+    @Override
+    public CarriageSeatMapping getCSMByCarriageIdAndSeatId(Integer carriageId, Integer seatId) {
+        Optional<CarriageSeatMapping> csmOpt = carriageSeatMappingRepository.
+                findByCarriage_CarriageIdAndSeat_SeatId(carriageId,seatId);
+
+        return csmOpt.orElseThrow(
+                () -> new RuntimeException("CarriageSeatMapping not found with carriage ID: "
+                        +carriageId +
+                        " and seat ID: " + seatId)
+        );
+    }
 }

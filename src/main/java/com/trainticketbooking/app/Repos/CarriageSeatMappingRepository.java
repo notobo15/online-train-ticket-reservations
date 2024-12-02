@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CarriageSeatMappingRepository extends JpaRepository<CarriageSeatMapping, Integer> {
@@ -20,4 +21,6 @@ public interface CarriageSeatMappingRepository extends JpaRepository<CarriageSea
             WHERE csm.carriage_id = :carriageId
             """, nativeQuery = true)
     Integer countTicketsByCarriageId(@Param("carriageId") Integer carriageId);
+
+    Optional<CarriageSeatMapping> findByCarriage_CarriageIdAndSeat_SeatId(Integer carriageId, Integer seatId);
 }
