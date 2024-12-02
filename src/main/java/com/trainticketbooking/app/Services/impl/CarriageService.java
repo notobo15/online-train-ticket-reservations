@@ -15,6 +15,8 @@ import com.trainticketbooking.app.Repos.TrainRepository;
 import com.trainticketbooking.app.Services.ICarriageService;
 import com.trainticketbooking.app.Services.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
@@ -66,14 +68,17 @@ public class CarriageService implements ICarriageService {
             updatedCarriage.setTrain(carriage.getTrain());
             updatedCarriage.setCarriageClass(carriage.getCarriageClass());
             updatedCarriage.setCarriageNumber(carriage.getCarriageNumber());
-            updatedCarriage.setSeatCount(carriage.getSeatCount());
-            updatedCarriage.setTotalFloors(carriage.getTotalFloors());
+//            updatedCarriage.setSeatCount(carriage.getSeatCount());
+//            updatedCarriage.setTotalFloors(carriage.getTotalFloors());
             return carriageRepository.save(updatedCarriage);
         } else {
             throw new RuntimeException("Carriage not found with ID: " + carriage.getCarriageId());
         }
     }
-
+    @Override
+    public Page<Carriage> findAll(Pageable pageable) {
+        return carriageRepository.findAll(pageable);
+    }
 
 //    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
 //        Carriage carriage = carriageRepository.findById(carriageId)
@@ -138,7 +143,7 @@ public class CarriageService implements ICarriageService {
         dto.setCarriageNumber(carriage.getCarriageNumber());
         dto.setCarriageClassName(carriage.getCarriageClass().getName());
         dto.setCarriageClassId(carriage.getCarriageClass().getCarriageClassId());
-        dto.setSeatCount(carriage.getSeatCount());
+//        dto.setSeatCount(carriage.getSeatCount());
         return dto;
     }
 

@@ -10,6 +10,8 @@ import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +41,11 @@ public class CarriageClassService implements ICarriageClassService {
     @Override
     public void deleteById(Integer id) {
         carriageClassRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<CarriageClass> findAll(Pageable pageable) {
+        return carriageClassRepository.findAll(pageable);
     }
 
     @Override
