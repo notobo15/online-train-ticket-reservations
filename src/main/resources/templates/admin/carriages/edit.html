@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Edit Train</title>
+
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/trains}">Trains</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
+        </nav>
+        <h3>
+            Edit Train
+            <small th:if="${train != null}" class="text-muted">
+                (ID: <span th:text="${train.trainId}"></span>)
+            </small>
+        </h3>
+
+        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+            th:href="@{/admin/trains/index}">
+            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+            <span>Back</span>
+        </a>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Kiểm tra nếu có thông báo thành công -->
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <form th:if="${train != null} and ${railwayNetworks != null}"
+                    th:action="@{/admin/trains/edit/{id}(id=${train.trainId})}" th:object="${train}" method="post">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Train Number:</h5>
+                                    <input th:field="*{trainNumber}" placeholder="Enter Train Number" type="text"
+                                        class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Train Type:</h5>
+                                    <input th:field="*{trainType}" placeholder="Enter Train Type" type="text"
+                                        class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Railway Network:</h5>
+                                    <select id="raiwayNetwork" th:field="*{railwayNetwork.railwayId}"
+                                        class="form-control">
+                                        <option th:each="railwayNetwork : ${railwayNetworks}"
+                                            th:value="${railwayNetwork.railwayId}"
+                                            th:text="${railwayNetwork.railwayId + ' - (' + railwayNetwork.name + ') - ' + railwayNetwork.status}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-lg">
+                        <i class="fa-solid fa-check"></i> Save Edit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="scripts">
+
+        <!-- Thêm Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- js select2 -->
+        <script>
+            $(document).ready(function () {
+                $('#raiwayNetwork').select2({
+                    placeholder: "Select a railway network",
+                    width: '100%'
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>

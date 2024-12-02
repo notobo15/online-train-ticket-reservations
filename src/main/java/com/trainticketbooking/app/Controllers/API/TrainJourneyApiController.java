@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/train-journeys")
-public class TrainJourneyController {
+public class TrainJourneyApiController {
 
     @Autowired
     private TrainJourneyService trainJourneyService;

@@ -1,0 +1,69 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}" xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="content">
+  <h3>Create Train Journey</h3>
+
+  <!-- FullCalendar -->
+  <div id="calendar"></div>
+
+  <div id="trainList" style="display: none;">
+    <h4>Select Trains for the Selected Date</h4>
+    <form th:action="@{/admin/trainjourneys/create}" method="post">
+      <div th:each="train : ${trains}">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" th:value="${train.trainId}" th:name="selectedTrains" id="trainCheckbox" />
+          <label class="form-check-label" th:text="${train.trainNumber}"></label>
+        </div>
+      </div>
+      <input type="hidden" id="selectedDate" name="departureDate"/>
+      <button type="submit" class="btn btn-primary">Create Journey</button>
+    </form>
+  </div>
+</div>
+
+<!-- FullCalendar JS Script -->
+<script>
+  $(document).ready(function() {
+      // FullCalendar initialization
+      $('#calendar').fullCalendar({
+          header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'month,agendaWeek,agendaDay'
+          },
+          events: function(start, end, timezone, callback) {
+              // Gửi yêu cầu đến server để lấy danh sách các sự kiện tàu (có thể dựa vào dữ liệu ngày)
+              // Ví dụ, bạn có thể sử dụng một endpoint để lấy danh sách tàu cho một ngày cụ thể
+              $.ajax({
+                  url: '/api/trainjourneys/events',
+                  dataType: 'json',
+                  success: function(data) {
+                      var events = data.map(function(event) {
+                          return {
+                              title: event.trainNumber,  // Hiển thị số tàu
+                              start: event.departureDate,  // Ngày khởi hành
+                              id: event.trainJourneyId  // Thêm ID để xác định tàu
+                          };
+                      });
+                      callback(events);
+                  }
+              });
+          },
+          dayClick: function(date, jsEvent, view) {
+              // Khi người dùng click vào một ngày, hiển thị danh sách các tàu cho ngày đó
+              var selectedDate = date.format();  // Lấy ngày được chọn
+              $('#selectedDate').val(selectedDate);  // Gửi ngày được chọn vào hidden field
+
+              // Hiển thị danh sách tàu cho ngày đã chọn
+              var dayEvents = $('#calendar').fullCalendar('clientEvents', function(event) {
+                  return event.start.format('YYYY-MM-DD') === selectedDate;
+              });
+
+              // Hiển thị các tàu chạy vào ngày đã chọn
+              $('#trainList').show();  // Hiển thị danh sách tàu
+          }
+      });
+  });
+</script>
+
+</html>

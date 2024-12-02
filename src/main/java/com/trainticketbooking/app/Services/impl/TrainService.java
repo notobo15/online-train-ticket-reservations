@@ -212,8 +212,8 @@ public class TrainService implements ITrainService {
         dto.setCarriageNumber(carriage.getCarriageNumber());
         dto.setCarriageClassName(carriage.getCarriageClass() != null ? carriage.getCarriageClass().getName() : null);
         dto.setCarriageClassId(carriage.getCarriageClass().getCarriageClassId());
-        dto.setSeatCount(carriage.getSeatCount());
-        dto.setTotalFloors(carriage.getTotalFloors());
+//        dto.setSeatCount(carriage.getSeatCount());
+//        dto.setTotalFloors(carriage.getTotalFloors());
         return dto;
     }
 

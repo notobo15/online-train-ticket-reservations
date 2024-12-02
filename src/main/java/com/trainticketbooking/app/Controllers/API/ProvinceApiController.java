@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/provinces")
-public class ProvinceController {
+public class ProvinceApiController {
 
     @Autowired
     private ProvinceService provinceService;
@@ -33,6 +33,7 @@ public class ProvinceController {
         List<ProvinceDTO> provincesWithStations = provinceService.getProvincesWithStations();
         return ResponseEntity.ok(provincesWithStations);
     }
+
     private ProvinceDTO convertToDTO(Province province) {
         ProvinceDTO provinceDTO = modelMapper.map(province, ProvinceDTO.class);
         List<StationDTO> stationDTOs = province.getStations().stream()

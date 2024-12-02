@@ -61,8 +61,8 @@ public class ExcelReader {
     @Autowired
     private RouteService routeService;
 
-    @PostConstruct
-    public void readExcelOnStartup() {
+//    @PostConstruct
+   public void readExcelOnStartup() {
         try {
             ClassPathResource classPathResource = new ClassPathResource("data/data.xlsx");
             InputStream inputStream = classPathResource.getInputStream();
@@ -399,8 +399,8 @@ public class ExcelReader {
                         carriage.setTrain(train.get());
                         carriage.setCarriageClass(carriageClass.get());
                         carriage.setCarriageNumber(carNumber);
-                        carriage.setSeatCount(seatCount);
-                        carriage.setTotalFloors(totalFloors);
+//                        carriage.setSeatCount(seatCount);
+//                        carriage.setTotalFloors(totalFloors);
 
                         carriageService.save(carriage);
                     } else {

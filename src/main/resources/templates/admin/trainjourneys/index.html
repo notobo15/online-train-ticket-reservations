@@ -1,0 +1,56 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="content">
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item" th:href="@{/admin/trainjourneys}">Train Journeys</li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+        <h3>Train Journeys Management</h3>
+        <a th:href="@{/admin/trainjourneys/create}" type="button" class="btn btn-outline-primary btn-icon-text">
+            <i class="btn-icon-prepend" data-feather="plus"></i>
+            <span>Create Journey</span>
+        </a>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Train</th>
+                <th scope="col">Departure Date</th>
+                <th scope="col">Arrival Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="journey : ${journeys}">
+                <td th:text="${journey.train.trainNumber}"></td>
+                <td th:text="${journey.departureDate}"></td>
+                <td th:text="${journey.arrivalDate}"></td>
+                <td th:text="${journey.status}"></td>
+                <td>
+                    <a th:href="@{/admin/trainjourneys/delete/{id}(id=${journey.trainJourneyId})}">
+                        <i class="btn-icon-prepend text-danger" data-feather="trash-2"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</html>

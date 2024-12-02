@@ -32,11 +32,14 @@ public class Carriage {
     @Column(name = "carriage_number", nullable = false)
     private String carriageNumber;
 
-    @Column(name = "seat_count", nullable = false)
-    private int seatCount;
+    @Column(name = "order_number")
+    private Integer orderNumber;
 
-    @Column(name = "total_floors")
-    private int totalFloors;
+//    @Column(name = "seat_count", nullable = false)
+//    private int seatCount;
+
+//    @Column(name = "total_floors")
+//    private int totalFloors;
 
 //    @OneToMany(mappedBy = "carriage")
 //    @JsonIgnore
