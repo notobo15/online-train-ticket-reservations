@@ -45,13 +45,13 @@ public class CarriageClassService implements ICarriageClassService {
 
     @Override
     public CarriageClass update(CarriageClass cac) {
-        CarriageClass existingCarriage = carriageClassRepository
+        CarriageClass existingCarriageClass = carriageClassRepository
                 .findById(cac.getCarriageClassId())
                 .orElseThrow(() -> new RuntimeException("Carriage class not found with ID: " + cac.getCarriageClassId()));
 
-        existingCarriage.setName(cac.getName());
+        existingCarriageClass.setName(cac.getName());
 
-        return carriageClassRepository.save(existingCarriage);
+        return carriageClassRepository.save(existingCarriageClass);
     }
 
     @Override

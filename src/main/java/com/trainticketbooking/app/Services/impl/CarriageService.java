@@ -1,16 +1,15 @@
 package com.trainticketbooking.app.Services.impl;
 
-import com.trainticketbooking.app.Entities.Carriage;
-import com.trainticketbooking.app.Entities.Seat;
-import com.trainticketbooking.app.Entities.Train;
-import com.trainticketbooking.app.Repos.CarriageRepository;
-import com.trainticketbooking.app.Repos.SeatRepository;
-import com.trainticketbooking.app.Repos.TrainRepository;
+import com.trainticketbooking.app.Entities.*;
+import com.trainticketbooking.app.Repos.*;
 import com.trainticketbooking.app.Services.ICarriageService;
 import com.trainticketbooking.app.Services.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +21,12 @@ public class CarriageService implements ICarriageService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private CarriageSeatMappingRepository carriageSeatMappingRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Override
     public List<Carriage> getAll() {
@@ -45,25 +50,48 @@ public class CarriageService implements ICarriageService {
 
     @Override
     public Carriage update(Carriage carriage) {
-        Optional<Carriage> existingCarriage = carriageRepository.findById(carriage.getCarriageId());
-        if (existingCarriage.isPresent()) {
-            Carriage updatedCarriage = existingCarriage.get();
-            updatedCarriage.setTrain(carriage.getTrain());
-            updatedCarriage.setCarriageClass(carriage.getCarriageClass());
-            updatedCarriage.setCarNumber(carriage.getCarNumber());
-            updatedCarriage.setSeatCount(carriage.getSeatCount());
-            updatedCarriage.setTotalFloors(carriage.getTotalFloors());
-            return carriageRepository.save(updatedCarriage);
-        } else {
-            throw new RuntimeException("Carriage not found with ID: " + carriage.getCarriageId());
+        Carriage existingCarriage = carriageRepository
+                .findById(carriage.getCarriageId())
+                .orElseThrow(
+                        () -> new RuntimeException("Carriage not found with ID: " + carriage.getCarriageId()));
+
+        existingCarriage.setTrain(carriage.getTrain());
+        existingCarriage.setCarriageClass(carriage.getCarriageClass());
+        existingCarriage.setCarNumber(carriage.getCarNumber());
+        existingCarriage.setSeatCount(carriage.getSeatCount());
+        existingCarriage.setTotalFloors(carriage.getTotalFloors());
+
+        return carriageRepository.save(existingCarriage);
+    }
+
+    @Override
+    public Page<Carriage> findAll(Pageable pageable) {
+        return carriageRepository.findAll(pageable);
+    }
+
+    public Integer getTicketNumberOfCarriage(Integer carriageId) {
+        List<CarriageSeatMapping> csmMappings = carriageSeatMappingRepository.findByCarriage_CarriageId(carriageId);
+        int sum = 0;
+
+        for (CarriageSeatMapping csm : csmMappings) {
+            sum += csm.getTickets().size();
         }
+        return sum;
+    }
+
+    public List<Ticket> getTicketsOfCarriage(Integer carriageId) {
+        return ticketRepository.getTicketsByCarriageId(carriageId);
     }
 
 
-//    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
-//        Carriage carriage = carriageRepository.findById(carriageId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid carriage ID: " + carriageId));
-//
-//        return seatRepository.findByCarriage(carriage);
-//    }
+    public List<Seat> getSeatsOfCarriage(Integer carriageId) {
+        List<CarriageSeatMapping> csmMappings = carriageSeatMappingRepository.findByCarriage_CarriageId(carriageId);
+        List<Seat> seats = new ArrayList<>() ;
+
+        for (CarriageSeatMapping csm : csmMappings) {
+            seats.add(csm.getSeat());
+        }
+
+        return seats;
+    }
 }

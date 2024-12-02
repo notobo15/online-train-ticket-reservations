@@ -1,23 +1,18 @@
 package com.trainticketbooking.app.Repos;
 
-import com.trainticketbooking.app.Entities.CarriageSeatMapping;
+import com.trainticketbooking.app.Entities.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface CarriageSeatMappingRepository extends JpaRepository<CarriageSeatMapping, Integer> {
-
-    List<CarriageSeatMapping> findByCarriage_CarriageId(Integer carriageId);
-
+public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(value = """
-            SELECT COUNT(t.ticket_id)
+            SELECT t.*
             FROM tickets t
             JOIN carriage_seat_mapping csm ON t.carriage_seat_id = csm.carriage_seat_id
             WHERE csm.carriage_id = :carriageId
             """, nativeQuery = true)
-    Integer countTicketsByCarriageId(@Param("carriageId") Integer carriageId);
+    List<Ticket> getTicketsByCarriageId(@Param("carriageId") Integer carriageId);
 }

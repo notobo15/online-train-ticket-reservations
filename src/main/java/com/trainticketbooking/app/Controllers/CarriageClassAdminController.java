@@ -32,11 +32,11 @@ public class CarriageClassAdminController {
                         @RequestParam(defaultValue = "10") int size,
                         HttpSession session) {
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<CarriageClass> seatPage = mCarriageClassService.findAll(pageRequest);
+        Page<CarriageClass> carriageClassPage = mCarriageClassService.findAll(pageRequest);
 
-        model.addAttribute("carriageClasses", seatPage.getContent());
+        model.addAttribute("carriageClasses", carriageClassPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", seatPage.getTotalPages());
+        model.addAttribute("totalPages", carriageClassPage.getTotalPages());
         model.addAttribute("size", size);
 
         String currentUrl = String.format("/admin/carriage-classes/index?page=%d&size=%d", page, size);

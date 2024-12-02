@@ -146,7 +146,7 @@ public class SeatAdminController {
     }
 
     @ModelAttribute("getSeatTypes")
-    public List<SeatType> getSeatTypes() {
+    public List<SeatType> getAllSeatTypes() {
         return mSeatTypeService.getAll();
     }
 

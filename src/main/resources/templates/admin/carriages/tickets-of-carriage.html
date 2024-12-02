@@ -1,0 +1,89 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+    xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+<div layout:fragment="content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item"><a th:href="@{${session.previousCarriagesPage}}">Carriages</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/admin/carriages/edit/{id}(id=${car.carriageId})}">
+                    <span
+                        th:text="'Edit #' + ${car.train.trainNumber} + ' - ' + ${car.carriageId} + ' - ' + ${car.carNumber}"></span></a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">List Tickets of Carriage</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <!-- <th>Ticke Type ID</th> -->
+                                    <th>Booking Date</th>
+                                    <th>Booking ID</th>
+                                    <th>User Name</th>
+                                    <th>Passenger</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th style="width: 60px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr onclick="" class="cursor-pointer" th:each="ticket : ${tickets}">
+                                    <td th:text="${ticket.ticketId}"></td>
+                                    <!-- <td th:text="${ticket.ticketTypeId}"></td> -->
+                                    <td th:text="${ticket.bookingDate}"></td>
+                                    <td th:text="${ticket.booking.bookingId}"></td>
+                                    <td th:text="${ticket.booking.user.username}"></td>
+                                    <td th:text="${ticket.passenger.identityCardNumber}"></td>
+                                    <td th:text="${ticket.price}"></td>
+                                    <td>
+                                        <span
+                                            th:class="${ticket.status == 'Active' ? 'badge bg-success' : 'badge bg-danger'}"
+                                            th:text="${ticket.status}"></span>
+                                    </td>
+
+                                    <td>
+                                        <a th:href="@{/admin/tickets/edit/{id}(id=${ticket.ticketId})}">
+                                            <i class="bi bi-box-arrow-up-right text-primary"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function () {
+            $('#dataTableExample').DataTable({
+                "paging": false,
+                "info": false,
+            });
+        });
+    </script>
+</div>
+
+</html>

@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface IRailwayNetworkService extends IService<RailwayNetwork> {
     public Page<RailwayNetwork> findAll(Pageable pageable);
+    
 }
