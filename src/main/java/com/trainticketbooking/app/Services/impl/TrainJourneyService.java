@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -128,4 +129,34 @@ public class TrainJourneyService implements ITrainJourneyService {
                 .map(trainJourney -> TrainMapper.INSTANCE.mapToTrainDTOWithDetails(trainJourney.getTrain()))
                 .collect(Collectors.toList());
     }
+
+    public List<TrainJourney> getJourneysByDate(LocalDate date) {
+        return trainJourneyRepository.findByDepartureDate(date);
+    }
+
+    public List<TrainJourney> getTrainJourneysByDate(LocalDate date) {
+        return trainJourneyRepository.findByDepartureDate(date);
+    }
+
+    public void deleteByDate(LocalDate departureDate) {
+        List<TrainJourney> journeysToDelete = trainJourneyRepository.findByDepartureDate(departureDate);
+        for (TrainJourney journey : journeysToDelete) {
+            trainJourneyRepository.delete(journey);  // Xóa từng hành trình
+        }
+    }
+
+    // Hoặc nếu bạn muốn xóa nhanh hơn, có thể sử dụng phương thức xóa theo ngày:
+    public void deleteByDepartureDate(LocalDate departureDate) {
+        trainJourneyRepository.deleteByDepartureDate(departureDate);  // Nếu repository hỗ trợ phương thức này
+    }
+
+    public Map<LocalDate, Long> getJourneysGroupedByDate() {
+        List<TrainJourney> journeys = trainJourneyRepository.findAll(); // Lấy tất cả các chuyến tàu
+
+        // Nhóm các chuyến tàu theo departureDate và đếm số lượng chuyến trong mỗi ngày
+        return journeys.stream()
+                .collect(Collectors.groupingBy(TrainJourney::getDepartureDate, Collectors.counting()));
+    }
+
+
 }

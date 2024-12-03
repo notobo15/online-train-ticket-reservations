@@ -49,4 +49,9 @@ public interface TrainJourneyRepository extends JpaRepository<TrainJourney, Inte
             "AND r.endStation.code = :arrivalCode")
     List<Route> findByDepartureAndArrivalCodes(@Param("departureCode") String departureCode,
                                                @Param("arrivalCode") String arrivalCode);
+
+    List<TrainJourney> findByDepartureDate(LocalDate departureDate);
+
+    // Xóa tất cả các chuyến tàu theo ngày khởi hành
+    void deleteByDepartureDate(LocalDate departureDate);
 }

@@ -1,11 +1,10 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}" xmlns:th="http://www.thymeleaf.org">
 
 <div layout:fragment="content">
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-            <li class="breadcrumb-item" th:href="@{/admin/trainjourneys}">Train Journeys</li>
+            <li class="breadcrumb-item" th:href="@{/admin/train-journeys}">Train Journeys</li>
             <li class="breadcrumb-item active" aria-current="page">List</li>
         </ol>
     </nav>
@@ -29,25 +28,25 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Train</th>
-                <th scope="col">Departure Date</th>
-                <th scope="col">Arrival Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Actions</th>
+                <th>Ngày</th>
+                <th>Số lượng chuyến tàu</th>
+                <th>Danh sách tên tàu</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="journey : ${journeys}">
-                <td th:text="${journey.train.trainNumber}"></td>
-                <td th:text="${journey.departureDate}"></td>
-                <td th:text="${journey.arrivalDate}"></td>
-                <td th:text="${journey.status}"></td>
-                <td>
-                    <a th:href="@{/admin/trainjourneys/delete/{id}(id=${journey.trainJourneyId})}">
-                        <i class="btn-icon-prepend text-danger" data-feather="trash-2"></i>
-                    </a>
-                </td>
-            </tr>
+            <th:block th:each="entry : ${groupedJourneys}">
+                <tr>
+                    <td th:text="${entry.key}"></td> <!-- Ngày -->
+                    <td th:text="${entry.value}"></td> <!-- Số lượng chuyến tàu -->
+                    <td th:text="${groupedTrainNames[entry.key]}"></td> <!-- Danh sách tên tàu -->
+                    <td>
+                        <a th:href="@{/admin/train-journeys/create?departureDate={date}(date=${entry.key})}" class="btn btn-primary btn-sm">
+                            <i class="btn-icon-prepend" data-feather="eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
