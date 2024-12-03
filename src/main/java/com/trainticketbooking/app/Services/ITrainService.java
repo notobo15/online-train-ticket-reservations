@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface ITrainService extends IService<Train> {
     Page<Train> findAll(Pageable pageable);
+    Integer calculateOrderNumber(Train train);
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{admin/layout/layout}">
+      layout:decorate="~{admin/layout/layout}">
 
 <head>
     <title>Edit Train</title>
@@ -9,480 +9,485 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Thêm Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 </head>
 
 <body>
-    <div layout:fragment="content">
-        <nav class="page-breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/admin/trains}">Trains</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit</li>
-            </ol>
-        </nav>
-        <h3>Edit Train
-            <small th:if="${train != null}" class=" text-muted">
-                (ID: <span th:text="${train.trainId}"></span>)
-            </small>
-        </h3>
+<div layout:fragment="content">
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/admin/trains}">Trains</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit</li>
+        </ol>
+    </nav>
+    <h3>Edit Train
+        <small th:if="${train != null}" class=" text-muted">
+            (ID: <span th:text="${train.trainId}"></span>)
+        </small>
+    </h3>
 
-        <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
-            th:href="@{/admin/trains/index}">
-            <i class="btn-icon-prepend" data-feather="chevron-left"></i>
-            <span>Back</span>
-        </a>
+    <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
+       th:href="@{/admin/trains/index}">
+        <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+        <span>Back</span>
+    </a>
 
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
                     type="button" role="tab" aria-controls="pills-home" aria-selected="true">Edit Info Train
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
                     type="button" role="tab" aria-controls="pills-profile" aria-selected="false">List Carriages
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
                     type="button" role="tab" aria-controls="pills-contact" aria-selected="false">List Routes
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
 
-            <div class="col-md-4">
-                <!-- Kiểm tra nếu có thông báo thành công -->
-                <div th:if="${successMessage}" class="alert alert-success" role="alert">
-                    <span th:text="${successMessage}"></span>
-                </div>
-                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-                    <span th:text="${errorMessage}"></span>
-                </div>
-
+        <div class="col-md-4">
+            <!-- Kiểm tra nếu có thông báo thành công -->
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
             </div>
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
-                tabindex="0">
-                <form th:if="${train != null} and ${railwayNetworks != null}"
-                    th:action="@{/admin/trains/edit/{id}(id=${train.trainId})}" th:object="${train}" method="post">
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Train Number:</h5>
-                                    <input th:field="*{trainNumber}" placeholder="Enter Train Number" type="text"
-                                        class="form-control">
-                                </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+        </div>
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+             tabindex="0">
+            <form th:if="${train != null} and ${railwayNetworks != null}"
+                  th:action="@{/admin/trains/edit/{id}(id=${train.trainId})}" th:object="${train}" method="post">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Train Number:</h5>
+                                <input th:field="*{trainNumber}" placeholder="Enter Train Number" type="text"
+                                       class="form-control">
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Train Type:</h5>
-                                    <input th:field="*{trainType}" placeholder="Enter Train Type" type="text"
-                                        class="form-control">
-                                </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Train Type:</h5>
+                                <input th:field="*{trainType}" placeholder="Enter Train Type" type="text"
+                                       class="form-control">
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Railway Network:</h5>
-                                    <select id="raiwayNetwork" th:field="*{railwayNetwork.railwayId}"
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Railway Network:</h5>
+                                <select id="raiwayNetwork" th:field="*{railwayNetwork.railwayId}"
                                         class="form-control">
-                                        <option th:each="railwayNetwork : ${railwayNetworks}"
+                                    <option th:each="railwayNetwork : ${railwayNetworks}"
                                             th:value="${railwayNetwork.railwayId}"
                                             th:text="${railwayNetwork.railwayId + ' - (' + railwayNetwork.name + ') - ' + railwayNetwork.status}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning btn-lg">
+                    <i class="fa-solid fa-check"></i> Save Edit
+                </button>
+            </form>
+        </div>
+
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+             tabindex="0">
+
+
+            <!-- Form to add a new carriage (Initially hidden) -->
+            <div id="addCarriageForm">
+                <h4 class="mt-5">Add Carriage</h4>
+                <form th:action="@{/admin/trains/carriages/create}" method="post">
+
+                    <!-- Truyền trainId dưới dạng hidden input -->
+                    <input type="hidden" name="trainId" th:value="${train.trainId}" />
+
+                    <!-- Carriage Number -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <label for="carriageNumber" class="form-label">Carriage Number</label>
+                                <input type="text" name="carriageNumber" class="form-control" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carriage Class -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <label for="carriageClass" class="form-label">Carriage Class</label>
+                                <select name="carriageClassId" class="form-control">
+                                    <option th:each="class : ${carriageClasses}" th:value="${class.carriageClassId}"
+                                            th:text="${class.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary my-3">Add Carriage</button>
+                </form>
+            </div>
+            <h4 class="my-2">Table Carriages</h4>
+            <!-- Table with drag-and-drop functionality -->
+            <table class="table" id="carriageTable">
+                <thead>
+                <tr>
+                    <!-- Add drag column -->
+                    <th scope="col" style="width: 30px;">&#x21C5;</th> <!-- Drag icon -->
+                    <th scope="col">Id</th>
+                    <th scope="col">Order Number</th>
+                    <th scope="col">Carriage Number</th>
+                    <th scope="col">Carriage Class</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody id="carriageList">
+                <tr th:each="carriage : ${carriages}" th:data-id="${carriage.carriageId}">
+                    <!-- Drag handle -->
+                    <td><i class="fa-solid fa-grip-vertical"></i></td>
+                    <td th:text="${carriage.carriageId}"></td>
+                    <td th:text="${carriage.orderNumber}"></td>
+                    <td th:text="${carriage.carriageNumber}"></td>
+                    <td th:text="${carriage.carriageClass != null ? carriage.carriageClass.name : 'N/A'}"></td>
+                    <td>
+                        <!-- Delete button -->
+                        <form th:action="@{/admin/trains/carriages/delete/{id}(id=${carriage.carriageId})}"
+                              method="post" style="display:inline;">
+                            <input type="hidden" name="trainId" th:value="${train.trainId}"/>
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this carriage?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
+                        <a th:href="@{/admin/trains/carriages/edit/{id}(id=${carriage.carriageId})}"
+                           class="btn btn-warning btn-sm">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+             tabindex="0">
+            <h4>New Routes</h4>
+
+            <div>
+                <form th:action="@{/admin/trains/routes/create}" th:object="${route}" method="post">
+                    <div class="row">
+                        <!-- Start Station -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Start Station:</h5>
+                                    <select id="startStation" th:field="*{startStation.stationId}"
+                                            class="form-control cbb-station">
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                                th:text="${station.stationName + ' (' + station.province.fullName + ')'}">
                                         </option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- End Station -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">End Station:</h5>
+                                    <select id="endStation" th:field="*{endStation.stationId}"
+                                            class="form-control cbb-station">
+                                        <option th:each="station : ${stations}" th:value="${station.stationId}"
+                                                th:text="${station.stationName + ' (' + station.province.fullName + ')'}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="trainId" th:field="*{train.trainId}"
+                               th:value="${train.trainId}"/>
+
+                        <!-- Arrival Time -->
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Arrival Time:</h5>
+                                    <input th:field="*{arrivalTime}" type="time" class="timePicker form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Departure Time -->
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Departure Time:</h5>
+                                    <input th:field="*{departureTime}" type="time" class="timePicker form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Distance -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Distance:</h5>
+                                    <div class="input-group">
+                                        <input th:field="*{distance}" placeholder="Enter distance" type="number"
+                                               class="form-control" min="0"/>
+                                        <span class="input-group-text">Km</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date Number -->
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Date Number:</h5>
+                                    <input th:field="*{dateNumber}" placeholder="Enter dateNumber" type="number"
+                                           class="form-control" min="0"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Station Number -->
+                        <div class="col-md-2 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Station Number:</h5>
+                                    <input th:field="*{stationNumber}" placeholder="Enter stationNumber"
+                                           type="number" class="form-control" min="0"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Status:</h5>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="form-check me-3 mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                   name="status" id="active" value="active">
+                                            <label class="form-check-label badge bg-success"
+                                                   for="active">Active</label>
+                                        </div>
+                                        <div class="form-check me-3 mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                   name="status" id="maintenance" value="maintenance">
+                                            <label class="form-check-label badge bg-warning text-dark"
+                                                   for="maintenance">Maintenance</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input th:field="*{status}" class="form-check-input" type="radio"
+                                                   name="status" id="suspended" value="suspended">
+                                            <label class="form-check-label badge bg-danger"
+                                                   for="suspended">Suspended</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-warning btn-lg">
-                        <i class="fa-solid fa-check"></i> Save Edit
+
+                    <!-- Submit Button -->
+                    <button class="btn btn-success my-3" type="submit">
+                        <i class="fas fa-plus"></i> Create
                     </button>
                 </form>
             </div>
 
-            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
-                tabindex="0">
-                <h4 class="mt-5">Carriages</h4>
 
-                <!-- Button to show the add carriage form -->
-                <button id="addCarriageBtn" class="btn btn-success btn-lg">
-                    <i class="fa-solid fa-plus"></i> Add New Carriage
-                </button>
+            <h4>Table Routes</h4>
 
-                <!-- Form to add a new carriage (Initially hidden) -->
-                <div id="addCarriageForm" style="display:none;">
-                    <h4 class="mt-5">Add Carriage</h4>
-                    <form th:action="@{/admin/trains/carriages/create}" method="post">
-                        <input type="hidden" name="trainId" th:value="${train.trainId}" />
-
-                        <div class="mb-3">
-                            <label for="carriageNumber" class="form-label">Carriage Number</label>
-                            <input type="text" name="carriageNumber" class="form-control" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="carriageClass" class="form-label">Carriage Class</label>
-                            <select name="carriageClassId" class="form-control">
-                                <option th:each="class : ${carriageClasses}" th:value="${class.carriageClassId}"
-                                    th:text="${class.name}"></option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Add Carriage</button>
-                    </form>
-                </div>
-
-                <!-- Table with drag-and-drop functionality -->
-                <table class="table" id="carriageTable">
-                    <thead>
-                        <tr>
-                            <!-- Add drag column -->
-                            <th scope="col" style="width: 30px;">&#x21C5;</th> <!-- Drag icon -->
-                            <th scope="col">Id</th>
-                            <th scope="col">Order Number</th>
-                            <th scope="col">Carriage Number</th>
-                            <th scope="col">Carriage Class</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="carriageList">
-                        <tr th:each="carriage : ${carriages}" th:data-id="${carriage.carriageId}">
-                            <!-- Drag handle -->
-                            <td><i class="fa-solid fa-grip-vertical"></i></td>
-                            <td th:text="${carriage.carriageId}"></td>
-                            <td th:text="${carriage.orderNumber}"></td>
-                            <td th:text="${carriage.carriageNumber}"></td>
-                            <td th:text="${carriage.carriageClass != null ? carriage.carriageClass.name : 'N/A'}"></td>
-                            <td>
-                                <!-- Delete button -->
-                                <form th:action="@{/admin/trains/carriages/delete/{id}(id=${carriage.carriageId})}"
-                                    method="post" style="display:inline;">
-                                    <input type="hidden" name="trainId" th:value="${train.trainId}" />
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Are you sure you want to delete this carriage?');">
-                                        <i class="fa-solid fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                                <a th:href="@{/admin/trains/carriages/edit/{id}(id=${carriage.carriageId})}"
-                                    class="btn btn-primary btn-sm">
-                                    <i class="fa-solid fa-edit"></i> Edit
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
-                tabindex="0">
-                <h4>Associated Routes</h4>
-
-                <div>
-                    <form th:action="@{/admin/trains/routes/create}" th:object="${route}" method="post">
-                        <div class="row">
-                            <!-- Start Station -->
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Start Station:</h5>
-                                        <select id="startStation" th:field="*{startStation.stationId}"
-                                            class="form-control cbb-station">
-                                            <option th:each="station : ${stations}" th:value="${station.stationId}"
-                                                th:text="${station.stationName + ' (' + station.province.fullName + ')'}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- End Station -->
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">End Station:</h5>
-                                        <select id="endStation" th:field="*{endStation.stationId}"
-                                            class="form-control cbb-station">
-                                            <option th:each="station : ${stations}" th:value="${station.stationId}"
-                                                th:text="${station.stationName + ' (' + station.province.fullName + ')'}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="trainId" th:field="*{train.trainId}"
-                                th:value="${train.trainId}" />
-
-                            <!-- Arrival Time -->
-                            <div class="col-md-2 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Arrival Time:</h5>
-                                        <input th:field="*{arrivalTime}" type="time" class="timePicker form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Departure Time -->
-                            <div class="col-md-2 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Departure Time:</h5>
-                                        <input th:field="*{departureTime}" type="time" class="timePicker form-control">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Distance -->
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Distance:</h5>
-                                        <div class="input-group">
-                                            <input th:field="*{distance}" placeholder="Enter distance" type="number"
-                                                class="form-control" min="0" />
-                                            <span class="input-group-text">Km</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Date Number -->
-                            <div class="col-md-2 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Date Number:</h5>
-                                        <input th:field="*{dateNumber}" placeholder="Enter dateNumber" type="number"
-                                            class="form-control" min="0" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Station Number -->
-                            <div class="col-md-2 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Station Number:</h5>
-                                        <input th:field="*{stationNumber}" placeholder="Enter stationNumber"
-                                            type="number" class="form-control" min="0" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Status -->
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Status:</h5>
-                                        <div class="d-flex flex-wrap">
-                                            <div class="form-check me-3 mb-2">
-                                                <input th:field="*{status}" class="form-check-input" type="radio"
-                                                    name="status" id="active" value="active">
-                                                <label class="form-check-label badge bg-success"
-                                                    for="active">Active</label>
-                                            </div>
-                                            <div class="form-check me-3 mb-2">
-                                                <input th:field="*{status}" class="form-check-input" type="radio"
-                                                    name="status" id="maintenance" value="maintenance">
-                                                <label class="form-check-label badge bg-warning text-dark"
-                                                    for="maintenance">Maintenance</label>
-                                            </div>
-                                            <div class="form-check mb-2">
-                                                <input th:field="*{status}" class="form-check-input" type="radio"
-                                                    name="status" id="suspended" value="suspended">
-                                                <label class="form-check-label badge bg-danger"
-                                                    for="suspended">Suspended</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button class="btn btn-success btn-lg" type="submit">
-                            <i class="fas fa-plus"></i> Create
-                        </button>
-                    </form>
-                </div>
-
-                <table id="routesTable" class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Start Station</th>
-                            <th scope="col">End Station</th>
-                            <th scope="col">Arrival</th>
-                            <th scope="col">Departure</th>
-                            <th scope="col">distance</th>
-                            <th scope="col">station</th>
-                            <th scope="col">date</th>
-                            <th scope="col">status</th>
-                            <th style="width: 60px;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Loop through all routes related to the train -->
-                        <tr th:each="route : ${train.routes}">
-                            <td th:text="${route.routeId}"></td>
-                            <td
-                                th:text="${route.startStation.stationName + ' (' + route.startStation.province.fullName + ')'}">
-                            </td>
-                            <td
-                                th:text="${route.endStation.stationName + ' (' + route.endStation.province.fullName + ')'}">
-                            </td>
-                            <td th:text="${#temporals.format(route.arrivalTime, 'HH:mm')}"></td>
-                            <td th:text="${#temporals.format(route.departureTime, 'HH:mm')}"></td>
-                            <td th:text="${route.distance}"></td>
-                            <td th:text="${route.stationNumber}"></td>
-                            <td th:text="${route.dateNumber}"></td>
-                            <td>
+            <table id="routesTable" class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Start Station</th>
+                    <th scope="col">End Station</th>
+                    <th scope="col">Arrival</th>
+                    <th scope="col">Departure</th>
+                    <th scope="col">distance</th>
+                    <th scope="col">station</th>
+                    <th scope="col">date</th>
+                    <th scope="col">status</th>
+                    <th style="width: 60px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Loop through all routes related to the train -->
+                <tr th:each="route : ${train.routes}">
+                    <td th:text="${route.routeId}"></td>
+                    <td
+                            th:text="${route.startStation.stationName + ' (' + route.startStation.province.fullName + ')'}">
+                    </td>
+                    <td
+                            th:text="${route.endStation.stationName + ' (' + route.endStation.province.fullName + ')'}">
+                    </td>
+                    <td th:text="${#temporals.format(route.arrivalTime, 'HH:mm')}"></td>
+                    <td th:text="${#temporals.format(route.departureTime, 'HH:mm')}"></td>
+                    <td th:text="${route.distance}"></td>
+                    <td th:text="${route.stationNumber}"></td>
+                    <td th:text="${route.dateNumber}"></td>
+                    <td>
                                 <span th:switch="${route.status}">
                                     <label th:case="'active'" class="form-check-label badge bg-success"
-                                        for="active">Active</label>
+                                           for="active">Active</label>
                                     <label th:case="'maintenance'" class="form-check-label badge bg-warning text-dark"
-                                        for="maintenance">Maintenance</label>
+                                           for="maintenance">Maintenance</label>
                                     <label th:case="'suspended'" class="form-check-label badge bg-danger"
-                                        for="suspended">Suspended</label>
+                                           for="suspended">Suspended</label>
                                     <label th:case="*">Unknown Status</label>
                                 </span>
-                            </td>
+                    </td>
 
-                            <td class="actions">
-                                <!-- Button Edit -->
-                                <a th:href="@{/admin/trains/routes/edit/{id}(id=${route.routeId})}"
-                                    class="btn btn-warning btn-sm d-inline-flex align-items-center">
-                                    <i class="fa-solid fa-edit"></i>
-                                </a>
+                    <td class="actions">
+                        <!-- Button Edit -->
+                        <a th:href="@{/admin/trains/routes/edit/{id}(id=${route.routeId})}"
+                           class="btn btn-warning btn-sm d-inline-flex align-items-center">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>
 
-                                <!-- Button Delete -->
-                                <form th:action="@{/admin/trains/routes/delete/{id}(id=${route.routeId})}" method="post"
-                                    style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm d-inline-flex align-items-center"
-                                        onclick="return confirm('Are you sure you want to delete this route?');">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
+                        <!-- Button Delete -->
+                        <form th:action="@{/admin/trains/routes/delete/{id}(id=${route.routeId})}" method="post"
+                              style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm d-inline-flex align-items-center"
+                                    onclick="return confirm('Are you sure you want to delete this route?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
+
     </div>
+</div>
 
-    <div layout:fragment="scripts">
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-        <script>
-            console.log(12312321312)
-            // JavaScript to toggle the add carriage form visibility
-            document.getElementById('addCarriageBtn').addEventListener('click', function () {
-                const form = document.getElementById('addCarriageForm');
-                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+
+        flatpickr(".timePicker", {
+            enableTime: true,
+            noCalendar: true,
+            time_24hr: true,
+            dateFormat: "H:i",
+            minuteIncrement: 1
+        });
+
+        // Optional: Initialize Select2 for carriage class dropdown
+        $(document).ready(function () {
+            $('select[name="carriageClassId"]').select2({
+                placeholder: "Select Carriage Class",
+                width: '100%'
             });
 
-            flatpickr(".timePicker", {
-                enableTime: true,
-                noCalendar: true,
-                time_24hr: true,
-                dateFormat: "H:i",
-                minuteIncrement: 1
+            $('#train').select2({
+                placeholder: "Select a train",
+                width: '100%'
             });
-
-            // Optional: Initialize Select2 for carriage class dropdown
-            $(document).ready(function () {
-                $('select[name="carriageClassId"]').select2({
-                    placeholder: "Select Carriage Class",
-                    width: '100%'
-                });
-
-                $('#train').select2({
-                    placeholder: "Select a train",
-                    width: '100%'
-                });
-                $('.cbb-station').select2({
-                    placeholder: "Select a station",
-                    width: '100%'
-                });
+            $('.cbb-station').select2({
+                placeholder: "Select a station",
+                width: '100%'
             });
+        });
 
 
-            $(document).ready(function () {
-                // Kích hoạt tính năng sortable cho bảng
-                var table = document.getElementById('carriageList');
+        $(document).ready(function () {
+            // Kích hoạt tính năng sortable cho bảng
+            var table = document.getElementById('carriageList');
 
 
-                var sortable = new Sortable(table, {
-                    handle: '.fa-grip-vertical', // Chỉ cho phép kéo bằng icon "grip-vertical"
-                    animation: 150,               // Thêm hiệu ứng hoạt hình khi kéo
-                    onEnd: function (evt) {
-                        // Sau khi thay đổi vị trí các hàng, bạn có thể xử lý thứ tự đã thay đổi
-                        var order = [];
-                        $('#carriageList tr').each(function (index) {
-                            var carriageId = $(this).data('id');
-                            order.push({ id: carriageId, order: index });
-                        });
-                        console.log(order)
-
-                        // Gửi thông tin thứ tự mới lên server qua AJAX
-                        $.ajax({
-                            url: '/admin/trains/carriages/update-order',
-                            method: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify({ order: order }),
-                            success: function (response) {
-                                $('#carriageList tr').each(function (index) {
-                                    // Lấy thông tin carriageId từ data-id và tìm carriage trong response
-                                    var carriageId = $(this).data('id');
-                                    var carriage = order.find(c => c.id === carriageId);
-
-                                    if (carriage) {
-                                        // Cập nhật lại số thứ tự trong bảng theo orderNumber từ server
-                                        $(this).find('td').eq(2).text(carriage.order);  // Cập nhật số thứ tự
-                                    }
-                                });
-
-
-                                alert("Order updated successfully!");
-                            },
-                            error: function () {
-                                alert("Failed to update order.");
-                            }
-                        });
-                    }
-                });
-
-                function sortCarriages() {
-                    // Lấy tất cả các hàng trong bảng
-                    var rows = $('#carriageList tr').get();
-
-                    // Sắp xếp các hàng theo orderNumber (dựa trên thẻ <td> thứ 2)
-                    rows.sort(function (a, b) {
-                        var orderA = $(a).find('td:nth-child(2)').text();
-                        var orderB = $(b).find('td:nth-child(2)').text();
-                        return orderA - orderB;  // Sắp xếp tăng dần
+            var sortable = new Sortable(table, {
+                handle: '.fa-grip-vertical', // Chỉ cho phép kéo bằng icon "grip-vertical"
+                animation: 150,               // Thêm hiệu ứng hoạt hình khi kéo
+                onEnd: function (evt) {
+                    // Sau khi thay đổi vị trí các hàng, bạn có thể xử lý thứ tự đã thay đổi
+                    var order = [];
+                    $('#carriageList tr').each(function (index) {
+                        var carriageId = $(this).data('id');
+                        order.push({ id: carriageId, order: index });
                     });
+                    console.log(order)
 
-                    // Đưa các hàng đã sắp xếp lại vào bảng
-                    $.each(rows, function (index, row) {
-                        $('#carriageList').append(row);
+                    // Gửi thông tin thứ tự mới lên server qua AJAX
+                    $.ajax({
+                        url: '/admin/trains/carriages/update-order',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ order: order }),
+                        success: function (response) {
+                            $('#carriageList tr').each(function (index) {
+                                // Lấy thông tin carriageId từ data-id và tìm carriage trong response
+                                var carriageId = $(this).data('id');
+                                var carriage = order.find(c => c.id === carriageId);
+
+                                if (carriage) {
+                                    // Cập nhật lại số thứ tự trong bảng theo orderNumber từ server
+                                    $(this).find('td').eq(2).text(carriage.order);  // Cập nhật số thứ tự
+                                }
+                            });
+
+
+                            alert("Order updated successfully!");
+                        },
+                        error: function () {
+                            alert("Failed to update order.");
+                        }
                     });
                 }
             });
-        </script>
-    </div>
+
+            function sortCarriages() {
+                // Lấy tất cả các hàng trong bảng
+                var rows = $('#carriageList tr').get();
+
+                // Sắp xếp các hàng theo orderNumber (dựa trên thẻ <td> thứ 2)
+                rows.sort(function (a, b) {
+                    var orderA = $(a).find('td:nth-child(2)').text();
+                    var orderB = $(b).find('td:nth-child(2)').text();
+                    return orderA - orderB;  // Sắp xếp tăng dần
+                });
+
+                // Đưa các hàng đã sắp xếp lại vào bảng
+                $.each(rows, function (index, row) {
+                    $('#carriageList').append(row);
+                });
+            }
+        });
+    </script>
+</div>
 </body>
 
 </html>
