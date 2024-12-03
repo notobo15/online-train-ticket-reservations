@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,8 @@ public class TrainController {
 
     @Autowired
     private IRailwayNetworkService railwayNetworkService;
+
+    private Integer trainId;
 
     @GetMapping({"", "/index"})
     public String getAllTrains(Model model, Pageable pageable) {
@@ -114,6 +117,7 @@ public class TrainController {
 
     @GetMapping("/edit/{id}")
     public String editTrain(@PathVariable("id") Integer id, Model model) {
+        trainId = id;
         try {
             Optional<Train> trainOptional = trainService.getById(id);
             if (trainOptional.isPresent()) {
@@ -122,7 +126,9 @@ public class TrainController {
                 model.addAttribute("railwayNetworks", railwayNetworkService.getAll());
 
                 List<Carriage> carriages = train.getCarriages();
-                Collections.sort(carriages, Comparator.comparingInt(Carriage::getOrderNumber));
+                carriages.sort(Comparator.comparing(
+                        carriage -> carriage.getOrderNumber() != null ? carriage.getOrderNumber() : Integer.MAX_VALUE
+                ));
 
                 model.addAttribute("carriages", carriages);  // Add carriages to the model
                 model.addAttribute("carriageClasses", carriageClassService.getAll());  // Add carriages to the model
@@ -135,7 +141,8 @@ public class TrainController {
                 model.addAttribute("errorMessage", String.format("Train with ID = %d does not exist", id));
             }
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "Failed to load train data: " + e.getMessage());
+            e.printStackTrace(); // In chi tiết lỗi ra console để gỡ lỗi
+            model.addAttribute("errorMessage", "Exception occurred: " + e.toString());
         }
 
         User currentUser = userService.getCurrentUser();
@@ -201,8 +208,8 @@ public class TrainController {
     }
 
     @PostMapping("/carriages/create")
-    public String createCarriage(@RequestParam("trainId") Integer trainId, @RequestParam("carriageClassId") Integer carriageClassId, @Valid @ModelAttribute Carriage carriage,
-                                 BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String saveCreateCarriage(@RequestParam("trainId") Integer trainId, @RequestParam("carriageClassId") Integer carriageClassId, @Valid @ModelAttribute Carriage carriage,
+                                     BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("errorMessage", "Failed to create carriage due to validation errors.");
             return "admin/trains/edit";  // Assuming you're submitting the form from the train edit page
@@ -220,9 +227,65 @@ public class TrainController {
         }
     }
 
+    @GetMapping("/carriages/edit/{id}")
+    public String editCarriage(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("carriageClasses", carriageClassService.getAll());
+        try {
+            Optional<Carriage> carriageOptional = carriageService.getById(id);
+            if (carriageOptional.isPresent()) {
+                Carriage carriage = carriageOptional.get();
+                model.addAttribute("carriage", carriage);
+            } else {
+                model.addAttribute("errorMessage", String.format("carriage with ID = %d does not exist", id));
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Exception occurred editCarriage: " + e.toString());
+        }
+        return "admin/trains/editCarriage";
+    }
+
+    @PostMapping("/carriages/edit/{id}")
+    public String saveEditCarriage(@PathVariable("id") Integer id,
+                                   Model model,
+                                   @Valid @ModelAttribute Carriage carriageRequest,
+                                   BindingResult result,
+                                   RedirectAttributes redirectAttributes) {
+        model.addAttribute("carriageClasses", carriageClassService.getAll());
+        if (result.hasErrors()) {
+            StringJoiner errorsJoiner = new StringJoiner(" / ");
+            result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage) // Lấy message của từng lỗi
+                    .forEach(errorsJoiner::add); // Thêm message vào StringJoiner
+            model.addAttribute(
+                    "errorMessage",
+                    "carriage edit fail! => " + errorsJoiner);
+            return "admin/trains/editCarriage";
+        }
+        try {
+            Optional<Carriage> carriageOptional = carriageService.getById(id);
+            if (carriageOptional.isPresent()) {
+                Carriage carriage = carriageOptional.get();
+                carriage.setCarriageClass(carriageRequest.getCarriageClass());
+                carriage.setCarriageNumber(carriageRequest.getCarriageNumber());
+
+                Carriage carriageResponse = carriageService.save(carriage);
+                redirectAttributes.addFlashAttribute("successMessage",
+                        String.format("Edited Carriage successfully with id = %d",
+                                carriageResponse.getCarriageId()));
+                return "redirect:/admin/trains/edit/" + trainId;
+            } else {
+                model.addAttribute("errorMessage", String.format("carriage with ID = %d does not exist", id));
+            }
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Edited Carriage fail!  " + e.getMessage());
+        }
+        return "admin/trains/editCarriage";
+    }
 
     @PostMapping("/carriages/delete/{id}")
-    public String deleteCarriage(@PathVariable("id") Integer id,@RequestParam("trainId") Integer trainId, RedirectAttributes redirectAttributes) {
+    public String deleteCarriage(@PathVariable("id") Integer id, @RequestParam("trainId") Integer trainId, RedirectAttributes redirectAttributes) {
         try {
             carriageService.deleteById(id);  // Assuming a service method to delete the carriage
             redirectAttributes.addFlashAttribute("successMessage", "Carriage deleted successfully.");
@@ -255,28 +318,113 @@ public class TrainController {
         }
     }
 
-
-
-
-
-
     @PostMapping("/routes/create")
-    public String createRoute(@Valid @ModelAttribute("route") Route route, BindingResult result,
-                              RedirectAttributes redirectAttributes) {
+    public String saveCreateRoute(@Valid @ModelAttribute("route") Route route, BindingResult result,
+                                  RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            // If there are validation errors, return the form with error messages
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create route due to validation errors.");
-            return "redirect:/admin/routes/create";
+            StringJoiner errorsJoiner = new StringJoiner(" / ");
+            result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage) // Lấy message của từng lỗi
+                    .forEach(errorsJoiner::add); // Thêm message vào StringJoiner
+            redirectAttributes.addFlashAttribute("errorMessage", "Route created fail! => " + errorsJoiner);
+            return "redirect:/admin/trains/edit/" + trainId;
         }
         try {
-            // Save the route (assuming routeService handles the database persistence)
-            routeService.save(route);
-            redirectAttributes.addFlashAttribute("successMessage", "Route created successfully!");
-            return "redirect:/admin/routes";  // Redirect to the route list page
+            Optional<Train> trainOptional = trainService.getById(trainId);
+            if (trainOptional.isPresent()) {
+                Train train = trainOptional.get();
+                route.setTrain(train);
+                Route routeResponse = routeService.save(route);
+                redirectAttributes.addFlashAttribute(
+                        "successMessage",
+                        "Route created successfully with id = " + routeResponse.getRouteId());
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        String.format("train with ID = %d does not exist", trainId));
+            }
         } catch (Exception e) {
-            // Handle any errors that occur during route creation
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create route: " + e.getMessage());
-            return "redirect:/admin/routes/create";
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Route created fail!  " + e.toString());
         }
+        return "redirect:/admin/trains/edit/" + trainId;
+    }
+
+    @GetMapping("/routes/edit/{id}")
+    public String editRoute(@PathVariable("id") Integer id, Model model) {
+        try {
+            Optional<Route> routesOptional = routeService.getById(id);
+            if (routesOptional.isPresent()) {
+                Route route = routesOptional.get();
+                model.addAttribute("route", route);
+                model.addAttribute("stations", stationService.getAll());
+                return "admin/trains/editRoute";
+            } else {
+                model.addAttribute(
+                        "errorMessage",
+                        String.format("route has id = %d does not exist", id)
+                );
+            }
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Route edited fail!  " + e.toString());
+        }
+        return "redirect:/admin/trains/edit/" + trainId;
+    }
+
+    @PostMapping("/routes/edit/{id}")
+    public String saveEditRoute(@PathVariable("id") Integer id,
+                                Model model,
+                                @Valid @ModelAttribute Route route,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes) {
+        model.addAttribute("stations", stationService.getAll());
+        route.setRouteId(id);
+        if (result.hasErrors()) {
+            StringJoiner errorsJoiner = new StringJoiner(" / ");
+            result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage) // Lấy message của từng lỗi
+                    .forEach(errorsJoiner::add); // Thêm message vào StringJoiner
+            model.addAttribute(
+                    "errorMessage",
+                    "route edit fail! => " + errorsJoiner);
+            return "admin/trains/editRoute";
+        }
+        try {
+            Optional<Train> trainOptional = trainService.getById(trainId);
+            if (trainOptional.isPresent()) {
+                Train train = trainOptional.get();
+                route.setTrain(train);
+                Route routeResponse = routeService.save(route);
+                redirectAttributes.addFlashAttribute("successMessage",
+                        String.format("Edited Route successfully with id = %d",
+                                routeResponse.getRouteId()));
+                return "redirect:/admin/trains/edit/" + trainId;
+            } else {
+                model.addAttribute(
+                        "errorMessage",
+                        String.format("Train has id = %d does not exist", trainId)
+                );
+            }
+        } catch (Exception e) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Edited Route fail!  " + e.toString());
+        }
+        return "admin/trains/editRoute";
+    }
+
+    @PostMapping("/routes/delete/{id}")
+    public String deleteRoute(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            routeService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Route deleted successfully with id = " + id);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Failed to delete Route: " + e.toString());
+        }
+        return "redirect:/admin/trains/edit/" + trainId;
     }
 }

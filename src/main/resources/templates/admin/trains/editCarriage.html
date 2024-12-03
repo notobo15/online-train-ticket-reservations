@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout/layout}">
+
+<head>
+    <title>Edit Carriage</title>
+
+    <!-- font-awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Thêm Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <h3>Edit Carriage
+            <small th:if="${carriage != null}" class=" text-muted">
+                (ID: <span th:text="${carriage.carriageId}"></span>)
+            </small>
+        </h3>
+
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Kiểm tra nếu có thông báo thành công -->
+                <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <div th:if="${carriage}">
+                    <form th:action="@{/admin/trains/carriages/edit/{id}(id=${carriage.carriageId})}"
+                        th:object="${carriage}" method="post">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">carriage_number:</h5>
+                                        <input th:field="*{carriageNumber}" placeholder="Enter carriageNumber"
+                                            type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Carriage Class: </h5>
+                                    <select id="carriageClass" th:field="*{carriageClass.carriageClassId}"
+                                        class="form-control">
+                                        <option th:each="class : ${carriageClasses}" th:value="${class.carriageClassId}"
+                                            th:text="${class.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-check"></i> Save Edit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout:fragment="scripts">
+
+        <!-- Thêm Select2 JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <!-- js select2 -->
+        <script>
+            $(document).ready(function () {
+                $('#carriageClass').select2({
+                    placeholder: "Select a carriage class",
+                    width: '100%'
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
