@@ -80,6 +80,12 @@ public class CarriageService implements ICarriageService {
         return carriageRepository.findAll(pageable);
     }
 
+    @Override
+    public List<Carriage> findByTrain(Train train) {
+        return List.of();
+    }
+
+
 //    public List<Seat> findSeatsByCarriageId(Integer carriageId) {
 //        Carriage carriage = carriageRepository.findById(carriageId)
 //                .orElseThrow(() -> new IllegalArgumentException("Invalid carriage ID: " + carriageId));
@@ -164,5 +170,10 @@ public class CarriageService implements ICarriageService {
         dto.setStatus(seatMapping.getStatus());
         dto.setSeatType(seatMapping.getSeatType().getSeatType()); // giả sử seatType có thuộc tính name
         return dto;
+    }
+
+    @Override
+    public List<Carriage> findByTrainTrainId(Integer train) {
+        return carriageRepository.findByTrainTrainId(train);
     }
 }

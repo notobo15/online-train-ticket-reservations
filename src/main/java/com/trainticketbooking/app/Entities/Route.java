@@ -61,7 +61,6 @@ public class Route {
     @Column(name = "date_number")
     private int dateNumber;
 
-    @NotNull(message = "Train cannot be null")
     @ManyToOne
     @JoinColumn(name = "train_id", nullable = false)
     private Train train;

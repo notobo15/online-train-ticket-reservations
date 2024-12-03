@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -232,5 +233,21 @@ public class TrainService implements ITrainService {
         // Tính tổng thời gian
         Duration totalDuration = Duration.between(totalDepartureTime, totalArrivalTime);
         return totalDuration;
+    }
+
+    public Integer calculateOrderNumber(Train train) {
+        // Lấy tất cả các carriage của tàu này
+        List<Carriage> carriages = carriageRepository.findByTrain(train);
+
+        if (carriages.isEmpty()) {
+            return 1;  // Nếu không có toa nào, đặt orderNumber là 1
+        }
+
+        // Lấy orderNumber của toa cuối cùng, cộng thêm 1
+        Carriage lastCarriage = carriages.stream()
+                .max(Comparator.comparingInt(Carriage::getOrderNumber))  // Lấy toa có orderNumber lớn nhất
+                .orElseThrow(() -> new RuntimeException("Failed to find the last carriage"));
+
+        return lastCarriage.getOrderNumber() + 1;  // Cộng thêm 1 vào orderNumber của toa cuối
     }
 }
