@@ -3,6 +3,8 @@ package com.trainticketbooking.app.Entities;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -16,16 +18,18 @@ public class SeatType {
     private Long seatTypeId;
 
     @Column(name = "seat_type", nullable = false)
+    @NotEmpty(message = "SeatType is required!")
     private String seatType;
 
     @Column(name = "code")
+    @NotEmpty(message = "Code is required!")
     private String code;
 
     @Column(name = "description")
     private String description;
 
 
-    @OneToOne
+    @OneToOne(mappedBy = "seatType")
     private Price price;
 
 }

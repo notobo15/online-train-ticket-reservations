@@ -1,13 +1,8 @@
 package com.trainticketbooking.app.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -22,8 +17,9 @@ public class Price {
     @Column(name = "priceId")
     private Integer priceId;
 
-    @OneToOne
-    @JoinColumn(name = "seat_type_id")
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "seat_type_id",referencedColumnName = "seat_type_id")
     private SeatType seatType;
 
 
@@ -31,6 +27,7 @@ public class Price {
     private Double surchargePercentage;
 
     @Column(name = "price_per_km", nullable = false)
+    @NotNull(message = "PricePerKm is required!")
     private Double pricePerKm;
 
     public Double calTotalPrice(Double distanceInKm) {
