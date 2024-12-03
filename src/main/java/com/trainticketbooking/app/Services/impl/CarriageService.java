@@ -1,9 +1,9 @@
 package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.*;
+import com.trainticketbooking.app.Exceptions.CarriageClassNotFoundException;
 import com.trainticketbooking.app.Repos.*;
 import com.trainticketbooking.app.Services.ICarriageService;
-import com.trainticketbooking.app.Services.ITrainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +24,12 @@ public class CarriageService implements ICarriageService {
 
     @Autowired
     private CarriageSeatMappingRepository carriageSeatMappingRepository;
+
+    @Autowired
+    private CarriageClassRepository carriageClassRepository;
+
+    @Autowired
+    private TrainRepository trainRepository;
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -54,9 +60,19 @@ public class CarriageService implements ICarriageService {
                 .findById(carriage.getCarriageId())
                 .orElseThrow(
                         () -> new RuntimeException("Carriage not found with ID: " + carriage.getCarriageId()));
+        CarriageClass existingCarriageClass = carriageClassRepository
+                .findById(carriage.getCarriageClass().getCarriageClassId())
+                .orElseThrow(
+                        () -> new CarriageClassNotFoundException("Carriage Class not found with ID: " + carriage.getCarriageClass().getCarriageClassId()));
 
-        existingCarriage.setTrain(carriage.getTrain());
-        existingCarriage.setCarriageClass(carriage.getCarriageClass());
+        Train existingCTrain = trainRepository
+                .findById(carriage.getTrain().getTrainId())
+                .orElseThrow(
+                        () -> new RuntimeException("Train not found with ID: " + carriage.getTrain().getTrainId()));
+
+
+        existingCarriage.setTrain(existingCTrain);
+        existingCarriage.setCarriageClass(existingCarriageClass);
         existingCarriage.setCarNumber(carriage.getCarNumber());
         existingCarriage.setSeatCount(carriage.getSeatCount());
         existingCarriage.setTotalFloors(carriage.getTotalFloors());
@@ -67,6 +83,10 @@ public class CarriageService implements ICarriageService {
     @Override
     public Page<Carriage> findAll(Pageable pageable) {
         return carriageRepository.findAll(pageable);
+    }
+
+    public List<CarriageSeatMapping> getCSMsByCarriageId(Integer carriageId) {
+        return carriageSeatMappingRepository.findByCarriage_CarriageId(carriageId);
     }
 
     public Integer getTicketNumberOfCarriage(Integer carriageId) {
@@ -84,8 +104,8 @@ public class CarriageService implements ICarriageService {
     }
 
 
-    public List<Seat> getSeatsOfCarriage(Integer carriageId) {
-        List<CarriageSeatMapping> csmMappings = carriageSeatMappingRepository.findByCarriage_CarriageId(carriageId);
+    public List<Seat> getSeatsOfCarriage(List<CarriageSeatMapping> csmMappings) {
+//        List<CarriageSeatMapping> csmMappings = carriageSeatMappingRepository.findByCarriage_CarriageId(carriageId);
         List<Seat> seats = new ArrayList<>() ;
 
         for (CarriageSeatMapping csm : csmMappings) {

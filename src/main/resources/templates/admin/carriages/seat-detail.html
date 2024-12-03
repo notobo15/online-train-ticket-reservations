@@ -18,7 +18,7 @@
                 <li class="breadcrumb-item"><a th:href="@{${session.previousCarriagesPage}}">Carriages</a></li>
                 <li class="breadcrumb-item"><a th:href="@{/admin/carriages/edit/{id}(id=${car.carriageId})}">
                         <span
-                            th:text="'Edit #' + ${car.train.trainNumber} + ' - ' + ${car.carriageId} + ' - ' + ${car.carNumber}"></span></a>
+                        th:text="'Edit #' + ${car.carriageId}"></span></a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     <a th:href="@{/admin/carriages/{id}/seats(id=${car.carriageId})}">

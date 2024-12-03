@@ -13,7 +13,7 @@
             <li class="breadcrumb-item"><a th:href="@{${session.previousCarriagesPage}}">Carriages</a></li>
             <li class="breadcrumb-item"><a th:href="@{/admin/carriages/edit/{id}(id=${car.carriageId})}">
                     <span
-                        th:text="'Edit #' + ${car.train.trainNumber} + ' - ' + ${car.carriageId} + ' - ' + ${car.carNumber}"></span></a>
+                    th:text="'Edit #' + ${car.carriageId}"></span></a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">List Seats of Carriage</li>
         </ol>
@@ -33,11 +33,12 @@
                                     <th>Floor</th>
                                     <th>Compartment</th>
                                     <th>Status</th>
+                                    <th>Status in car</th>
                                     <th style="width: 60px;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="cursor-pointer" th:each="seat : ${seats}">
+                                <tr class="cursor-pointer" th:each="seat, iterStat : ${seats}">
                                     <td th:text="${seat.seatId}"></td>
                                     <td th:text="${seat.seatNumber}"></td>
                                     <td th:text="${seat.seatType.code} + ' (' + ${seat.seatType.seatType} + ')'"></td>
@@ -48,6 +49,13 @@
                                             th:text="${seat.status ? 'Locked' : 'Available'}"></span>
 
                                     </td>
+
+                                    <td>
+                                        <span th:class="${csms[iterStat.index].status ? 'badge bg-danger' : 'badge bg-success'}"
+                                            th:text="${csms[iterStat.index].status ? 'Locked' : 'Available'}"></span>
+
+                                    </td>
+
                                     <td>
                                         <a th:href="@{/admin/carriages/{carriageId}/seat/{seatId}(carriageId=${car.carriageId},seatId=${seat.seatId})}">
                                             <i class="bi bi-box-arrow-up-right text-primary"></i>

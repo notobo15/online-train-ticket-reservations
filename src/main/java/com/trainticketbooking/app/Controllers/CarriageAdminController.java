@@ -1,10 +1,12 @@
 package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Entities.*;
+import com.trainticketbooking.app.Exceptions.CarriageClassNotFoundException;
+import com.trainticketbooking.app.Exceptions.SeatTypeNotFoundException;
 import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
 import com.trainticketbooking.app.Services.ISeatTypeService;
-import com.trainticketbooking.app.Services.impl.CarriageService;
+import com.trainticketbooking.app.Services.ITrainService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class CarriageAdminController {
 
     @Autowired
     private ISeatTypeService mSeatTypeService;
+
+    @Autowired
+    private ITrainService mTrainService;
 
 
     @GetMapping({"", "/index"})
@@ -63,6 +68,7 @@ public class CarriageAdminController {
             model.addAttribute("errorMap", errorMap);
             model.addAttribute("successMessages", successMessages);
             model.addAttribute("ticketsOfCarriage", ticketsOfCarriage);
+            model.addAttribute("csms",car.getCarriageSeatMappings());
             return "admin/carriages/edit";
         }
         return (String) session.getAttribute("previousCarriagesPage");
@@ -84,10 +90,12 @@ public class CarriageAdminController {
 
     @GetMapping("/{id}/seats")
     public String getSeats(@PathVariable("id") Integer id, Model model) {
-        List<Seat> seats = mCarriageService.getSeatsOfCarriage(id);
+        List<CarriageSeatMapping> csms = mCarriageService.getCSMsByCarriageId(id);
+        List<Seat> seats = mCarriageService.getSeatsOfCarriage(csms);
         Optional<Carriage> carOpt = mCarriageService.getById(id);
 
         if (carOpt.isPresent()) {
+            model.addAttribute("csms", csms);
             model.addAttribute("seats", seats);
             model.addAttribute("car", carOpt.get());
             return "admin/carriages/seats-of-carriage";
@@ -134,32 +142,45 @@ public class CarriageAdminController {
     public List<SeatType> getAllSeatTypes() {
         return mSeatTypeService.getAll();
     }
-//
-//    @PostMapping("/edit/{id}")
-//    public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("cac") CarriageClass cac, BindingResult result, Model model) {
-//        cac.setCarriageClassId(id);
-//
-//        Map<String, String> errorMap = new HashMap<>();
-//        List<String> successMessages = new ArrayList<>();
-//        model.addAttribute("errorMap", errorMap);
-//        model.addAttribute("successMessages", successMessages);
-//
-//        if (result.hasErrors()) {
-//            return "admin/carriage-classes/edit";
-//        }
-//
-//        try {
-//            cac = mCarriageClassService.update(cac);
-//        } catch (RuntimeException ex) {
-//            errorMap.put("generalError", ex.getMessage());
-//            return "admin/carriage-classes/edit";
-//        }
-//
-//        model.addAttribute("cac", cac);
-//        successMessages.add("Successfully Updated");
-//        return "admin/carriage-classes/edit";
-//    }
-//
+
+    @ModelAttribute("getAllTrains")
+    public List<Train> getAllTrains() {
+        return mTrainService.getAll();
+    }
+
+
+    @PostMapping("/edit/{id}")
+    public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("car") Carriage car, BindingResult result, Model model) {
+        car.setCarriageId(id);
+        int ticketsOfCarriage = mCarriageService.getTicketNumberOfCarriage(id);
+        Map<String, String> errorMap = new HashMap<>();
+        List<String> successMessages = new ArrayList<>();
+        model.addAttribute("errorMap", errorMap);
+        model.addAttribute("successMessages", successMessages);
+        model.addAttribute("csms", mCarriageService.getCSMsByCarriageId(id));
+        model.addAttribute("ticketsOfCarriage", ticketsOfCarriage);
+
+        if (result.hasErrors()) {
+            return "admin/carriages/edit";
+        }
+
+        try {
+            car = mCarriageService.update(car);
+        }
+        catch (CarriageClassNotFoundException ex) {
+            errorMap.put("carriageClass", ex.getMessage());
+            return "admin/carriages/edit";
+        }
+        catch (RuntimeException ex) {
+            errorMap.put("generalError", ex.getMessage());
+            return "admin/carriages/edit";
+        }
+
+        model.addAttribute("car", car);
+        successMessages.add("Successfully Updated");
+        return "admin/carriages/edit";
+    }
+
 //    @GetMapping("create")
 //    public String create(Model model) {
 //        CarriageClass cac = new CarriageClass();
@@ -190,10 +211,11 @@ public class CarriageAdminController {
 //        return "redirect:/admin/carriage-classes/index";
 //    }
 //
-//    @PostMapping("/delete/{id}")
-//    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-//        mCarriageClassService.deleteById(id);
-//        redirectAttributes.addFlashAttribute("successMessages", List.of("Successfully Deleted"));
-//        return "redirect:/admin/carriage-classes/index";
-//    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        mCarriageService.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessages", List.of("Successfully Deleted"));
+        return "redirect:/admin/carriages/index";
+    }
 }

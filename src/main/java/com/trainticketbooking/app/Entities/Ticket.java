@@ -1,6 +1,7 @@
 package com.trainticketbooking.app.Entities;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id")
-    private Long ticketId;
+    private Integer ticketId;
 
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)

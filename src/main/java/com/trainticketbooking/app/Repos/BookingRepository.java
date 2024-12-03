@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 //    Booking findByOrderInfo(String orderInfo);
 //    Booking findByOrderId(Integer orderId);
+
+
 }

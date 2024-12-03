@@ -5,6 +5,8 @@ import com.trainticketbooking.app.Entities.Station;
 import com.trainticketbooking.app.Repos.BookingRepository;
 import com.trainticketbooking.app.Services.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,5 +50,10 @@ public class BookingService implements IBookingService {
         } else {
             throw new RuntimeException("Booking not found with ID: " + booking.getBookingId());
         }
+    }
+
+    @Override
+    public Page<Booking> findAll(Pageable pageable) {
+        return bookingRepository.findAll(pageable);
     }
 }
