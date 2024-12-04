@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -33,6 +34,7 @@ public class Price {
     private Double surchargePercentage;
 
     @Column(name = "price_per_km", nullable = false)
+    @NotNull(message = "PricePerKm is required!")
     private Double pricePerKm;
 
     public Double calTotalPrice(Double distanceInKm) {
