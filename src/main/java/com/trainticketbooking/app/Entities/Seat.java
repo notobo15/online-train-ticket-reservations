@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -27,9 +29,11 @@ public class Seat {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "seat_type_id", nullable = false)
+    @NotNull(message = "Seattype is required!")
     private SeatType seatType;
 
     @Column(name = "seat_number", nullable = false)
+    @NotEmpty(message = "SeatNumber is required!")
     private String seatNumber;
 
     @Column(name = "floor", nullable = true)
@@ -38,6 +42,7 @@ public class Seat {
     @Column(name = "compartment_number", nullable = true)
     private Integer compartmentNumber;
 
+    @NotNull(message = "Status is required!")
     private String status;
 
 //    @JsonIgnore
