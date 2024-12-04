@@ -1,0 +1,68 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/carriage-classes/index}">Carriage Classes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${cac.carriageClassId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center ">
+                <a th:href="@{${session.previousCarriageClassesPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3"
+                    th:text=" ${'Carriage Classes Detail #' +  cac.carriageClassId}"> </h3>
+            </div>
+        </div>
+
+        <form id="carriageClassDetailForm" class="card"
+              th:object="${cac}" method="post">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label for="name" class="form-label"><strong>Carriage Class name:</strong></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}"
+                            readonly >
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                  class="text-small text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+        });
+
+    </script>
+
+</div>
+
+
+</html>
