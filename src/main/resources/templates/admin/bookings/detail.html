@@ -1,0 +1,178 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</div>
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/bookings}">Bookings</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Detail#<span
+                        th:text="${booking.bookingId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center">
+                <a th:href="@{${session.previousBookingsPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3" th:text="'Booking Detail #' + ${booking.bookingId}"></h3>
+            </div>
+        </div>
+
+        <!-- Booking Information -->
+        <div class="card" th:object="${booking}">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label"><strong>Booking ID:</strong></label>
+                            <input type="text" class="form-control" th:value="*{bookingId}" readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Booking Time:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${#temporals.format(booking.bookingTime, 'dd-MM-yyyy HH:mm')}" readonly>
+                        </div>
+
+                        <!-- Departure Date -->
+                        <div class="form-group">
+                            <label for="departureDate" class="form-label"><strong>Departure Date:</strong></label>
+                            <input type="datetime" class="form-control" id="departureDate" th:value="${#temporals.format(booking.departureDate, 'dd-MM-yyyy')}"
+                                readonly>
+                        </div>
+
+                        <!-- Station Information -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Station Information(start-end):</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${booking.startStation.stationName + '-' + booking.endStation.stationName}"
+                                readonly>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Total Price:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')}"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label"><strong>User:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${booking.user != null ? booking.user.username : 'N/A'}" readonly>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Number of Tickets:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${booking.tickets != null ? booking.tickets.size() : 0}" readonly>
+                        </div>
+                        <!-- Paid, Pending, Failed -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Payment Status:</strong></label>
+                            <div>
+                                <span th:if="${booking.payment != null}" th:class="${booking.payment.status == 'Paid' ? 'badge bg-success' : 
+                                    booking.payment.status == 'Pending' ? 'badge bg-warning' : 'badge bg-danger'}"
+                                    th:text="${booking.payment.status}">
+                                </span>
+                                <span th:if="${booking.payment == null}" class="badge bg-danger">
+                                    Unknown
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets"
+                    type="button" role="tab" aria-controls="tickets" aria-selected="true">Tickets</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets-tab">
+                <table class="table table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Booking Date</th>
+                            <th>Passenger</th>
+                            <th>Price</th>
+                            <th>Train info</th>
+                            <th>Booking Info</th>
+                            <th>Status</th>
+                            <th style="width: 60px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ticket : ${ticketsOfBooking}">
+                            <td th:text="${ticket.ticketId}"></td>
+
+                            <td th:text="${#temporals.format(ticket.bookingDate, 'dd-MM-yyyy')}"></td>
+
+                            <td th:text="${ticket.passenger != null ? ticket.passenger.fullName : 'N/A'}"></td>
+
+                            <td th:text="${#numbers.formatDecimal(ticket.price, 0, 'COMMA', 0, 'POINT')}"></td>
+
+                            <td>
+                                <span th:if="${ticket.seat != null}"
+                                    th:text="${ ticket.seat.carriage.train.trainNumber + '-' + ticket.seat.carriage.carriageNumber + '-' + ticket.seat.seatNumber}">
+                                </span>
+                            </td>
+                            <td>
+                                <a th:if="${ticket.booking != null}"
+                                    th:href="@{/admin/bookings/detail/{id}(id=${ticket.booking.bookingId})}"
+                                    class="text-decoration-none">
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-receipt me-1"></i>
+                                        <span th:text="${'#' + ticket.booking.bookingId}"></span>
+                                    </span>
+                                </a>
+                                <span th:unless="${ticket.booking != null}" class="badge bg-secondary">No
+                                    Booking</span>
+                            </td>
+
+                            <td>
+                                <span
+                                    th:class="${ticket.status == 'active' ? 'badge bg-success' : 'badge bg-danger'}"
+                                    th:text="${ticket.status}"></span>
+                            </td>
+
+                            <td>
+                                <a th:href="@{/admin/tickets/edit/{id}(id=${ticket.ticketId})}">
+                                    <i class="bi bi-box-arrow-up-right text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // Khởi tạo DataTable nếu cần
+            $('#ticketsTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true
+            });
+        });
+    </script>
+</div>
+
+</html>

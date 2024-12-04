@@ -30,19 +30,8 @@ public class Ticket {
     @Column(name = "booking_datetime", nullable = false)
     private LocalDateTime bookingDate;
 
-    @Column(name = "departure_date")
-    private LocalDate departureDate;
-
     @Column(name = "status", nullable = false)
     private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "start_station_id")
-    private Station startStation;
-
-    @ManyToOne
-    @JoinColumn(name = "end_station_id")
-    private Station endStation;
 
 //    @ManyToOne
 //    @JoinColumn(name = "carriage_seat_id", nullable = false)
@@ -52,9 +41,8 @@ public class Ticket {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
-    @OneToOne()
-    @JoinColumn(name = "return_ticket_id", referencedColumnName = "ticket_id", nullable = true)
-    private Ticket returnTicket;
+    @Column(name = "isDeparture", nullable = true)
+    private boolean isDeparture;
 
 //    @ManyToOne
 //    @JoinColumn(name = "ticket_type", nullable = false)

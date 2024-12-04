@@ -68,10 +68,10 @@ public class TicketController {
 
         // Tạo vé mới với trạng thái "Đang giữ chỗ"
         Ticket ticket = new Ticket();
-        ticket.setStartStation(startStation);
-        ticket.setEndStation(endStation);
+//        ticket.setStartStation(startStation);
+//        ticket.setEndStation(endStation);
         ticket.setPrice(99999D);
-        ticket.setDepartureDate(request.getDepartureDate());
+//        ticket.setDepartureDate(request.getDepartureDate());
         ticket.setSeat(seat);
         ticket.setStatus("Đang giữ chỗ");
         ticket.setBookingDate(LocalDateTime.now());
@@ -119,10 +119,10 @@ public class TicketController {
 
         // Tạo vé mới
         Ticket ticket = new Ticket();
-        ticket.setStartStation(stationService.getById(request.getStartStationId()).get());
-        ticket.setEndStation(stationService.getById(request.getEndStationId()).get());
+//        ticket.setStartStation(stationService.getById(request.getStartStationId()).get());
+//        ticket.setEndStation(stationService.getById(request.getEndStationId()).get());
         ticket.setPrice(request.getPrice());
-        ticket.setDepartureDate(request.getDepartureDate());
+//        ticket.setDepartureDate(request.getDepartureDate());
         ticket.setSeat(seatService.getById(request.getSeatId()).get());
         ticket.setBookingDate(LocalDateTime.now());
         ticket.setStatus("Đang giữ chỗ");

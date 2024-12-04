@@ -7,6 +7,8 @@ import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IBookingService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -113,5 +115,10 @@ public class BookingService implements IBookingService {
         } else {
             throw new IllegalArgumentException("Invalid payment amount");
         }
+    }
+
+    @Override
+    public Page<Booking> findAll(Pageable pageable) {
+        return bookingRepository.findAll(pageable);
     }
 }

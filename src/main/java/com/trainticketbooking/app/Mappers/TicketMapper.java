@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TicketMapper {
 
-    @Mapping(source = "startStation.stationId", target = "startStationId")
-    @Mapping(source = "endStation.stationId", target = "endStationId")
+//    @Mapping(source = "startStation.stationId", target = "startStationId")
+//    @Mapping(source = "endStation.stationId", target = "endStationId")
     TicketDTO toDTO(Ticket ticket);
 }
