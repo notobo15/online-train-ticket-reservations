@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface StationRepository extends JpaRepository<Station, Integer> {
     List<Station> findAll();
+    boolean existsByStationId(Integer stationId);
 }

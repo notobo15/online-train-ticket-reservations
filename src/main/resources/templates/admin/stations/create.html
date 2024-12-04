@@ -3,7 +3,7 @@
     layout:decorate="~{admin/layout/layout}">
 
 <head>
-    <title>Create Province</title>
+    <title>Create Station</title>
     <!-- font-awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
@@ -13,14 +13,14 @@
         <nav class="page-breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/admin/provinces}">Provinces</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/stations}">Stations</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Create</li>
             </ol>
         </nav>
-        <h3>Create Province</h3>
+        <h3>Create Station</h3>
 
         <a class="mt-3 btn btn-outline-secondary mb-3 d-inline-flex align-items-center justify-content-center"
-            th:href="@{/admin/provinces/index}">
+            th:href="@{/admin/stations/index}">
             <i class="btn-icon-prepend" data-feather="chevron-left"></i>
             <span>Back</span>
         </a>
@@ -33,41 +33,13 @@
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                     <span th:text="${errorMessage}"></span>
                 </div>
-                <form th:action="@{/admin/provinces/create}" th:object="${province}" method="post">
+                <form th:action="@{/admin/stations/create}" th:object="${station}" method="post">
                     <div class="row">
-
                         <div class="col-md-12 mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title text-primary">ID:</h5>
-                                    <input th:field="*{provinceId}" placeholder="Enter Province ID" type="text"
-                                           class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Code name:</h5>
-                                    <input th:field="*{codeName}" placeholder="Enter Code name" type="text"
-                                           class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Fullname:</h5>
-                                    <input th:field="*{fullName}" placeholder="Enter Fullname" type="text"
-                                           class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Fullname_En:</h5>
-                                    <input th:field="*{fullNameEn}" placeholder="Enter Fullname English" type="text"
+                                    <h5 class="card-title text-primary">Code:</h5>
+                                    <input th:field="*{code}" placeholder="Enter Code" type="text"
                                            class="form-control" />
                                 </div>
                             </div>
@@ -76,21 +48,35 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title text-primary">Name:</h5>
-                                    <input th:field="*{name}" placeholder="Enter Name" type="text"
-                                           class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Name_En:</h5>
-                                    <input th:field="*{NameEn}" placeholder="Enter Name English" type="text"
+                                    <input th:field="*{stationName}" placeholder="Enter Name" type="text"
                                            class="form-control" />
                                 </div>
                             </div>
                         </div>
 
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Start Station:</h5>
+                                    <select id="province" th:field="*{province.provinceId}"
+                                            class="form-control cbb-station">
+                                        <option th:each="province : ${provinces}" th:value="${province.provinceId}"
+                                                th:text="${province.name}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">GoogleMap Link:</h5>
+                                    <input th:field="*{GGMapLink}" placeholder="Enter GoogleMap Link" type="text"
+                                           class="form-control" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button class="btn btn-success btn-lg" type="submit">
                         <i class="fas fa-plus"></i> Create
