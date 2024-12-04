@@ -1,0 +1,109 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+    xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</div>
+
+<div layout:fragment="content">
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">List Seats of Carriage <span th:text="${carriage.carriageNumber}"></span></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Seat Number</th>
+                                    <th>Seat Type</th>
+                                    <th>Floor</th>
+                                    <th>Compartment Number</th>
+                                    <th>Train Info</th>
+                                    <th>Ticket Number</th>
+
+                                    <th>Status</th>
+                                    <th style="width: 60px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="seat : ${seats}">
+                                    <td th:text="${seat.seatId}"></td>
+                                    <td th:text="${seat.seatNumber}"></td>
+                                    <td th:text="${seat.seatType.code} + ' (' + ${seat.seatType.seatType} + ')'"></td>
+                                    <td th:text="${seat.floor}"></td>
+                                    <td th:text="${seat.compartmentNumber}"></td>
+                                    <td th:text="${seat.carriage.train.trainNumber + '-' + seat.carriage.carriageNumber}"></td>
+                                    <td th:text="${seat.tickets != null ? seat.tickets.size() : 'N/A'}"></td>
+                                    <td>
+                                        <span th:class="${seat.status == 'available' ? 'badge bg-success' : seat.status == 'holding' ? 'badge bg-warning' : 'badge bg-danger'}"
+                                            th:text="${seat.status}"></span>
+                                    </td>
+                                    <td class="actions">
+                                        <a th:href="@{/admin/seats/edit/{id}(id=${seat.seatId})}">
+                                            <i class="bi bi-box-arrow-up-right text-primary"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  Error notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert" aria-live="assertive"
+             aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong class="me-auto">Error Notifications</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul class="list-unstyled m-0">
+                    <li th:each="message : ${errorMessages}" class="error-message">
+                        <i class="bi bi-check2 me-2"></i>
+                        <span th:text="${message}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function () {
+            $('#dataTableExample').DataTable({
+                "paging": false,
+                "info": false,
+            });
+        });
+
+
+
+        // Tự động ẩn toast sau 3 giây
+        setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            // Khởi tạo toast
+            $('.toast').toast({
+                delay: 3000
+            });
+    </script>
+</div>
+
+</html>
