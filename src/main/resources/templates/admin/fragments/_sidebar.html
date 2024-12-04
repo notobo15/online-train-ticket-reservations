@@ -80,6 +80,26 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#carriage-classes" role="button" aria-expanded="false"
+                   aria-controls="#carriage-classes">
+                    <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/carriage.svg}" alt="">
+                    <span class="link-title">carriage-classes</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" data-bs-parent="#sidebarNav" id="carriage-classes">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/carriage-classes/index}" class="nav-link">List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/carriage-classes/create}" class="nav-link">Create</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#seats" role="button" aria-expanded="false"
                     aria-controls="seats">
                     <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/chair.svg}" alt="">

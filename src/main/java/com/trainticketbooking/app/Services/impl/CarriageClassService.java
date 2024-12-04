@@ -34,8 +34,8 @@ public class CarriageClassService implements ICarriageClassService {
     }
 
     @Override
-    public CarriageClass save(CarriageClass carriage) {
-        return carriageClassRepository.save(carriage);
+    public CarriageClass save(CarriageClass cac) {
+        return carriageClassRepository.save(cac);
     }
 
     @Override
@@ -44,21 +44,19 @@ public class CarriageClassService implements ICarriageClassService {
     }
 
     @Override
-    public Page<CarriageClass> findAll(Pageable pageable) {
-        return carriageClassRepository.findAll(pageable);
+    public CarriageClass update(CarriageClass cac) {
+        CarriageClass existingCarriageClass = carriageClassRepository
+                .findById(cac.getCarriageClassId())
+                .orElseThrow(() -> new RuntimeException("Carriage class not found with ID: " + cac.getCarriageClassId()));
+
+        existingCarriageClass.setName(cac.getName());
+
+        return carriageClassRepository.save(existingCarriageClass);
     }
 
     @Override
-    public CarriageClass update(CarriageClass carriage) {
-        // Tìm kiếm đối tượng CarriageClass bằng ID hoặc ném ngoại lệ nếu không tìm thấy
-        CarriageClass existingCarriage = carriageClassRepository.findById(carriage.getCarriageClassId())
-                .orElseThrow(() -> new EntityNotFoundException("Carriage class not found with ID: " + carriage.getCarriageClassId()));
-
-        // Cập nhật thông tin
-        existingCarriage.setName(carriage.getName());
-
-        // Lưu và trả về đối tượng đã cập nhật
-        return carriageClassRepository.save(existingCarriage);
+    public Page<CarriageClass> findAll(Pageable pageable) {
+        return carriageClassRepository.findAll(pageable);
     }
 
 }
