@@ -104,16 +104,16 @@
                     aria-controls="seats">
                     <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/bed.svg}" alt="">
 
-                    <span class="link-title">Seat Types</span>
+                    <span class="link-title">Prices - Seat Types</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
                 </a>
                 <div class="collapse" data-bs-parent="#sidebarNav" id="seattype">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="" class="nav-link">List</a>
+                            <a th:href="@{/admin/prices/index}" class="nav-link">List Prices</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">Create</a>
+                            <a th:href="@{/admin/seat-types/create}" class="nav-link">List Seat Types</a>
                         </li>
                     </ul>
                 </div>

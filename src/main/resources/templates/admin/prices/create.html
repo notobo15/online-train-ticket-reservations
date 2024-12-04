@@ -1,0 +1,104 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</div>
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/prices}">Prices</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create New Price</li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center">
+                <a th:href="@{${session.previousPricesPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3">Create New Price</h3>
+            </div>
+        </div>
+
+        <form class="card" th:action="@{/admin/prices/store}" th:object="${price}" method="post">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <!-- Price per Km -->
+                        <div class="form-group">
+                            <label for="pricePerKm" class="form-label"><strong>Price per Km:</strong></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="pricePerKm" 
+                                    th:field="*{pricePerKm}" step="100" min="0">
+                                <span class="input-group-text">VND</span>
+                            </div>
+                            <span th:if="${#fields.hasErrors('pricePerKm')}" th:errors="*{pricePerKm}"
+                                class="text-small text-danger"></span>
+                        </div>
+
+                        <!-- Surcharge Percentage -->
+                        <div class="form-group mt-3">
+                            <label for="surchargePercentage" class="form-label"><strong>Surcharge Percentage:</strong></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="surchargePercentage" 
+                                    th:field="*{surchargePercentage}" step="0.1" min="0">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <span th:if="${#fields.hasErrors('surchargePercentage')}" th:errors="*{surchargePercentage}"
+                                class="text-small text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-end">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-plus-circle me-1"></i>Create
+                </button>
+            </div>
+        </form>
+
+        <!-- Notifications -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <!-- Error Messages -->
+            <div th:if="${not #lists.isEmpty(errorMessages)}" class="toast show" role="alert" aria-live="assertive"
+                aria-atomic="true">
+                <div class="toast-header bg-danger text-white">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    <strong class="me-auto">Error Notifications</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="list-unstyled m-0">
+                        <li th:each="message : ${errorMessages}" class="error-message">
+                            <i class="bi bi-x-circle me-2"></i>
+                            <span th:text="${message}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // Auto hide toasts
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            $('.toast').toast({
+                delay: 3000
+            });
+        });
+    </script>
+</div>
+
+</html>

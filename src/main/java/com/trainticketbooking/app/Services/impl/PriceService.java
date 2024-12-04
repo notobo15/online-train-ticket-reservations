@@ -1,9 +1,13 @@
 package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Entities.Price;
+import com.trainticketbooking.app.Entities.SeatType;
 import com.trainticketbooking.app.Repos.PriceRepository;
+import com.trainticketbooking.app.Repos.SeatTypeRepository;
 import com.trainticketbooking.app.Services.IPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +18,9 @@ public class PriceService implements IPriceService {
 
     @Autowired
     private PriceRepository priceRepository;
+
+    @Autowired
+    private SeatTypeRepository seatTypeRepository;
 
     @Override
     public List<Price> getAll() {
@@ -27,12 +34,21 @@ public class PriceService implements IPriceService {
 
     @Override
     public Price save(Price price) {
+        price.setSeatType(null);
         return priceRepository.save(price);
     }
 
     @Override
     public void deleteById(Integer id) {
-        priceRepository.deleteById(id);
+        Price price = priceRepository.findById(id).orElseThrow();
+
+        if (price.getSeatType() != null) {
+            SeatType seatType = price.getSeatType();
+            price.setSeatType(null);
+            seatTypeRepository.save(seatType);
+        }
+
+        priceRepository.delete(price);
     }
 
     @Override
@@ -47,5 +63,14 @@ public class PriceService implements IPriceService {
         } else {
             throw new RuntimeException("Price not found with ID: " + price.getPriceId());
         }
+    }
+
+    public List<Price> findAvailablePrices() {
+        return priceRepository.findBySeatTypeIsNull();
+    }
+
+    @Override
+    public Page<Price> findAll(Pageable pageable) {
+        return priceRepository.findAll(pageable);
     }
 }

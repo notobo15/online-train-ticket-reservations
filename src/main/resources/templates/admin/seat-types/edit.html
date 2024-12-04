@@ -1,0 +1,173 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</div>
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/seat-types/}">Seat Types</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span
+                        th:text="${st.seatTypeId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center">
+                <a th:href="@{${session.previousSeatTypesPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3" th:text="'Seat Type Edit #' + ${st.seatTypeId}"></h3>
+            </div>
+        </div>
+
+        <form class="card" th:action="@{/admin/seat-types/edit/{id}(id=${st.seatTypeId})}" th:object="${st}"
+            method="post">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <input type="hidden" th:field="*{seatTypeId}" />
+                        
+                        <!-- Seat Type Name -->
+                        <div class="form-group">
+                            <label for="seatTypestring" class="form-label"><strong>Seat Type Name:</strong></label>
+                            <input type="text" class="form-control" id="seatTypestring" th:field="*{seatType}">
+                           
+                        </div>
+
+                        <!-- Code -->
+                        <div class="form-group mt-3">
+                            <label for="code" class="form-label"><strong>Code:</strong></label>
+                            <input type="text" class="form-control" id="code" th:field="*{code}">
+                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="description" class="form-label"><strong>Description:</strong></label>
+                            <textarea class="form-control" id="description" th:field="*{description}"
+                                rows="3"></textarea>
+                            
+                        </div>
+
+                        <!-- Price Selection -->
+                        <div class="form-group mt-3">
+                            <label for="priceId" class="form-label"><strong>Price:</strong></label>
+                            <select id="priceId" th:field="*{price.priceId}" class="form-select select2">
+                                <option value="" disabled>Select Price</option>
+                                <option value="-1" >Non-Price</option>
+                                <option th:each="availablePrice : ${availablePrices}"
+                                    th:value="${availablePrice.priceId}"
+                                    th:text="${'Price/Km: ' + #numbers.formatDecimal(availablePrice.pricePerKm, 0, 'COMMA', 0, 'POINT') + ' VND - Surcharge: ' + availablePrice.surchargePercentage + '%'}">
+                                </option>
+                            </select>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-end">
+                <button type="button" class="btn btn-outline-danger deleteBtn">
+                    <i class="bi bi-trash me-1"></i>Delete
+                </button>
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-save me-1"></i>Update
+                </button>
+            </div>
+        </form>
+
+        <!-- Delete Form -->
+        <form th:action="@{/admin/seat-types/delete/{id}(id=${st.seatTypeId})}" method="post" class="deleteForm">
+            <input type="hidden" name="seatTypeId" th:value="${st.seatTypeId}">
+        </form>
+
+        <!-- Notifications -->
+        <!--  error notifications -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert" aria-live="assertive"
+                aria-atomic="true">
+                <div class="toast-header bg-success text-white">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong class="me-auto">Success Notifications</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="list-unstyled m-0">
+                        <li th:each="message : ${successMessages}" class="success-message">
+                            <i class="bi bi-check2 me-2"></i>
+                            <span th:text="${message}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(errorMessages)}" class="toast show" role="alert" aria-live="assertive"
+                aria-atomic="true">
+                <div class="toast-header bg-danger text-white">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    <strong class="me-auto">Error Notifications</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="list-unstyled m-0">
+                        <li th:each="message : ${errorMessages}" class="error-message">
+                            <i class="bi bi-check2 me-2"></i>
+                            <span th:text="${message}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // Delete confirmation
+            $('.deleteBtn').on('click', function (e) {
+                let form = $('.deleteForm');
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this seat type?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel'
+                        }
+                    }
+                });
+            });
+
+            // Auto hide toasts
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            $('.toast').toast({
+                delay: 3000
+            });
+        });
+    </script>
+</div>
+
+</html>
