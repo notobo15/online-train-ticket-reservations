@@ -2,6 +2,8 @@ package com.trainticketbooking.app.Entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,4 +33,17 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "start_station_id")
+    private Station startStation;
+
+    @ManyToOne
+    @JoinColumn(name = "end_station_id")
+    private Station endStation;
+
+    @Column(name = "departure_date")
+    private LocalDate departureDate;
+
+
 }
