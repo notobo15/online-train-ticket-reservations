@@ -10,5 +10,4 @@ public interface IProvinceService extends IService<Province>{
     public boolean existsByProvinceId(Integer provinceId);
     Page<Province> findAll(Pageable pageable);
     public Province adminUpdateProvince(Province province);
-
 }

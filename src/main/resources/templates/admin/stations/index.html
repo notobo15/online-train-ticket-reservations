@@ -5,14 +5,14 @@
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-            <li class="breadcrumb-item" th:href="@{/admin/provinces}">Provinces</li>
+            <li class="breadcrumb-item" th:href="@{/admin/stations}">Stations</li>
             <li class="breadcrumb-item active" aria-current="page">List</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-        <h3>Provinces Management</h3>
-        <a th:href="@{/admin/provinces/create}" type="button"
+        <h3>Stations Management</h3>
+        <a th:href="@{/admin/stations/create}" type="button"
             class="btn btn-outline-primary btn-icon-text mr-2 d-none d-md-flex align-items-center justify-content-center">
             <i class="btn-icon-prepend" data-feather="plus"></i>
             <span>Create</span>
@@ -34,24 +34,28 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Full Name</th>
-                                    <th>Code Name</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Province ID</th>
+                                    <th>GoogleMaps Link</th>
                                     <th style="width: 60px;">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody th:if="${provinces}">
-                                <tr th:each=" province : ${provinces}">
-                                    <td th:text="${province.provinceId}"></td>
-                                    <td th:text="${province.fullName}"></td>
-                                    <td th:text="${province.codeName}"></td>
+                            <tbody th:if="${stations}">
+                                <tr th:each=" station : ${stations}">
+                                    <td th:text="${station.stationId}"></td>
+                                    <td th:text="${station.code}"></td>
+                                    <td th:text="${station.stationName}"></td>
+                                    <td th:text="${station.province.provinceId}"></td>
+                                    <td th:text="${station.GGMapLink}"></td>
                                     <td class="actions">
-                                        <a th:href="@{/admin/provinces/detail/{id}(id=${province.provinceId})}">
+                                        <a th:href="@{/admin/stations/detail/{id}(id=${station.stationId})}">
                                             <i class="btn-icon-prepend text-primary" data-feather="eye"></i>
                                         </a>
-                                        <a th:href="@{/admin/provinces/edit/{id}(id=${province.provinceId})}">
+                                        <a th:href="@{/admin/stations/edit/{id}(id=${station.stationId})}">
                                             <i class="btn-icon-prepend text-warning" data-feather="edit"></i>
                                         </a>
-                                        <form th:action="@{/admin/provinces/delete/{id}(id=${province.provinceId})}" method="post"
+                                        <form th:action="@{/admin/stations/delete/{id}(id=${station.stationId})}" method="post"
                                             class="deleteForm">
                                             <div type="button" class="deleteBtn">
                                                 <i class="btn-icon-prepend text-danger" data-feather="trash-2"></i>
@@ -68,7 +72,7 @@
                         <div th:replace="~{/admin/fragments/_table-size}"></div>
                         <!-- Pagination -->
                         <div
-                            th:replace="/admin/fragments/_pagination :: pagination(url='/admin/provinces/index', currentPage=${currentPage}, size=${size}, totalPages=${totalPages})">
+                            th:replace="/admin/fragments/_pagination :: pagination(url='/admin/stations/index', currentPage=${currentPage}, size=${size}, totalPages=${totalPages})">
                         </div>
                     </nav>
                 </div>
