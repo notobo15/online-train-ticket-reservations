@@ -61,27 +61,8 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#carriages" role="button" aria-expanded="false"
-                    aria-controls="#carriages">
-                    <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/carriage.svg}" alt="">
-                    <span class="link-title">Carriages</span>
-                    <i class="link-arrow" data-feather="chevron-down"></i>
-                </a>
-                <div class="collapse" data-bs-parent="#sidebarNav" id="carriages">
-                    <ul class="nav sub-menu">
-                        <li class="nav-item">
-                            <a th:href="@{/admin/carriages/index}" class="nav-link">List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a th:href="@{/admin/carriages/create}" class="nav-link">Create</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#carriage-classes" role="button" aria-expanded="false"
-                   aria-controls="#carriage-classes">
+                <a class="nav-link" data-bs-toggle="collapse" href="#carriage-classes" role="button"
+                    aria-expanded="false" aria-controls="#carriage-classes">
                     <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/carriage.svg}" alt="">
                     <span class="link-title">carriage-classes</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
@@ -114,20 +95,21 @@
                             <a th:href="@{/admin/seats/index}" class="nav-link">List</a>
                         </li>
                         <li class="nav-item">
-                            <a th:href="@{/admin/seats/index}" class="nav-link">Create</a>
+                            <a th:href="@{/admin/seats/create}" class="nav-link">Create</a>
                         </li>
                     </ul>
                 </div>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#seattype" role="button" aria-expanded="false"
-                    aria-controls="seats">
+                <a class="nav-link" data-bs-toggle="collapse" href="#seattypes" role="button" aria-expanded="false"
+                    aria-controls="seattypes">
                     <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/bed.svg}" alt="">
 
                     <span class="link-title">Prices - Seat Types</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
                 </a>
-                <div class="collapse" data-bs-parent="#sidebarNav" id="seattype">
+                <div class="collapse" data-bs-parent="#sidebarNav" id="seattypes">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
                             <a th:href="@{/admin/prices/index}" class="nav-link">List Prices</a>
@@ -138,6 +120,47 @@
                     </ul>
                 </div>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#bt" role="button" aria-expanded="false"
+                    aria-controls="bt">
+                    <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/air-booking-ticket-svgrepo-com.svg}" alt="">
+
+                    <span class="link-title">Bookings - Tickets</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" data-bs-parent="#sidebarNav" id="bt">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/bookings/index}" class="nav-link">List Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/admin/tickets/index}" class="nav-link">List Tickets</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#payments" role="button" aria-expanded="false"
+                    aria-controls="payments">
+                    <img class="link-icon" style="width: 24px; height: 24px;" th:src="@{/icons/paymentsvg.svg}" alt="">
+
+                    <span class="link-title">Payments</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+
+                </a>
+                <div class="collapse" data-bs-parent="#sidebarNav" id="payments">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a th:href="@{/admin/payments/index}" class="nav-link">List</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+
+
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#stations" role="button" aria-expanded="false"
                     aria-controls="seats">

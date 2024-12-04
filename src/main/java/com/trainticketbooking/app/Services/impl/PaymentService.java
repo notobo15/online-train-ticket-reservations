@@ -5,6 +5,8 @@ import com.trainticketbooking.app.Repos.PaymentRepository;
 import com.trainticketbooking.app.Services.IPaymentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +45,10 @@ public class PaymentService implements IPaymentService {
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with ID: " + payment.getPaymentId()));
         existingPayment.setStatus(payment.getStatus());
         return paymentRepository.save(existingPayment);
+    }
+
+    @Override
+    public Page<Payment> findAll(Pageable pageable) {
+        return paymentRepository.findAll(pageable);
     }
 }
