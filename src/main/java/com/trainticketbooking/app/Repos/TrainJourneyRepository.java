@@ -1,6 +1,7 @@
 package com.trainticketbooking.app.Repos;
 
 import com.trainticketbooking.app.Entities.Route;
+import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Entities.TrainJourney;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -54,4 +55,6 @@ public interface TrainJourneyRepository extends JpaRepository<TrainJourney, Inte
 
     // Xóa tất cả các chuyến tàu theo ngày khởi hành
     void deleteByDepartureDate(LocalDate departureDate);
+
+    TrainJourney findByTrainAndDepartureDate(Train train, LocalDate departureDate);
 }

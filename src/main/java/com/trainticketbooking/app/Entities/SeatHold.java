@@ -7,21 +7,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "temporary_ticket_holds")
+@Table(name = "seatholds")
 @Data
-public class TemporaryTicketHold {
+public class SeatHold {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hold_id")
-    private Integer holdId;
+    @Column(name = "id")
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "seat_id", nullable = true)
     private Seat seat;
 
-    @Column(name = "train_id", nullable = true)
-    private Integer trainId;
+    @ManyToOne
+    @JoinColumn(name = "train_id", nullable = true)
+    private Train train;
 
     @ManyToOne
     @JoinColumn(name = "departure_station_id", nullable = true)
@@ -40,22 +41,15 @@ public class TemporaryTicketHold {
     @Column(name = "expiration_time", nullable = true)
     private LocalDateTime expirationTime;
 
-    @Column(name = "status", nullable = true)
+    @Column(name = "status", nullable = true, length = 50)
     private String status;
+
+    @Column(name = "is_departure", nullable = false)
+    private boolean isDeparture;  // `true` for departure, `false` for return
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
-
-//    @Column(name = "is_round_trip", nullable = false)
-//    private boolean isRoundTrip; // `true` cho vé khứ hồi, `false` cho vé một chiều
-
-//    @OneToOne
-//    @JoinColumn(name = "return_hold_id", referencedColumnName = "hold_id", nullable = true)
-//    private TemporaryTicketHold returnHold;
-
-    @Column(name = "is_departure", nullable = false)
-    private boolean isDeparture; // `true` cho chiều đi, `false` cho chiều về
 
     @PrePersist
     public void setExpirationTime() {

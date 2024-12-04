@@ -1,6 +1,7 @@
 package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
+import com.trainticketbooking.app.Dtos.SeatHolds.CreateSeatHoldRequestDto;
 import com.trainticketbooking.app.Dtos.SeatType.SeatTypePriceDTO;
 import com.trainticketbooking.app.Dtos.TrainJourney.TrainJourneySearchDTO;
 import com.trainticketbooking.app.Entities.*;
@@ -250,4 +251,53 @@ public class TrainService implements ITrainService {
 
         return lastCarriage.getOrderNumber() + 1;  // Cộng thêm 1 vào orderNumber của toa cuối
     }
+
+    @Service
+    public static class SeatHoldService {
+
+        private final SeatHoldRepository seatHoldRepository;
+
+        @Autowired
+        public SeatHoldService(SeatHoldRepository seatHoldRepository) {
+            this.seatHoldRepository = seatHoldRepository;
+        }
+
+        // Create or update a SeatHold
+        public SeatHold saveSeatHold(SeatHold seatHold) {
+            return seatHoldRepository.save(seatHold);
+        }
+
+        // Find a SeatHold by its ID
+        public Optional<SeatHold> getSeatHoldById(Integer id) {
+            return seatHoldRepository.findById(id);
+        }
+
+        // Find all SeatHolds by trainId
+        public List<SeatHold> getSeatHoldsByTrainId(Integer trainId) {
+            return seatHoldRepository.findByTrainTrainId(trainId);
+        }
+
+        // Find all SeatHolds by departure station
+        public List<SeatHold> getSeatHoldsByDepartureStation(Integer departureStationId) {
+            return seatHoldRepository.findByDepartureStationStationId(departureStationId);
+        }
+
+        // Find SeatHolds by status
+        public List<SeatHold> getSeatHoldsByStatus(String status) {
+            return seatHoldRepository.findByStatus(status);
+        }
+
+        // Find SeatHolds that are about to expire
+        public List<SeatHold> getExpiredSeatHolds() {
+            LocalDateTime now = LocalDateTime.now();
+            return seatHoldRepository.findByExpirationTimeBeforeAndStatus(now, "HOLD");
+        }
+
+        // Remove a SeatHold by its ID
+        public void deleteSeatHold(Integer id) {
+            seatHoldRepository.deleteById(id);
+        }
+    }
+
+
 }

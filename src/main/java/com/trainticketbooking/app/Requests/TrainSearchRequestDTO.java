@@ -9,6 +9,6 @@ public class TrainSearchRequestDTO {
     private LocalDate arrivalDate;
     private String startStationCode;
     private String endStationCode;
-    private int passengerCount;
+//    private int passengerCount;
     private boolean isRoundTrip;
 }

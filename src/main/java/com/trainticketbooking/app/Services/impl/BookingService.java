@@ -1,9 +1,7 @@
 package com.trainticketbooking.app.Services.impl;
 
-import com.trainticketbooking.app.Dtos.Booking.BookingDTO;
 import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Repos.BookingRepository;
-import com.trainticketbooking.app.Repos.TemporaryTicketHoldRepository;
 import com.trainticketbooking.app.Repos.TicketRepository;
 import com.trainticketbooking.app.Repos.UserRepository;
 import com.trainticketbooking.app.Services.IBookingService;
@@ -28,9 +26,6 @@ public class BookingService implements IBookingService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private TemporaryTicketHoldRepository temporaryTicketHoldRepository;
 
     @Override
     public List<Booking> getAll() {
@@ -77,25 +72,25 @@ public class BookingService implements IBookingService {
         booking = bookingRepository.save(booking);
 
         // Lấy danh sách hold và chuyển đổi thành ticket
-        List<TemporaryTicketHold> holds = temporaryTicketHoldRepository.findAllById(holdIds);
-        Booking finalBooking = booking;
-        List<Ticket> tickets = holds.stream().map(hold -> {
-            Ticket ticket = new Ticket();
-            ticket.setBooking(finalBooking);
-//            ticket.setPassenger(hold.getSeat().getPassenger());
-            ticket.setPrice(1111.0);
-            ticket.setBookingDate(LocalDateTime.now());
-            ticket.setDepartureDate(hold.getDepartureDate());
-            ticket.setStatus("Paid");
-            ticket.setStartStation(hold.getDepartureStation());
-            ticket.setEndStation(hold.getArrivalStation());
-            ticket.setSeat(hold.getSeat());
-//            ticket.setTicketType();
-            return ticketRepository.save(ticket);
-        }).collect(Collectors.toList());
-
-        // Xóa các TemporaryTicketHold sau khi tạo ticket
-        temporaryTicketHoldRepository.deleteAll(holds);
+//        List<TemporaryTicketHold> holds = temporaryTicketHoldRepository.findAllById(holdIds);
+//        Booking finalBooking = booking;
+//        List<Ticket> tickets = holds.stream().map(hold -> {
+//            Ticket ticket = new Ticket();
+//            ticket.setBooking(finalBooking);
+////            ticket.setPassenger(hold.getSeat().getPassenger());
+//            ticket.setPrice(1111.0);
+//            ticket.setBookingDate(LocalDateTime.now());
+//            ticket.setDepartureDate(hold.getDepartureDate());
+//            ticket.setStatus("Paid");
+//            ticket.setStartStation(hold.getDepartureStation());
+//            ticket.setEndStation(hold.getArrivalStation());
+//            ticket.setSeat(hold.getSeat());
+////            ticket.setTicketType();
+//            return ticketRepository.save(ticket);
+//        }).collect(Collectors.toList());
+//
+//        // Xóa các TemporaryTicketHold sau khi tạo ticket
+//        temporaryTicketHoldRepository.deleteAll(holds);
 
         return booking;
     }
