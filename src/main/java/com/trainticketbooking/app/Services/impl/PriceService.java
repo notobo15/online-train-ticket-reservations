@@ -34,7 +34,6 @@ public class PriceService implements IPriceService {
 
     @Override
     public Price save(Price price) {
-        price.setSeatType(null);
         return priceRepository.save(price);
     }
 
