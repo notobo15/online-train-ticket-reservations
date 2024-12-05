@@ -1,18 +1,22 @@
 package com.trainticketbooking.app.Mappers;
 
+import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
+import com.trainticketbooking.app.Dtos.Carriage.CarriageWithoutSeatsDTO;
 import com.trainticketbooking.app.Dtos.Train.TrainDTO;
+import com.trainticketbooking.app.Dtos.Train.TrainWithCarriagesDTO;
+import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Route;
 import com.trainticketbooking.app.Entities.Train;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.List;
 
-
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TrainMapper {
     TrainMapper INSTANCE = Mappers.getMapper(TrainMapper.class);
 
@@ -45,4 +49,20 @@ public interface TrainMapper {
 
         return dto;
     }
+
+    @Mappings({
+            @Mapping(source = "train.trainId", target = "trainId"), // This maps trainId from Train entity
+            @Mapping(source = "train.trainNumber", target = "trainNumber"),
+            @Mapping(source = "train.trainType", target = "trainType"),
+            @Mapping(target = "carriages", source = "carriages")  // This maps the carriages field
+    })
+    TrainWithCarriagesDTO toTrainWithCarriagesDTO(Train train, List<CarriageWithoutSeatsDTO> carriages);
+
+    @Mappings({
+            @Mapping(source = "train.trainId", target = "trainId"), // This maps trainId from Train entity
+            @Mapping(source = "train.trainNumber", target = "trainNumber"),
+            @Mapping(source = "train.trainType", target = "trainType"),
+    })
+    TrainWithCarriagesDTO toTrainWithCarriagesDTO(Train train);
+
 }

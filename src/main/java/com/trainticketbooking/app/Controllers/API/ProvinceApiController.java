@@ -1,12 +1,14 @@
 package com.trainticketbooking.app.Controllers.API;
 
+import com.trainticketbooking.app.Dtos.Booking.BookingResponseDTO;
 import com.trainticketbooking.app.Dtos.Province.ProvinceDTO;
 import com.trainticketbooking.app.Dtos.Station.StationDTO;
+import com.trainticketbooking.app.Dtos.Wrappers.ApiResponse;
 import com.trainticketbooking.app.Entities.Province;
 import com.trainticketbooking.app.Entities.Station;
 import com.trainticketbooking.app.Mappers.ProvinceMapper;
-import com.trainticketbooking.app.Responses.ApiResponse;
 import com.trainticketbooking.app.Services.IProvinceService;
+import com.trainticketbooking.app.Services.Redis.ProvinceRedisService;
 import com.trainticketbooking.app.Services.impl.ProvinceService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,19 @@ public class ProvinceApiController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ProvinceRedisService provinceRedisService;
+
     @GetMapping("/with-stations")
-    public ResponseEntity<List<ProvinceDTO>> getProvincesWithStations() {
-        List<ProvinceDTO> provincesWithStations = provinceService.getProvincesWithStations();
-        return ResponseEntity.ok(provincesWithStations);
+    public  ApiResponse<List<ProvinceDTO>> getProvincesWithStations() {
+        List<ProvinceDTO> provincesWithStations = provinceRedisService.getProvincesWithStations("provincesWithStations");
+        if (provincesWithStations == null) {
+            provincesWithStations = provinceService.getProvincesWithStations();
+            provinceRedisService.saveProvincesWithStations("provincesWithStations", provincesWithStations);
+        }
+        return ApiResponse.<List<ProvinceDTO>>builder()
+                .result(provincesWithStations)
+                .build();
     }
 
     private ProvinceDTO convertToDTO(Province province) {

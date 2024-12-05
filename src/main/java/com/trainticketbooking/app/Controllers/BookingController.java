@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/booking")
 @Slf4j
 public class BookingController {
 
@@ -60,15 +60,15 @@ public class BookingController {
     // return ResponseEntity.ok(response);
     // }
 
-    @GetMapping("/trains/{trainId}/carriages")
-    public ResponseEntity<List<CarriageDto>> getCarriages(@PathVariable Integer trainId) {
-        List<Carriage> carriages = trainService.findCarriagesByTrainId(trainId);
-        List<CarriageDto> carriageDTOs = carriages.stream()
-                .map(carriage -> new CarriageDto(carriage.getCarriageId(), carriage.getCarriageNumber()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(carriageDTOs);
-    }
+//    @GetMapping("/trains/{trainId}/carriages")
+//    public ResponseEntity<List<CarriageDto>> getCarriages(@PathVariable Integer trainId) {
+//        List<Carriage> carriages = trainService.findCarriagesByTrainId(trainId);
+//        List<CarriageDto> carriageDTOs = carriages.stream()
+//                .map(carriage -> new CarriageDto(carriage.getCarriageId(), carriage.getCarriageNumber()))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(carriageDTOs);
+//    }
 
     // @GetMapping("/carriages/{carriageId}/seats")
     // public ResponseEntity<Map<String, Object>> getSeats(@PathVariable Integer

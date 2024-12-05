@@ -1,5 +1,7 @@
 package com.trainticketbooking.app.Requests;
 
+import com.trainticketbooking.app.Dtos.Passenger.PassengerRequestDTO;
+import com.trainticketbooking.app.Entities.Passenger;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,5 +13,6 @@ public class TicketRequestDTO {
     private LocalDate departureDate;
     private Integer seatId;
     private Double price;
-    private String ticketTypeName;
+    private boolean isDeparture;
+    private PassengerRequestDTO passenger;
 }

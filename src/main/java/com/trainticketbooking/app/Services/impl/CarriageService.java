@@ -3,6 +3,7 @@ package com.trainticketbooking.app.Services.impl;
 import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
 import com.trainticketbooking.app.Dtos.Seat.CarriageSeatMappingDTO;
 import com.trainticketbooking.app.Dtos.Seat.SeatDTO;
+import com.trainticketbooking.app.Dtos.Train.TrainWithCarriagesDTO;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.CarriageSeatMapping;
 import com.trainticketbooking.app.Entities.Seat;
@@ -176,4 +177,5 @@ public class CarriageService implements ICarriageService {
     public List<Carriage> findByTrainTrainId(Integer train) {
         return carriageRepository.findByTrainTrainId(train);
     }
+
 }

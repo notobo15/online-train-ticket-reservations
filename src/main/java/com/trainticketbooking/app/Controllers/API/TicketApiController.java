@@ -6,7 +6,6 @@ import com.trainticketbooking.app.Mappers.TicketMapper;
 import com.trainticketbooking.app.Requests.TicketRequestDTO;
 import com.trainticketbooking.app.Responses.ApiResponse;
 import com.trainticketbooking.app.Services.ITicketService;
-import com.trainticketbooking.app.Services.impl.CarriageSeatMappingService;
 import com.trainticketbooking.app.Services.impl.SeatService;
 import com.trainticketbooking.app.Services.impl.StationService;
 import com.trainticketbooking.app.Services.impl.TicketTypeService;
@@ -22,7 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/tickets")
 @AllArgsConstructor
-public class TicketController {
+public class TicketApiController {
 
     private ITicketService ticketService;
     private StationService stationService;
@@ -68,10 +67,10 @@ public class TicketController {
 
         // Tạo vé mới với trạng thái "Đang giữ chỗ"
         Ticket ticket = new Ticket();
-        ticket.setStartStation(startStation);
-        ticket.setEndStation(endStation);
+//        ticket.setStartStation(startStation);
+//        ticket.setEndStation(endStation);
         ticket.setPrice(99999D);
-        ticket.setDepartureDate(request.getDepartureDate());
+//        ticket.setDepartureDate(request.getDepartureDate());
         ticket.setSeat(seat);
         ticket.setStatus("Đang giữ chỗ");
         ticket.setBookingDate(LocalDateTime.now());
@@ -114,15 +113,13 @@ public class TicketController {
     @PostMapping("/createTicket")
     public ResponseEntity<ApiResponse<TicketDTO>> createTicket(@RequestBody TicketRequestDTO request) {
         // Tìm loại vé "Khứ hồi" trong bảng TicketType
-        TicketType ticketType = ticketTypeService.findByName(request.getTicketTypeName())
-                .orElseThrow(() -> new EntityNotFoundException("Ticket type not found"));
 
         // Tạo vé mới
         Ticket ticket = new Ticket();
-        ticket.setStartStation(stationService.getById(request.getStartStationId()).get());
-        ticket.setEndStation(stationService.getById(request.getEndStationId()).get());
+//        ticket.setStartStation(stationService.getById(request.getStartStationId()).get());
+//        ticket.setEndStation(stationService.getById(request.getEndStationId()).get());
         ticket.setPrice(request.getPrice());
-        ticket.setDepartureDate(request.getDepartureDate());
+//        ticket.setDepartureDate(request.getDepartureDate());
         ticket.setSeat(seatService.getById(request.getSeatId()).get());
         ticket.setBookingDate(LocalDateTime.now());
         ticket.setStatus("Đang giữ chỗ");

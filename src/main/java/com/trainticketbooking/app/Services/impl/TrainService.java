@@ -1,14 +1,19 @@
 package com.trainticketbooking.app.Services.impl;
 
 import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
+import com.trainticketbooking.app.Dtos.Carriage.CarriageWithoutSeatsDTO;
 import com.trainticketbooking.app.Dtos.SeatHolds.CreateSeatHoldRequestDto;
 import com.trainticketbooking.app.Dtos.SeatType.SeatTypePriceDTO;
+import com.trainticketbooking.app.Dtos.Train.TrainWithCarriagesDTO;
 import com.trainticketbooking.app.Dtos.TrainJourney.TrainJourneySearchDTO;
 import com.trainticketbooking.app.Entities.*;
+import com.trainticketbooking.app.Mappers.CarriageMapper;
+import com.trainticketbooking.app.Mappers.TrainMapper;
 import com.trainticketbooking.app.Repos.*;
 import com.trainticketbooking.app.Requests.TrainSearchRequestDTO;
 import com.trainticketbooking.app.Services.ITrainService;
 import com.trainticketbooking.app.Utils.DurationUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,9 +24,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -49,6 +52,12 @@ public class TrainService implements ITrainService {
 //    public List<Seat> findSeatsByTrainId(Integer trainId) {
 //        return seatRepository.findSeatsByTrainId(trainId);
 //    }
+
+    @Autowired
+    private TrainMapper trainMapper;
+
+    @Autowired
+    private CarriageMapper carriageMapper;
 
     public List<Carriage> findCarriagesByTrainId(Integer trainId) {
         return carriageRepository.findByTrainTrainId(trainId);
@@ -299,5 +308,103 @@ public class TrainService implements ITrainService {
         }
     }
 
+    public Set<Integer> getStationIdsByTrain(Train train) {
+        // Truy vấn tất cả các Route của Train
+        List<Route> routes = routeRepository.findByTrain(train);
 
+        // Tạo một Set để lưu các stationId (startStation và endStation)
+        Set<Integer> stationIds = new HashSet<>();
+
+        // Lấy startStationId và endStationId từ từng Route
+        for (Route route : routes) {
+            if (route.getStartStation() != null) {
+                stationIds.add(route.getStartStation().getStationId());
+            }
+            if (route.getEndStation() != null) {
+                stationIds.add(route.getEndStation().getStationId());
+            }
+        }
+
+        return stationIds;
+    }
+
+    /**
+     * Lấy danh sách stationId từ CreateSeatHoldRequestDto
+     */
+    public Set<Integer> getStationIdsBetweenDepartureAndArrival(Integer departureStationId, Integer arrivalStationId, Train train) {
+        // Lấy danh sách tất cả stationIds từ train
+        Set<Integer> allStationIds = getStationIdsByTrain(train);
+
+        // Kiểm tra thứ tự của departure và arrival
+        if (departureStationId == null || arrivalStationId == null) {
+            throw new IllegalArgumentException("Both departureStationId and arrivalStationId must be provided.");
+        }
+
+        // Chuyển danh sách allStationIds thành danh sách để lọc
+        List<Integer> orderedStationIds = allStationIds.stream().sorted().collect(Collectors.toList());
+
+        // Kiểm tra xem departureStationId và arrivalStationId có nằm trong danh sách không
+        if (!orderedStationIds.contains(departureStationId) || !orderedStationIds.contains(arrivalStationId)) {
+            throw new IllegalArgumentException("Either departureStationId or arrivalStationId not found in the list of station IDs.");
+        }
+
+        // Lọc các stationIds từ departure đến arrival
+        int departureIndex = orderedStationIds.indexOf(departureStationId);
+        int arrivalIndex = orderedStationIds.indexOf(arrivalStationId);
+
+//        if (departureIndex > arrivalIndex) {
+//            throw new IllegalArgumentException("departureStationId must come before arrivalStationId.");
+//        }
+//         Xử lý trường hợp departureId và arrivalId không hợp lệ (departure phải trước arrival)
+        if (departureIndex > arrivalIndex) {
+            // Đảo ngược thứ tự của departureStationId và arrivalStationId
+            Integer temp = departureStationId;
+            departureStationId = arrivalStationId;
+            arrivalStationId = temp;
+
+            // Cập nhật lại index sau khi đảo ngược
+            departureIndex = orderedStationIds.indexOf(departureStationId);
+            arrivalIndex = orderedStationIds.indexOf(arrivalStationId);
+        }
+
+
+        // Lấy các stationId nằm giữa departureStationId và arrivalStationId (bao gồm cả 2 trạm)
+        return new HashSet<>(orderedStationIds.subList(departureIndex, arrivalIndex + 1));
+    }
+
+    public TrainWithCarriagesDTO findByTrainTrainId(Integer trainId) {
+        // Fetch the Train entity
+        Optional<Train> trainOptional = trainRepository.findById(trainId);
+        if (!trainOptional.isPresent()) {
+            throw new EntityNotFoundException("Train not found with ID: " + trainId);
+        }
+        Train train = trainOptional.get();
+
+        // Tạo một đối tượng TrainWithCarriagesDTO mới
+        TrainWithCarriagesDTO trainWithCarriagesDTO = new TrainWithCarriagesDTO();
+
+        // Ánh xạ các trường từ Train sang TrainWithCarriagesDTO
+        trainWithCarriagesDTO.setTrainId(train.getTrainId());
+        trainWithCarriagesDTO.setTrainNumber(train.getTrainNumber());
+        trainWithCarriagesDTO.setTrainType(train.getTrainType());
+
+        // Ánh xạ danh sách Carriages
+        List<CarriageWithoutSeatsDTO> carriageDTOList = new ArrayList<>();
+        for (Carriage carriage : train.getCarriages()) {
+            CarriageWithoutSeatsDTO carriageDTO = new CarriageWithoutSeatsDTO();
+            carriageDTO.setCarriageId(carriage.getCarriageId());
+            carriageDTO.setCarriageNumber(carriage.getCarriageNumber());
+            carriageDTO.setOrderNumber(carriage.getOrderNumber());
+            carriageDTO.setCarriageClassName(carriage.getCarriageClass() != null ? carriage.getCarriageClass().getName() : null);
+
+            // Thêm CarriageDTO vào danh sách
+            carriageDTOList.add(carriageDTO);
+        }
+
+        carriageDTOList.sort(Comparator.comparingInt(CarriageWithoutSeatsDTO::getOrderNumber));
+
+        trainWithCarriagesDTO.setCarriages(carriageDTOList);
+
+        return trainWithCarriagesDTO;
+    }
 }

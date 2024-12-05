@@ -1,6 +1,7 @@
 package com.trainticketbooking.app.Mappers;
 
 import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
+import com.trainticketbooking.app.Dtos.Carriage.CarriageWithoutSeatsDTO;
 import com.trainticketbooking.app.Dtos.Seat.SeatDTO;
 import com.trainticketbooking.app.Entities.Carriage;
 import com.trainticketbooking.app.Entities.Seat;
@@ -11,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CarriageMapper {
     CarriageMapper INSTANCE = Mappers.getMapper(CarriageMapper.class);
 
@@ -35,4 +36,12 @@ public interface CarriageMapper {
                 .map(SeatMapper.INSTANCE::toSeatDTO)
                 .collect(Collectors.toList());
     }
+
+
+//    @Mapping(source = "carriageId", target = "carriageId")
+//    @Mapping(source = "carriageNumber", target = "carriageNumber")
+//    @Mapping(source = "carriageClass.name", target = "carriageClassName")  // Assuming Carriage has a carriageClass
+//    @Mapping(source = "carriageClass.carriageClassId", target = "carriageClassId")      // Assuming Carriage has a carriageClassId
+//    @Mapping(source = "orderNumber", target = "orderNumber")      // Assuming Carriage has a carriageClassId
+//    CarriageWithoutSeatsDTO toCarriageWithoutSeatsDTO(Carriage carriage);
 }

@@ -51,16 +51,16 @@ public class SecurityConfig {
                                                 .anyRequest().permitAll()
 
                                 )
-                                .oauth2Login(oauth2 -> oauth2
-                                                .loginPage("/login").permitAll()
-                                                .successHandler(oAuth2LoginSuccessHandler)
-                                                .failureUrl("/login?error=true")
-
-                                                .failureHandler((request, response, exception) -> {
-                                                        exception.printStackTrace();
-                                                        response.sendRedirect(
-                                                                        "http://localhost:3000/en/home?error=true");
-                                                }))
+//                                .oauth2Login(oauth2 -> oauth2
+//                                                .loginPage("/login").permitAll()
+//                                                .successHandler(oAuth2LoginSuccessHandler)
+//                                                .failureUrl("/login?error=true")
+//
+//                                                .failureHandler((request, response, exception) -> {
+//                                                        exception.printStackTrace();
+//                                                        response.sendRedirect(
+//                                                                        "http://localhost:3000/en/home?error=true");
+//                                                }))
                                 .formLogin(form -> form
                                                 .loginPage("/login")
                                                 .defaultSuccessUrl("/admin")

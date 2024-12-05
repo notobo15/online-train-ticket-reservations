@@ -61,7 +61,7 @@ public class ExcelReader {
     @Autowired
     private RouteService routeService;
 
-//    @PostConstruct
+    @PostConstruct
    public void readExcelOnStartup() {
         try {
             ClassPathResource classPathResource = new ClassPathResource("data/data.xlsx");
@@ -399,6 +399,7 @@ public class ExcelReader {
                         carriage.setTrain(train.get());
                         carriage.setCarriageClass(carriageClass.get());
                         carriage.setCarriageNumber(carNumber);
+                        carriage.setOrderNumber(Integer.parseInt(carNumber));
 //                        carriage.setSeatCount(seatCount);
 //                        carriage.setTotalFloors(totalFloors);
 
@@ -441,7 +442,6 @@ public class ExcelReader {
                     CarriageClass carriageClass = new CarriageClass();
                     carriageClass.setCarriageClassId(carriageClassId);
                     carriageClass.setName(name);
-
                     carriageClassService.save(carriageClass);
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid number format: " + e.getMessage());

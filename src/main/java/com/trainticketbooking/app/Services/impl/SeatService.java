@@ -82,8 +82,6 @@ public class SeatService implements ISeatService {
             seatDTO.setSeatId(seatMapping.getSeat().getSeatId());
             seatDTO.setSeatNumber(seatMapping.getSeat().getSeatNumber());
             seatDTO.setSeatType(seatMapping.getSeat().getSeatType().getSeatType());
-            seatDTO.setFloor(seatMapping.getSeat().getFloor());
-            seatDTO.setCompartmentNumber(seatMapping.getSeat().getCompartmentNumber());
             seatDTO.setStatus(seatMapping.getStatus()); // "Booked," "Reserved," "Available"
 
             return seatDTO;

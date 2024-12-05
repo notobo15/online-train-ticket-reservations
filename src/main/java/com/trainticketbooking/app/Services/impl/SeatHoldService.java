@@ -1,15 +1,29 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.Seat.SeatDTO;
 import com.trainticketbooking.app.Dtos.SeatHolds.CreateSeatHoldRequestDto;
+import com.trainticketbooking.app.Dtos.SeatHolds.SeatHoldRequestDto;
+import com.trainticketbooking.app.Dtos.SeatHolds.SeatHoldResponseDto;
 import com.trainticketbooking.app.Entities.*;
+import com.trainticketbooking.app.Mappers.SeatHoldMapper;
 import com.trainticketbooking.app.Repos.*;
+import com.trainticketbooking.app.Services.IStationService;
+import com.trainticketbooking.app.Utils.CanBookUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class SeatHoldService {
 
@@ -26,10 +40,28 @@ public class SeatHoldService {
     private TrainRepository trainRepository;
 
     @Autowired
+    private TrainService trainService;
+
+    @Autowired
     private StationRepository stationRepository;
 
-    // Create or update a SeatHold
-    public SeatHold createSeatHold(CreateSeatHoldRequestDto seatHoldRequestDto) {
+    @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
+    private SeatHoldMapper seatHoldMapper;
+
+    @Autowired
+    private CarriageService carriageService;
+
+    @MessageMapping("/seatHold")
+    @SendTo("/topic/seats")
+    public SeatHoldResponseDto createSeatHold(CreateSeatHoldRequestDto seatHoldRequestDto) {
+
+
+        seatHoldRequestDto.setArrivalStationId(stationRepository.findByCode(seatHoldRequestDto.getArrivalStationCode()).getStationId());
+        seatHoldRequestDto.setDepartureStationId(stationRepository.findByCode(seatHoldRequestDto.getDepartureStationCode()).getStationId());
+
         // 1. Find the train
         Optional<Train> trainOptional = trainRepository.findById(seatHoldRequestDto.getTrainId());
         if (trainOptional.isEmpty()) {
@@ -49,83 +81,55 @@ public class SeatHoldService {
                     " on the date: " + journeyDate);
         }
 
-        // 4. Check for conflicts with the requested route and seat holds
-        for (Route route : routes) {
-            boolean isConflict = checkForConflict(route, seatHoldRequestDto);
-            if (isConflict) {
-                throw new RuntimeException("Conflict detected: Seat already held for this segment.");
-            }
+        Optional<Seat> seatOptional = seatRepository.findById(seatHoldRequestDto.getSeatId());
+        if (seatOptional.isEmpty()) {
+            throw new RuntimeException("Seat not found with ID: " + seatHoldRequestDto.getSeatId());
         }
+        Seat seat = seatOptional.get();
 
-        // 5. Create a new SeatHold entry if no conflict
-        SeatHold seatHold = new SeatHold();
-        seatHold.setTrain(train);
-        seatHold.setDepartureDate(seatHoldRequestDto.getDepartureDate());
-        seatHold.setStatus("HOLD");
+//        List<SeatHold> existingSeatHolds = seatHoldRepository.findByTrainAndDepartureDateAndSeat(train, journeyDate, seat);
+        List<SeatHold> existingSeatHolds = updateSeatHoldsWithExpiredRemoved(train, seatHoldRequestDto.getDepartureDate(), seat);
 
-        // Fetch the stations from the repository
-        Optional<Station> departureStationOptional = stationRepository.findById(seatHoldRequestDto.getDepartureStationId());
-        Optional<Station> arrivalStationOptional = stationRepository.findById(seatHoldRequestDto.getArrivalStationId());
+        var allStationIdsByTrain = trainService.getStationIdsByTrain(trainOptional.get());
 
-        if (departureStationOptional.isEmpty() || arrivalStationOptional.isEmpty()) {
-            throw new RuntimeException("Invalid station IDs provided.");
-        }
+        var allStationIds = trainService.getStationIdsBetweenDepartureAndArrival(seatHoldRequestDto.getDepartureStationId(), seatHoldRequestDto.getArrivalStationId(), train);
 
-        seatHold.setDepartureStation(departureStationOptional.get());
-        seatHold.setArrivalStation(arrivalStationOptional.get());
-
-        return seatHoldRepository.save(seatHold); // Save the seat hold in the DB
-    }
-
-    /**
-     * Checks if the requested seat hold conflicts with any existing seat holds
-     *
-     * @param route              The route to check against
-     * @param seatHoldRequestDto The seat hold request DTO containing the booking info
-     * @return True if there's a conflict, false otherwise
-     */
-    private boolean checkForConflict(Route route, CreateSeatHoldRequestDto seatHoldRequestDto) {
-        // Fetch existing seat holds for this train and date
-        List<SeatHold> existingSeatHolds = seatHoldRepository.findByTrainAndDepartureDate(route.getTrain(), seatHoldRequestDto.getDepartureDate());
-
-        // Check if the requested booking overlaps with any existing seat hold in the same route
+        List<Set<Integer>> allStationIdsFromSeatHolds = new ArrayList<>();
         for (SeatHold existingSeatHold : existingSeatHolds) {
-            // Check if the departure or arrival station overlap with any existing seat hold
-            boolean isConflict = isOverlapping(existingSeatHold, seatHoldRequestDto, route);
-            if (isConflict) {
-                return true;  // Conflict found
-            }
+            Set<Integer> stationIds = trainService.getStationIdsBetweenDepartureAndArrival(existingSeatHold.getDepartureStation().getStationId(), existingSeatHold.getArrivalStation().getStationId(), train);
+            allStationIdsFromSeatHolds.add(stationIds);
         }
 
-        return false;  // No conflict
-    }
 
-    /**
-     * Check if two seat hold requests overlap based on station segments
-     *
-     * @param existingSeatHold   The existing seat hold to check against
-     * @param seatHoldRequestDto The new seat hold request
-     * @param route              The route to check against
-     * @return True if there is an overlap
-     */
-    private boolean isOverlapping(SeatHold existingSeatHold, CreateSeatHoldRequestDto seatHoldRequestDto, Route route) {
-        // Get the departure and arrival station for the existing seat hold
-        Station existingDeparture = existingSeatHold.getDepartureStation();
-        Station existingArrival = existingSeatHold.getArrivalStation();
+        if (CanBookUtil.canBook(allStationIds, allStationIdsFromSeatHolds, allStationIdsByTrain)) {
 
-        // Check if the requested departure station overlaps with any existing arrival station
-        // and vice versa (this can happen when departure is part of an existing seat's journey)
-        boolean isDepartureOverlapping = seatHoldRequestDto.getDepartureStationId() >= existingDeparture.getStationId() &&
-                seatHoldRequestDto.getDepartureStationId() <= existingArrival.getStationId();
+            log.info("co the book");
 
-        boolean isArrivalOverlapping = seatHoldRequestDto.getArrivalStationId() >= existingDeparture.getStationId() &&
-                seatHoldRequestDto.getArrivalStationId() <= existingArrival.getStationId();
+            SeatHold seatHold = new SeatHold();
+            seatHold.setTrain(train);
+            seatHold.setSeat(seat);
+            seatHold.setDepartureDate(seatHoldRequestDto.getDepartureDate());
+            seatHold.setStatus("holding");
 
-        // Ensure that requested route is within the same route segment (based on the route stations' order)
-//        boolean isWithinRoute = isStationInRoute(seatHoldRequestDto.getDepartureStationId(), seatHoldRequestDto.getArrivalStationId(), route);
+            // Fetch the stations from the repository
+            Optional<Station> departureStationOptional = stationRepository.findById(seatHoldRequestDto.getDepartureStationId());
+            Optional<Station> arrivalStationOptional = stationRepository.findById(seatHoldRequestDto.getArrivalStationId());
 
-//        return (isDepartureOverlapping || isArrivalOverlapping) && isWithinRoute;
-        return true;
+            if (departureStationOptional.isEmpty() || arrivalStationOptional.isEmpty()) {
+                throw new RuntimeException("Invalid station IDs provided.");
+            }
+
+            seatHold.setDepartureStation(departureStationOptional.get());
+            seatHold.setArrivalStation(arrivalStationOptional.get());
+
+            seatHold = seatHoldRepository.save(seatHold);
+
+            // Trả về DTO sau khi lưu
+            return seatHoldMapper.toDto(seatHold);
+        } else {
+            log.info("khong the book");
+            return null;
+        }
     }
 
 
@@ -134,6 +138,8 @@ public class SeatHoldService {
      *
      * @param id The ID of the SeatHold to delete
      */
+    @MessageMapping("/cancelSeatHold")
+    @SendTo("/topic/seats")
     public void deleteSeatHoldById(Integer id) {
         // Check if SeatHold exists before deleting
         if (seatHoldRepository.existsById(id)) {
@@ -142,4 +148,137 @@ public class SeatHoldService {
             throw new RuntimeException("SeatHold not found with ID: " + id);
         }
     }
+
+    // Kiểm tra xem SeatHold đã hết hạn chưa
+    public boolean isSeatHoldExpired(SeatHold seatHold) {
+        return seatHold.getExpirationTime().isBefore(LocalDateTime.now());
+    }
+
+    // Xóa các SeatHold đã hết hạn
+    public void deleteExpiredSeatHolds() {
+        // Lấy tất cả SeatHold chưa hết hạn
+        List<SeatHold> expiredSeatHolds = seatHoldRepository.findAll().stream()
+                .filter(this::isSeatHoldExpired) // Chỉ giữ lại những SeatHold đã hết hạn
+                .collect(Collectors.toList());
+
+        // Xóa các SeatHold đã hết hạn
+        for (SeatHold seatHold : expiredSeatHolds) {
+            seatHoldRepository.delete(seatHold);
+        }
+    }
+
+    public List<SeatHold> getValidSeatHolds(List<SeatHold> existingSeatHolds) {
+        return existingSeatHolds.stream()
+                .filter(seatHold -> !isSeatHoldExpired(seatHold))  // Chỉ giữ lại những SeatHold chưa hết hạn
+                .collect(Collectors.toList());
+    }
+
+    // Tìm các SeatHold hợp lệ cho một chuyến tàu cụ thể và ngày đi cụ thể
+    public List<SeatHold> findValidSeatHolds(Train train, LocalDate journeyDate, Seat seat) {
+        List<SeatHold> existingSeatHolds = seatHoldRepository.findByTrainAndDepartureDateAndSeat(train, journeyDate, seat);
+
+        // Lọc ra các SeatHold còn hiệu lực
+        return getValidSeatHolds(existingSeatHolds);
+    }
+
+    // Tìm và xóa các SeatHold hết hạn khi cần thiết
+    public void cleanUpExpiredSeatHolds() {
+        deleteExpiredSeatHolds();  // Gọi phương thức để xóa các SeatHold đã hết hạn
+    }
+
+    // Phương thức này sẽ xóa các SeatHold đã hết hạn từ danh sách và cập nhật lại danh sách
+    public List<SeatHold> updateSeatHoldsWithExpiredRemoved(Train train, LocalDate journeyDate, Seat seat) {
+        // Lấy danh sách tất cả SeatHold cho chuyến tàu, ngày và ghế cụ thể
+        List<SeatHold> existingSeatHolds = seatHoldRepository.findByTrainAndDepartureDateAndSeat(train, journeyDate, seat);
+
+        // Lọc các SeatHold đã hết hạn
+        List<SeatHold> expiredSeatHolds = existingSeatHolds.stream()
+                .filter(this::isSeatHoldExpired)  // Chỉ giữ lại các SeatHold đã hết hạn
+                .collect(Collectors.toList());
+
+        // Xóa các SeatHold đã hết hạn từ cơ sở dữ liệu
+        if (!expiredSeatHolds.isEmpty()) {
+            seatHoldRepository.deleteAll(expiredSeatHolds);
+        }
+
+        // Cập nhật lại danh sách các SeatHold hợp lệ sau khi xóa
+        existingSeatHolds.removeAll(expiredSeatHolds); // Loại bỏ các SeatHold đã hết hạn
+
+        return existingSeatHolds;  // Trả về danh sách SeatHold đã được cập nhật
+    }
+
+
+    public List<SeatDTO> getListSeats(SeatHoldRequestDto seatHoldRequestDto) {
+        // 1. Find the train
+        Optional<Train> trainOptional = trainRepository.findById(seatHoldRequestDto.getTrainId());
+        if (trainOptional.isEmpty()) {
+            throw new RuntimeException("Train not found with ID: " + seatHoldRequestDto.getTrainId());
+        }
+
+        seatHoldRequestDto.setArrivalStationId(stationRepository.findByCode(seatHoldRequestDto.getArrivalStationCode()).getStationId());
+        seatHoldRequestDto.setDepartureStationId(stationRepository.findByCode(seatHoldRequestDto.getDepartureStationCode()).getStationId());
+
+        Train train = trainOptional.get();
+
+        // 2. Find the routes for the given train
+        List<Route> routes = routeRepository.findByTrain(train);
+
+        // 3. Find the journey for the specific date
+        LocalDate journeyDate = seatHoldRequestDto.getDepartureDate();
+        TrainJourney trainJourney = trainJourneyRepository.findByTrainAndDepartureDate(train, journeyDate);
+        if (trainJourney == null) {
+            throw new RuntimeException("No train journey found for the train ID: " + seatHoldRequestDto.getTrainId() +
+                    " on the date: " + journeyDate);
+        }
+
+        // 4. Find the carriage by carriageId
+        Optional<Carriage> carriageOptional = carriageService.getById(seatHoldRequestDto.getCarriageId());
+        if (carriageOptional.isEmpty()) {
+            throw new RuntimeException("Carriage not found with ID: " + seatHoldRequestDto.getCarriageId());
+        }
+        Carriage carriage = carriageOptional.get();
+
+        // 5. Get all seats in the carriage
+        List<Seat> seats = carriage.getSeats();  // Lấy tất cả các ghế trong carriage
+
+        // 6. Create a list of SeatDTOs
+        List<SeatDTO> seatDTOList = new ArrayList<>();
+
+        // 7. Check the availability of each seat in this carriage
+        for (Seat seat : seats) {
+            // Create a new SeatDTO for this seat
+            SeatDTO seatDTO = new SeatDTO();
+            seatDTO.setSeatId(seat.getSeatId());
+            seatDTO.setSeatNumber(seat.getSeatNumber());
+            seatDTO.setSeatType(seat.getSeatType().getSeatType());
+            // Check if the seat can be booked for the specified journey and stations
+            List<SeatHold> existingSeatHolds = updateSeatHoldsWithExpiredRemoved(train, journeyDate, seat);
+
+            var allStationIdsByTrain = trainService.getStationIdsByTrain(train);
+
+            var allStationIds = trainService.getStationIdsBetweenDepartureAndArrival(seatHoldRequestDto.getDepartureStationId(), seatHoldRequestDto.getArrivalStationId(), train);
+
+            List<Set<Integer>> allStationIdsFromSeatHolds = new ArrayList<>();
+            for (SeatHold existingSeatHold : existingSeatHolds) {
+                Set<Integer> stationIds = trainService.getStationIdsBetweenDepartureAndArrival(existingSeatHold.getDepartureStation().getStationId(), existingSeatHold.getArrivalStation().getStationId(), train);
+                allStationIdsFromSeatHolds.add(stationIds);
+            }
+
+            // 8. Determine the status of the seat
+            String status;
+            if (CanBookUtil.canBook(allStationIds, allStationIdsFromSeatHolds, allStationIdsByTrain)) {
+                status = "available"; // Ghế có thể đặt
+            } else {
+                status = "booked";
+            }
+
+            seatDTO.setStatus(status);
+
+            // Add the SeatDTO to the list
+            seatDTOList.add(seatDTO);
+        }
+
+        return seatDTOList;
+    }
+
 }

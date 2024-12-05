@@ -2,6 +2,7 @@ package com.trainticketbooking.app.Controllers;
 
 import java.util.*;
 
+import com.trainticketbooking.app.Dtos.Train.TrainWithCarriagesDTO;
 import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Services.*;
 import com.trainticketbooking.app.Services.impl.CarriageService;
@@ -378,6 +379,7 @@ public class TrainController {
         }
         return "redirect:/admin/trains/edit/" + trainId;
     }
+
 
 
 }

@@ -11,10 +11,7 @@ import com.trainticketbooking.app.Services.impl.VNPayService;
 import com.trainticketbooking.app.Utils.UrlUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
-public class PaymentController {
+public class PaymentApiController {
 
     @Autowired
     private VNPayService vnPayService;

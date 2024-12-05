@@ -1,12 +1,18 @@
 package com.trainticketbooking.app.Controllers.API;
 
 import com.trainticketbooking.app.Dtos.Carriage.CarriageDTO;
+import com.trainticketbooking.app.Dtos.SeatHolds.SeatHoldRequestDto;
+import com.trainticketbooking.app.Dtos.Wrappers.ApiResponse;
+import com.trainticketbooking.app.Entities.Carriage;
+import com.trainticketbooking.app.Exceptions.ErrorCode;
 import com.trainticketbooking.app.Services.impl.CarriageService;
+import com.trainticketbooking.app.Services.impl.SeatHoldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/carriages")
@@ -14,12 +20,13 @@ public class CarriageApiController {
 
     @Autowired
     private CarriageService carriageService;
-
-    @GetMapping("/by-train/{trainId}")
-    public ResponseEntity<List<CarriageDTO>> searchCarriagesByTrain(@PathVariable Integer trainId) {
-        List<CarriageDTO> result = carriageService.searchCarriagesByTrain(trainId);
-        return ResponseEntity.ok(result);
-    }
+    @Autowired
+    private SeatHoldService seatHoldService;
+//    @GetMapping("/by-train/{trainId}")
+//    public ResponseEntity<List<CarriageDTO>> searchCarriagesByTrain(@PathVariable Integer trainId) {
+//        List<CarriageDTO> result = carriageService.findByTrainTrainId(trainId);
+//        return ResponseEntity.ok(result);
+//    }
 
 //    @MessageMapping("/getSeatsByCarriage")
 //    @SendTo("/topic/seats")
@@ -29,7 +36,7 @@ public class CarriageApiController {
 //    }
 
     @GetMapping("/{carriageId}")
-    public ResponseEntity<CarriageDTO> getCarriageById(@PathVariable Integer carriageId) {
+    public ApiResponse<CarriageDTO> getCarriageById(@PathVariable Integer carriageId) {
         // Lấy thông tin của Carriage
         CarriageDTO carriage = carriageService.getCarriageById(carriageId);
 
@@ -37,6 +44,35 @@ public class CarriageApiController {
         int seatCount = carriageService.getSeatCountByCarriageId(carriageId);
         carriage.setSeatCount(seatCount); // Giả sử CarriageDTO có thuộc tính seatCount
 
-        return ResponseEntity.ok(carriage);
+        return ApiResponse.<CarriageDTO>builder()
+                .result(carriage)
+                .build();
+    }
+
+    @GetMapping("/{carriageId}/seats")
+    public ApiResponse<CarriageDTO> getCarriageWithSeatsById(@PathVariable Integer carriageId, SeatHoldRequestDto dto) {
+        // Lấy thông tin của Carriage từ dịch vụ
+        Optional<Carriage> carriageOptional = carriageService.getById(carriageId);
+
+        if (carriageOptional.isEmpty()) {
+            return ApiResponse.<CarriageDTO>builder()
+                    .result(null)
+                    .success(false)
+                    .message("Khong tim thay")
+                    .build();
+        }
+        var seats = seatHoldService.getListSeats(dto);
+
+
+        var carriage = carriageOptional.get();
+        CarriageDTO carriageDTO = new CarriageDTO();
+        carriageDTO.setCarriageId(carriage.getCarriageId());
+        carriageDTO.setCarriageNumber(carriage.getCarriageNumber());
+        carriageDTO.setCarriageClassName(carriage.getCarriageClass().getName());
+        carriageDTO.setSeats(seats);
+
+        return ApiResponse.<CarriageDTO>builder()
+                .result(carriageDTO)
+                .build();
     }
 }

@@ -14,6 +14,8 @@ public class CreateSeatHoldRequestDto {
     private Integer trainId;
     private Integer departureStationId;
     private Integer arrivalStationId;
+    private String departureStationCode;
+    private String arrivalStationCode;
     private LocalDate departureDate;
     private String status;
     private boolean isDeparture;

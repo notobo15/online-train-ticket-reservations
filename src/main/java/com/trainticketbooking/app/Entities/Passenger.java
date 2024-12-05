@@ -13,7 +13,7 @@ public class Passenger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "passenger_id")
-    private Long passengerId;
+    private Integer passengerId;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;

@@ -1,5 +1,6 @@
 package com.trainticketbooking.app.Repos;
 
+import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.SeatHold;
 import com.trainticketbooking.app.Entities.Train;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,5 @@ public interface SeatHoldRepository extends JpaRepository<SeatHold, Integer> {
 
     List<SeatHold> findByTrainAndDepartureDate(Train train, LocalDate departureDate);
     Optional<SeatHold> findBySeat_SeatIdAndDepartureDate(Integer seatId, LocalDate departureDate);
+    List<SeatHold> findByTrainAndDepartureDateAndSeat(Train train, LocalDate departureDate, Seat seat);
 }

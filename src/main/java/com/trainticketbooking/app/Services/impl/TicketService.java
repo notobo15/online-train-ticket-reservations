@@ -1,5 +1,7 @@
 package com.trainticketbooking.app.Services.impl;
 
+import com.trainticketbooking.app.Dtos.Ticket.TicketDTO;
+import com.trainticketbooking.app.Entities.Booking;
 import com.trainticketbooking.app.Entities.Ticket;
 import com.trainticketbooking.app.Repos.TicketRepository;
 import com.trainticketbooking.app.Services.ITicketService;
@@ -59,13 +61,15 @@ public class TicketService implements ITicketService {
             existingTicket.setPassenger(ticket.getPassenger());
         }
 
-        if (ticket.getStartStation() != null) {
-            existingTicket.setStartStation(ticket.getStartStation());
-        }
-
-        if (ticket.getEndStation() != null) {
-            existingTicket.setEndStation(ticket.getEndStation());
-        }
+//        if (ticket.getStartStation() != null) {
+//            existingTicket.setStartStation(ticket.getStartStation());
+//        }
+//
+//        if (ticket.getEndStation() != null) {
+//            existingTicket.setEndStation(ticket.getEndStation());
+//        }
         return ticketRepository.save(existingTicket);
     }
+
+
 }

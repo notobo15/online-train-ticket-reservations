@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 
 @Data
 public class TicketDTO {
-    private Long ticketId;
-    private String status;
-    private LocalDateTime bookingDate;
+
+    private Integer ticketId;
     private Double price;
-    private LocalDate departureDate;
-    private Long startStationId;
-    private Long endStationId;
-    private Long seatId;
+    private LocalDateTime bookingDate;
+    private String status;
+    private Integer seatId;
+    private boolean isDeparture;
+
 }
