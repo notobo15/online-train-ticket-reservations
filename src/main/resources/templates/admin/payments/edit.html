@@ -1,0 +1,195 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</div>
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/payments/}">payments</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${payment.paymentId}"></span>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center">
+                <a th:href="@{${session.previouspaymentsPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3" th:text="'payment Edit #' + ${payment.paymentId}"></h3>
+            </div>
+        </div>
+
+        <form class="card" th:action="@{/admin/payments/edit/{id}(id=${payment.paymentId})}" th:object="${payment}"
+            method="post">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <!-- Payment Info (Read-only) -->
+                        <div class="form-group">
+                            <label class="form-label"><strong>Payment ID:</strong></label>
+                            <input type="text" class="form-control" th:value="${payment.paymentId}" readonly>
+                        </div>
+
+                        <!-- Booking Info (Read-only) -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Booking ID:</strong></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" th:value="${payment.booking.bookingId}"
+                                    readonly>
+                                <a th:href="@{/admin/bookings/detail/{id}(id=${payment.booking.bookingId})}"
+                                    class="btn btn-primary" title="View Booking Detail">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Time (Read-only) -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Time:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${#temporals.format(payment.time, 'dd-MM-yyyy HH:mm')}" readonly>
+                        </div>
+
+                        <!-- Method (Read-only) -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Method:</strong></label>
+                            <input type="text" class="form-control" th:value="${payment.method}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <!-- Total Price (Read-only) -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Total Price:</strong></label>
+                            <input type="text" class="form-control"
+                                th:value="${#numbers.formatDecimal(payment.booking.totalPrice, 0, 'COMMA', 0, 'POINT')}"
+                                readonly>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="form-group mt-3">
+                            <label class="form-label"><strong>Status:</strong></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="status" id="statusPaid"
+                                    th:field="*{status}" value="Paid">
+                                <label class="form-check-label badge bg-success" for="statusPaid">
+                                    Paid
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="status" id="statusPending"
+                                    th:field="*{status}" value="Pending">
+                                <label class="form-check-label badge bg-warning" for="statusPending">
+                                    Pending
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="status" id="statusFailed"
+                                    th:field="*{status}" value="Failed">
+                                <label class="form-check-label badge bg-danger" for="statusFailed">
+                                    Failed
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer text-end">
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-save me-1"></i>Update
+                </button>
+            </div>
+        </form>
+
+        <!-- Notifications -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <!-- Success Messages -->
+            <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert">
+                <div class="toast-header bg-success text-white">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <strong class="me-auto">Success Notifications</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="list-unstyled m-0">
+                        <li th:each="message : ${successMessages}">
+                            <i class="bi bi-check2 me-2"></i>
+                            <span th:text="${message}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Error Messages -->
+            <div th:if="${not #lists.isEmpty(errorMessages)}" class="toast show" role="alert">
+                <div class="toast-header bg-danger text-white">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong class="me-auto">Error Notifications</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    <ul class="list-unstyled m-0">
+                        <li th:each="message : ${errorMessages}">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <span th:text="${message}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // Initialize Select2
+            $('.select2').select2();
+
+            // Delete confirmation
+            $('.deleteBtn').on('click', function (e) {
+                let form = $('.deleteForm');
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this payment?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel'
+                        }
+                    }
+                });
+            });
+
+            // Auto hide toasts
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            $('.toast').toast({
+                delay: 3000
+            });
+        });
+    </script>
+</div>
+
+</html>

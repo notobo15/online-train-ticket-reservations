@@ -12,6 +12,8 @@ import com.trainticketbooking.app.Repos.*;
 import com.trainticketbooking.app.Services.IBookingService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingService implements IBookingService {
-
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -43,6 +44,7 @@ public class BookingService implements IBookingService {
     private PassengerService passengerService;
     @Autowired
     private PassengerTypeService passengerTypeService;
+
     @Override
     public List<Booking> getAll() {
         return bookingRepository.findAll();
@@ -88,25 +90,26 @@ public class BookingService implements IBookingService {
         booking = bookingRepository.save(booking);
 
         // Lấy danh sách hold và chuyển đổi thành ticket
-//        List<TemporaryTicketHold> holds = temporaryTicketHoldRepository.findAllById(holdIds);
-//        Booking finalBooking = booking;
-//        List<Ticket> tickets = holds.stream().map(hold -> {
-//            Ticket ticket = new Ticket();
-//            ticket.setBooking(finalBooking);
-////            ticket.setPassenger(hold.getSeat().getPassenger());
-//            ticket.setPrice(1111.0);
-//            ticket.setBookingDate(LocalDateTime.now());
-//            ticket.setDepartureDate(hold.getDepartureDate());
-//            ticket.setStatus("Paid");
-//            ticket.setStartStation(hold.getDepartureStation());
-//            ticket.setEndStation(hold.getArrivalStation());
-//            ticket.setSeat(hold.getSeat());
-////            ticket.setTicketType();
-//            return ticketRepository.save(ticket);
-//        }).collect(Collectors.toList());
-//
-//        // Xóa các TemporaryTicketHold sau khi tạo ticket
-//        temporaryTicketHoldRepository.deleteAll(holds);
+        // List<TemporaryTicketHold> holds =
+        // temporaryTicketHoldRepository.findAllById(holdIds);
+        // Booking finalBooking = booking;
+        // List<Ticket> tickets = holds.stream().map(hold -> {
+        // Ticket ticket = new Ticket();
+        // ticket.setBooking(finalBooking);
+        //// ticket.setPassenger(hold.getSeat().getPassenger());
+        // ticket.setPrice(1111.0);
+        // ticket.setBookingDate(LocalDateTime.now());
+        // ticket.setDepartureDate(hold.getDepartureDate());
+        // ticket.setStatus("Paid");
+        // ticket.setStartStation(hold.getDepartureStation());
+        // ticket.setEndStation(hold.getArrivalStation());
+        // ticket.setSeat(hold.getSeat());
+        //// ticket.setTicketType();
+        // return ticketRepository.save(ticket);
+        // }).collect(Collectors.toList());
+        //
+        // // Xóa các TemporaryTicketHold sau khi tạo ticket
+        // temporaryTicketHoldRepository.deleteAll(holds);
 
         return booking;
     }
@@ -124,7 +127,8 @@ public class BookingService implements IBookingService {
                 ticketRepository.save(ticket);
             }
             // Thêm logic thanh toán và cập nhật trạng thái thanh toán
-            // booking.setPaymentStatus("Paid"); // Có thể thêm trạng thái thanh toán cho Booking nếu cần
+            // booking.setPaymentStatus("Paid"); // Có thể thêm trạng thái thanh toán cho
+            // Booking nếu cần
             return booking;
         } else {
             throw new IllegalArgumentException("Invalid payment amount");
@@ -142,9 +146,12 @@ public class BookingService implements IBookingService {
         }
         booking.setTotalPrice(totalPrice);
 
-        // Assuming you are passing station IDs, you can get the actual Station objects if needed
-        Station startStation = stationRepository.findById(bookingDTO.getStartStationId()).orElseThrow(() -> new RuntimeException("Start station not found"));
-        Station endStation = stationRepository.findById(bookingDTO.getEndStationId()).orElseThrow(() -> new RuntimeException("End station not found"));
+        // Assuming you are passing station IDs, you can get the actual Station objects
+        // if needed
+        Station startStation = stationRepository.findById(bookingDTO.getStartStationId())
+                .orElseThrow(() -> new RuntimeException("Start station not found"));
+        Station endStation = stationRepository.findById(bookingDTO.getEndStationId())
+                .orElseThrow(() -> new RuntimeException("End station not found"));
 
         booking.setStartStation(startStation);
         booking.setEndStation(endStation);
@@ -162,7 +169,8 @@ public class BookingService implements IBookingService {
             ticket.setStatus("Booked");
 
             // Fetch seat object using seatId
-            Seat seat = seatRepository.findById(ticketDTO.getSeatId()).orElseThrow(() -> new RuntimeException("Seat not found"));
+            Seat seat = seatRepository.findById(ticketDTO.getSeatId())
+                    .orElseThrow(() -> new RuntimeException("Seat not found"));
             ticket.setSeat(seat);
 
             // Set departure status
@@ -171,11 +179,12 @@ public class BookingService implements IBookingService {
             // Save the ticket
             ticketRepository.save(ticket);
 
-            var existedPassenger = passengerService.getPassengerByIdentityCardNumber(ticketDTO.getPassenger().getIdentityCardNumber());
+            var existedPassenger = passengerService
+                    .getPassengerByIdentityCardNumber(ticketDTO.getPassenger().getIdentityCardNumber());
 
-            if(existedPassenger.isPresent()) {
+            if (existedPassenger.isPresent()) {
 
-            }else {
+            } else {
 
                 existedPassenger = Optional.of(new Passenger());
                 var passengerType = passengerTypeService.getById(ticketDTO.getPassenger().getPassengerTypeId());
@@ -242,7 +251,8 @@ public class BookingService implements IBookingService {
             bookingDTO.setStartStation(booking.getStartStation().getStationName());
             bookingDTO.setEndStation(booking.getEndStation().getStationName());
             bookingDTO.setDepartureDate(booking.getDepartureDate());
-            List<TicketResponseDTO> ticketDTOs = ticketRepository.findByBookingBookingId( booking.getBookingId()).stream()
+            List<TicketResponseDTO> ticketDTOs = ticketRepository.findByBookingBookingId(booking.getBookingId())
+                    .stream()
                     .map(ticket -> {
                         TicketResponseDTO ticketDTO = new TicketResponseDTO();
                         ticketDTO.setTicketId(ticket.getTicketId());
@@ -251,7 +261,6 @@ public class BookingService implements IBookingService {
                         ticketDTO.setStatus(ticket.getStatus());
                         ticketDTO.setSeatNumber(ticket.getSeat().getSeatNumber());
                         ticketDTO.setTicketId(ticket.getSeat().getSeatId());
-
 
                         var passengerDto = new PassengerResponseDTO();
                         passengerDto.setPassengerId(ticket.getPassenger().getPassengerId());
@@ -266,5 +275,11 @@ public class BookingService implements IBookingService {
             bookingDTO.setTickets(ticketDTOs);
             return bookingDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Booking> findAll(Pageable pageable) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
 }

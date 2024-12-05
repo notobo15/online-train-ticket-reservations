@@ -1,0 +1,195 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/layout}"
+    xmlns:th="http://www.thymeleaf.org">
+
+<div layout:fragment="head">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+<div layout:fragment="content">
+
+    <!-- breadcrumb -->
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item" th:href="@{/admin/bookings}">Bookings</li>
+            <li class="breadcrumb-item active" aria-current="page">List</li>
+        </ol>
+    </nav>
+
+    <!-- title -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+        <h3>Bookings Management</h3>
+    </div>
+
+    <!-- table -->
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table table-hover text-center">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>User</th>
+
+                                    <th>Station(start-end)</th>
+                                    <th>Departure Date</th>
+                                    <th>Total Price</th>
+                                    <th>Number of Tickets</th>
+                                    <th>Payment Status</th>
+                                    <th style="width: 60px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="booking : ${bookings}">
+                                    <td th:text="${booking.bookingId}"></td>
+                                    <td th:text="${booking.user != null ? booking.user.username : ''}"></td>
+                                  
+                                    <td th:text="${booking.startStation.stationName + '-' + booking.endStation.stationName}"></td>
+                                    <td th:text="${#temporals.format(booking.departureDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#numbers.formatDecimal(booking.totalPrice, 0, 'COMMA', 0, 'POINT')}">
+                                    </td>
+                                    <td th:text="${booking.tickets != null ? booking.tickets.size() : 0}"></td>
+                                    <td>
+                                        <span th:if="${booking.payment != null}" th:class="${booking.payment.status == 'paid' ? 'badge bg-success' : 
+                                        booking.payment.status == 'pending' ? 'badge bg-warning' : 'badge bg-danger'}"
+                                            th:text="${booking.payment.status}">
+                                        </span>
+                                        <span th:if="${booking.payment == null}" class="badge bg-danger">
+                                            Unknown
+                                        </span>
+                                    </td>
+                                    <td class="actions">
+                                        <a th:href="@{/admin/bookings/detail/{id}(id=${booking.bookingId})}">
+                                            <i class="btn-icon-prepend text-primary" data-feather="eye"></i>
+                                        </a>
+                                        <form th:action="@{/admin/bookings/delete/{id}(id=${booking.bookingId})}"
+                                            method="post" class="deleteForm">
+                                            <div type="button" class="deleteBtn">
+                                                <i class="btn-icon-prepend text-danger" data-feather="trash-2"></i>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav class="d-flex justify-content-between align-items-center mt-3">
+                        <!-- Sizing -->
+                        <div th:replace="~{/admin/fragments/_table-size}"></div>
+                        <!-- Pagination -->
+                        <ul class="pagination justify-content-center">
+                            <!-- Thêm nút về trang đầu -->
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/bookings/index(page=0, size=${size})}"
+                                    aria-label="First">
+                                    <span aria-hidden="true">First</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link"
+                                    th:href="@{/admin/bookings/index(page=${currentPage - 1}, size=${size})}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">
+                                        <i class="btn-icon-prepend" data-feather="chevron-left"></i>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="page-item" th:each="i : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+                                th:if="${i >= 0 and i <= totalPages - 1}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:text="${i + 1}"
+                                    th:href="@{/admin/bookings/index(page=${i}, size=${size})}">1</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                <a class="page-link"
+                                    th:href="@{/admin/bookings/index(page=${currentPage + 1}, size=${size})}"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">
+                                        <i class="btn-icon-prepend" data-feather="chevron-right"></i>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <!-- Thêm nút về trang cuối -->
+                            <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                                <a class="page-link"
+                                    th:href="@{/admin/bookings/index(page=${totalPages - 1}, size=${size})}"
+                                    aria-label="Last">
+                                    <span aria-hidden="true">Last</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Pagination -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div layout:fragment="scripts">
+    <script>
+        $(document).ready(function () {
+            $('#dataTableExample').DataTable({
+                "paging": false,
+                "info": false,
+            });
+
+            $('.deleteBtn').on('click', function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this item?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+
+            let popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl, {
+                    html: true,
+                    sanitize: false,
+                    content: function () {
+                        return document.querySelector(this.getAttribute('data-bs-content')).innerHTML;
+                    }
+                })
+            })
+
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            // Khởi tạo toast
+            $('.toast').toast({
+                delay: 3000
+            });
+        });
+    </script>
+</div>
+
+</html>

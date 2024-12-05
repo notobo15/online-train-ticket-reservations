@@ -1,6 +1,8 @@
 package com.trainticketbooking.app.Controllers;
 
 import com.trainticketbooking.app.Entities.Carriage;
+import com.trainticketbooking.app.Entities.CarriageSeatMapping;
+import com.trainticketbooking.app.Entities.Seat;
 import com.trainticketbooking.app.Entities.Train;
 import com.trainticketbooking.app.Services.ICarriageClassService;
 import com.trainticketbooking.app.Services.ICarriageService;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 
@@ -95,6 +98,23 @@ public class CarriageController {
         }
         return "admin/carriages/edit";
     }
+
+    @GetMapping("/{id}/seats")
+    public String getSeats(@PathVariable("id") Integer id, Model model) {
+        Optional<Carriage> carriageOptional = carriageService.getById(id);
+
+        if (carriageOptional.isPresent()) {
+            model.addAttribute("carriage", carriageOptional.get());
+            List<Seat> seats = carriageOptional.get().getSeats();
+            model.addAttribute("seats", seats);
+
+            return "admin/trains/seats-of-carriage";
+        }
+
+        return "redirect:/admin/trains/edit/" + id;
+    }
+
+
 
     @PostMapping("/edit/{id}")
     public String saveEditCarriage(@PathVariable("id") Integer id,

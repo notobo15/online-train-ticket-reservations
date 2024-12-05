@@ -17,7 +17,6 @@ public class Booking {
     @Column(name = "booking_id")
     private Integer bookingId;
 
-
     @Column(name = "booking_time", nullable = false)
     private LocalDateTime bookingTime;
 
@@ -41,7 +40,6 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "end_station_id")
     private Station endStation;
-
 
     @Column(name = "departure_date")
     private LocalDate departureDate;

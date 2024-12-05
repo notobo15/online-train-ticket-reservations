@@ -30,7 +30,6 @@ public class Ticket {
     @Column(name = "booking_datetime", nullable = false)
     private LocalDateTime bookingDate;
 
-
     @Column(name = "status", nullable = false)
     private String status;
 
@@ -38,9 +37,7 @@ public class Ticket {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
-
     @Column(name = "isDeparture", nullable = true)
     private boolean isDeparture;
-
 
 }

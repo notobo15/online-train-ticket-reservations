@@ -10,6 +10,8 @@
 
     <!-- Thêm Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -18,6 +20,13 @@
             <small th:if="${carriage != null}" class=" text-muted">
                 (ID: <span th:text="${carriage.carriageId}"></span>)
             </small>
+            <a th:href="@{/admin/carriages/{id}/seats(id=${carriage.carriageId})}" class="btn btn-secondary me-2  ">
+                <div class="d-flex align-items-center">
+                    Seats
+                    <i class="bi bi-box-arrow-up-right ms-2"></i>
+                </div>
+            </a>
+
         </h3>
 
         <div class="row">

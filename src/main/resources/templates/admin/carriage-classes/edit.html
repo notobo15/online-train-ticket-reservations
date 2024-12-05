@@ -1,0 +1,155 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+    layout:decorate="~{admin/layout/layout}">
+
+<div layout:fragment="head">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style th:inline="css">
+
+    </style>
+</div>
+
+
+<div layout:fragment="content">
+    <div class="container-fluid mt-1">
+        <nav class="page-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/carriage-classes/index}">Carriage Classes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit#<span th:text="${cac.carriageClassId}"></span></li>
+            </ol>
+        </nav>
+
+        <div class="row mb-2">
+            <div class="col-md-6 d-flex align-items-center ">
+                <a th:href="@{${session.previousCarriageClassesPage}}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back
+                </a>
+                <h3 class="d-inline-block me-2 ms-3"
+                    th:text=" ${'Carriage Classes Edit #' +  cac.carriageClassId}"> </h3>
+            </div>
+        </div>
+
+        <form id="carriageClassEditForm" class="card" th:action="@{/admin/carriage-classes/edit/{id}(id=${cac.carriageClassId})}"
+            th:object="${cac}" method="post">
+
+
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label for="name" class="form-label"><strong>Carriage Class name:</strong></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}"
+                              >
+                            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                                class="text-small text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="button" th:data-url="@{/admin/carriage-classes/delete/{id}(id=${cac.carriageClassId})}"
+                    class="btn btn-outline-danger deleteBtn">
+                    <i class="bi bi-trash me-1"></i>Delete
+                </button>
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-save me-1"></i>Update
+                </button>
+            </div>
+        </form>
+
+        <form th:action="@{/admin/carriage-classes/delete/{id}(id=${cac.carriageClassId})}" method="post" class="deleteForm">
+            <input type="hidden" name="carriageClassId" th:value="${cac.carriageClassId}">
+        </form>
+
+    </div>
+
+    <!--  error notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div th:if="${not #lists.isEmpty(successMessages)}" class="toast show" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong class="me-auto">Success Notifications</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul class="list-unstyled m-0">
+                    <li th:each="message : ${successMessages}" class="success-message">
+                        <i class="bi bi-check2 me-2"></i>
+                        <span th:text="${message}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:if="${errorMap.containsKey('generalError')}" class="toast show" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="toast-header bg-danger text-white">
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                <strong class="me-auto">Error Notifications</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <ul class="list-unstyled m-0">
+                    <li class="success-message">
+                        <i class="bi bi-x-circle me-2"></i>
+                        <span th:text="${errorMap.get('generalError')}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div layout:fragment="scripts">
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.deleteBtn').on('click', function (e) {
+                let form = $('.deleteForm');
+                $.confirm({
+                    title: 'Confirm deletion',
+                    content: 'Are you sure you want to delete this item?',
+                    type: 'red',
+                    buttons: {
+                        ok: {
+                            text: 'OK',
+                            btnClass: 'btn-danger',
+                            action: function () {
+                                form.submit();
+                            }
+                        },
+                        cancel: {
+                            text: 'Hủy',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Tự động ẩn toast sau 3 giây
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000);
+
+            // Khởi tạo toast
+            $('.toast').toast({
+                delay: 3000
+            });
+        });
+
+    </script>
+
+</div>
+
+
+</html>
