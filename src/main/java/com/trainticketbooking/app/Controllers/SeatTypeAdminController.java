@@ -90,7 +90,7 @@ public class SeatTypeAdminController {
         }
 
         try {
-            seatType = mSeatTypeService.update(seatType);
+            seatType = mSeatTypeService.updateWithPrice(seatType);
         } catch (RuntimeException ex) {
             errorMessages.add(ex.getMessage());
             return "redirect:/admin/seat-types/edit/" + id;
@@ -125,7 +125,7 @@ public class SeatTypeAdminController {
         }
 
         try {
-            seatType = mSeatTypeService.save(seatType);
+            seatType = mSeatTypeService.saveWithPrice(seatType);
         } catch (RuntimeException ex) {
             errorMessages.add(ex.getMessage());
             return "redirect:/admin/seat-types/create" ;
@@ -137,7 +137,7 @@ public class SeatTypeAdminController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
-        mSeatTypeService.deleteById(id);
+        mSeatTypeService.deleteByIdWithPrice(id);
         redirectAttributes.addFlashAttribute("successMessages", List.of("Successfully Deleted"));
         return "redirect:/admin/seat-types/index";
     }
