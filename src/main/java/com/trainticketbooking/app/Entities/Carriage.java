@@ -46,6 +46,6 @@ public class Carriage {
 //    private List<CarriageSeatMapping> carriageSeatMappings;
 
 
-    @OneToMany(mappedBy = "carriage")
+    @OneToMany(mappedBy = "carriage", fetch = FetchType.EAGER)
     private List<Seat> seats;
 }

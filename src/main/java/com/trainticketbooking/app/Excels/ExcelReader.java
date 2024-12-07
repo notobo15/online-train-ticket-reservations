@@ -61,7 +61,7 @@ public class ExcelReader {
     @Autowired
     private RouteService routeService;
 
-    @PostConstruct
+//    @PostConstruct
    public void readExcelOnStartup() {
         try {
             ClassPathResource classPathResource = new ClassPathResource("data/data.xlsx");

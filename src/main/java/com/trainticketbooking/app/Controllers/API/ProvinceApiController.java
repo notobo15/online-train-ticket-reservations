@@ -35,7 +35,7 @@ public class ProvinceApiController {
 
     @GetMapping("/with-stations")
     public  ApiResponse<List<ProvinceDTO>> getProvincesWithStations() {
-        List<ProvinceDTO> provincesWithStations = provinceRedisService.getProvincesWithStations("provincesWithStations");
+            List<ProvinceDTO> provincesWithStations = provinceRedisService.getProvincesWithStations("provincesWithStations");
         if (provincesWithStations == null) {
             provincesWithStations = provinceService.getProvincesWithStations();
             provinceRedisService.saveProvincesWithStations("provincesWithStations", provincesWithStations);
