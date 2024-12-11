@@ -7,4 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ISeatTypeService extends IService<SeatType> {
     Page<SeatType> findAll(Pageable pageable);
+    SeatType saveWithPrice(SeatType seatType);
+    SeatType updateWithPrice(SeatType seatType);
+    void deleteByIdWithPrice(Integer id);
 }
