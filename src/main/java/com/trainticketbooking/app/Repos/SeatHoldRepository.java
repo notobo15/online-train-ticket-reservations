@@ -31,5 +31,6 @@ public interface SeatHoldRepository extends JpaRepository<SeatHold, Integer> {
 
     List<SeatHold> findByTrainAndDepartureDate(Train train, LocalDate departureDate);
     Optional<SeatHold> findBySeat_SeatIdAndDepartureDate(Integer seatId, LocalDate departureDate);
+    Optional<SeatHold> findBySeat_SeatIdAndDepartureDateAndTrain_TrainId(Integer seatId, LocalDate departureDate, Integer trainId);
     List<SeatHold> findByTrainAndDepartureDateAndSeat(Train train, LocalDate departureDate, Seat seat);
 }

@@ -114,6 +114,7 @@ public class TrainJourneyController {
             Optional<Train> trainOptional = trainService.getById(trainId);
             if (trainOptional.isPresent()) {
                 TrainJourney journey = new TrainJourney();
+                journey.setStatus("Open");
                 journey.setTrain(trainOptional.get());
                 journey.setDepartureDate(departureDate);
                 trainJourneyService.save(journey);
@@ -155,6 +156,7 @@ public class TrainJourneyController {
         // Tiến hành thêm hành trình cho các tàu đã chọn trong phạm vi ngày
         for (Integer trainId : selectedTrains) {
             TrainJourney journey = new TrainJourney();
+            journey.setStatus("Open");
             Optional<Train> trainOptional = trainService.getById(trainId);
             if (trainOptional.isPresent()) {
                 journey.setTrain(trainOptional.get());
