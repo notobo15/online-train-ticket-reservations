@@ -335,8 +335,7 @@ public class BookingService implements IBookingService {
 
     @Override
     public Page<Booking> findAll(Pageable pageable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return bookingRepository.findAll(pageable);
     }
 
     @Transactional

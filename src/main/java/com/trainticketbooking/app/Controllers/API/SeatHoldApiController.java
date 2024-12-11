@@ -108,11 +108,9 @@ public class SeatHoldApiController {
                 .build();
     }
 
-
     @MessageMapping("/delete-hold")
     @SendTo("/topic/seats")
     public ApiResponse<CarriageDTO> deleteSeatHoldWS(SeatHoldRequestDto request) {
-
 
         var dto = new CreateSeatHoldRequestDto();
         dto.setSeatId(request.getSeatId());
@@ -134,7 +132,6 @@ public class SeatHoldApiController {
         }
         var seats = seatHoldService.getListSeats(request);
 
-
         var carriage = carriageOptional.get();
         CarriageDTO carriageDTO = new CarriageDTO();
         carriageDTO.setCarriageId(carriage.getCarriageId());
@@ -148,49 +145,50 @@ public class SeatHoldApiController {
                 .build();
     }
 
-//
-//    @MessageMapping("/hold")
-//    @SendTo("/topic/seats")
-//    public ApiResponse<SeatHoldResponseDto> createSeatHoldWS(CreateSeatHoldRequestDto seatHoldRequestDto) {
-//        var seathold = seatHoldService.createSeatHold(seatHoldRequestDto);
-//        if (seathold != null) {
-//            return ApiResponse.<SeatHoldResponseDto>builder()
-//                    .result(seathold)
-//                    .success(true)
-//                    .message("SeatHold created successfully.")
-//                    .build();
-//        } else {
-//            return ApiResponse.<SeatHoldResponseDto>builder()
-//                    .result(null)
-//                    .success(false)
-//                    .message("Can't create seat hold successfully.")
-//                    .build();
-//        }
-//
-//    }
-//
-//
-//
-//    @MessageMapping("/delete-hold")
-//    @SendTo("/topic/seats")
-//    public ApiResponse<SeatHoldResponseDto> deleteSeatHoldWS(CreateSeatHoldRequestDto seatHoldRequestDto) {
-//        try {
-//            seatHoldService.deleteSeatHold(seatHoldRequestDto);
-//
-//            return ApiResponse.<SeatHoldResponseDto>builder()
-//                    .result(null)
-//                    .success(true)
-////                    .message("SeatHold with ID " + id + " has been deleted.")
-//                    .build();
-//        } catch (RuntimeException ex) {
-//            return ApiResponse.<SeatHoldResponseDto>builder()
-//                    .result(null)
-//                    .success(false)
-//                    .message(ex.getMessage())
-//                    .build();
-//        }
-//    }
-
+    //
+    // @MessageMapping("/hold")
+    // @SendTo("/topic/seats")
+    // public ApiResponse<SeatHoldResponseDto>
+    // createSeatHoldWS(CreateSeatHoldRequestDto seatHoldRequestDto) {
+    // var seathold = seatHoldService.createSeatHold(seatHoldRequestDto);
+    // if (seathold != null) {
+    // return ApiResponse.<SeatHoldResponseDto>builder()
+    // .result(seathold)
+    // .success(true)
+    // .message("SeatHold created successfully.")
+    // .build();
+    // } else {
+    // return ApiResponse.<SeatHoldResponseDto>builder()
+    // .result(null)
+    // .success(false)
+    // .message("Can't create seat hold successfully.")
+    // .build();
+    // }
+    //
+    // }
+    //
+    //
+    //
+    // @MessageMapping("/delete-hold")
+    // @SendTo("/topic/seats")
+    // public ApiResponse<SeatHoldResponseDto>
+    // deleteSeatHoldWS(CreateSeatHoldRequestDto seatHoldRequestDto) {
+    // try {
+    // seatHoldService.deleteSeatHold(seatHoldRequestDto);
+    //
+    // return ApiResponse.<SeatHoldResponseDto>builder()
+    // .result(null)
+    // .success(true)
+    //// .message("SeatHold with ID " + id + " has been deleted.")
+    // .build();
+    // } catch (RuntimeException ex) {
+    // return ApiResponse.<SeatHoldResponseDto>builder()
+    // .result(null)
+    // .success(false)
+    // .message(ex.getMessage())
+    // .build();
+    // }
+    // }
 
     private List<String> messages = new ArrayList<>();
 
@@ -200,22 +198,20 @@ public class SeatHoldApiController {
         return messages;
     }
 
-    @MessageMapping("/chat")  // Client sẽ gửi tin nhắn tới /app/chat
-    @SendTo("/topic/messages")  // Gửi tin nhắn tới tất cả các client đang subscribe tại /topic/messages
+    @MessageMapping("/chat") // Client sẽ gửi tin nhắn tới /app/chat
+    @SendTo("/topic/messages") // Gửi tin nhắn tới tất cả các client đang subscribe tại /topic/messages
     public List<String> sendMessage(String message) {
         messages.add(message);
         return messages;
     }
 
     @MessageMapping("/deleteMessage") // Nhận yêu cầu xóa tin nhắn
-    @SendTo("/topic/messages")  // Gửi lại danh sách tin nhắn sau khi xóa
+    @SendTo("/topic/messages") // Gửi lại danh sách tin nhắn sau khi xóa
     public List<String> deleteMessage(Integer messageIndex) {
         if (messageIndex != null && messageIndex >= 0 && messageIndex < messages.size()) {
             messages.remove((int) messageIndex); // Xóa tin nhắn theo index
         }
         return messages; // Trả về danh sách tin nhắn còn lại sau khi xóa
     }
-
-
 
 }

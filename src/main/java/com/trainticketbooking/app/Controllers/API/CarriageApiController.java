@@ -15,6 +15,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +31,20 @@ public class CarriageApiController {
     private CarriageService carriageService;
     @Autowired
     private SeatHoldService seatHoldService;
-//    @GetMapping("/by-train/{trainId}")
-//    public ResponseEntity<List<CarriageDTO>> searchCarriagesByTrain(@PathVariable Integer trainId) {
-//        List<CarriageDTO> result = carriageService.findByTrainTrainId(trainId);
-//        return ResponseEntity.ok(result);
-//    }
+    // @GetMapping("/by-train/{trainId}")
+    // public ResponseEntity<List<CarriageDTO>> searchCarriagesByTrain(@PathVariable
+    // Integer trainId) {
+    // List<CarriageDTO> result = carriageService.findByTrainTrainId(trainId);
+    // return ResponseEntity.ok(result);
+    // }
 
-//    @MessageMapping("/getSeatsByCarriage")
-//    @SendTo("/topic/seats")
-//    @GetMapping("/{carriageId}/seats")
-//    public List<CarriageSeatMappingDTO> getSeatsByCarriage(@PathVariable Integer carriageId) {
-//        return carriageService.getSeatMappings(carriageId);
-//    }
+    // @MessageMapping("/getSeatsByCarriage")
+    // @SendTo("/topic/seats")
+    // @GetMapping("/{carriageId}/seats")
+    // public List<CarriageSeatMappingDTO> getSeatsByCarriage(@PathVariable Integer
+    // carriageId) {
+    // return carriageService.getSeatMappings(carriageId);
+    // }
 
     @GetMapping("/{carriageId}")
     public ApiResponse<CarriageDTO> getCarriageById(@PathVariable Integer carriageId) {
@@ -56,7 +60,6 @@ public class CarriageApiController {
                 .build();
     }
 
-
     @GetMapping("/{carriageId}/seats")
     public ApiResponse<CarriageDTO> getCarriageWithSeatsById(@PathVariable Integer carriageId, SeatHoldRequestDto dto) {
         // Lấy thông tin của Carriage từ dịch vụ
@@ -71,7 +74,6 @@ public class CarriageApiController {
         }
         var seats = seatHoldService.getListSeats(dto);
 
-
         var carriage = carriageOptional.get();
         CarriageDTO carriageDTO = new CarriageDTO();
         carriageDTO.setCarriageId(carriage.getCarriageId());
@@ -84,7 +86,6 @@ public class CarriageApiController {
                 .success(true)
                 .build();
     }
-
 
     @MessageMapping("/seats")
     @SendTo("/topic/seats")
@@ -101,7 +102,6 @@ public class CarriageApiController {
         }
         var seats = seatHoldService.getListSeats(dto);
 
-
         var carriage = carriageOptional.get();
         CarriageDTO carriageDTO = new CarriageDTO();
         carriageDTO.setCarriageId(carriage.getCarriageId());
@@ -115,10 +115,10 @@ public class CarriageApiController {
                 .build();
     }
 
-
     @MessageMapping("/seats/{carriageId}")
     @SendTo("/topic/seats/{carriageId}")
-    public ApiResponse<CarriageDTO> getCarriageWithSeatsById(@DestinationVariable int carriageId, SeatHoldRequestDto dto) {
+    public ApiResponse<CarriageDTO> getCarriageWithSeatsById(@DestinationVariable int carriageId,
+            SeatHoldRequestDto dto) {
         // Lấy thông tin của Carriage từ dịch vụ
         Optional<Carriage> carriageOptional = carriageService.getById(carriageId);
 
