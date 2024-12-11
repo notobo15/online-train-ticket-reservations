@@ -14,6 +14,9 @@ public class BookingRequestDTO {
     private LocalDateTime bookingTime;
     private Integer startStationId;
     private Integer endStationId;
+    private LocalDate arrivalDate;
+    private String startStationCode;
+    private String endStationCode;
     private List<TicketRequestDTO> tickets;
 
 }

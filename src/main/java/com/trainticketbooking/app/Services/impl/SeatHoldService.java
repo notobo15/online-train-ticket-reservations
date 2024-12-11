@@ -4,6 +4,7 @@ import com.trainticketbooking.app.Dtos.Seat.SeatDTO;
 import com.trainticketbooking.app.Dtos.SeatHolds.CreateSeatHoldRequestDto;
 import com.trainticketbooking.app.Dtos.SeatHolds.SeatHoldRequestDto;
 import com.trainticketbooking.app.Dtos.SeatHolds.SeatHoldResponseDto;
+import com.trainticketbooking.app.Dtos.SeatType.SeatTypePriceDTO;
 import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Mappers.SeatHoldMapper;
 import com.trainticketbooking.app.Repos.*;
@@ -124,28 +125,60 @@ public class SeatHoldService {
 
             seatHold = seatHoldRepository.save(seatHold);
 
+            var dto = seatHoldMapper.toDto(seatHold);
+
+
+            // Xác định startRoute và endRoute
+            Route startRoute = routes.stream()
+                    .filter(r -> r.getStartStation().getCode().equals(seatHoldRequestDto.getDepartureStationCode()))
+                    .findFirst().orElse(null);
+
+            Route endRoute = routes.stream()
+                    .filter(r -> r.getEndStation().getCode().equals(seatHoldRequestDto.getArrivalStationCode()))
+                    .findFirst().orElse(null);
+
+            List<Route> relevantRoutes = routes.stream()
+                    .filter(r -> r.getStationNumber() >= startRoute.getStationNumber() &&
+                            r.getStationNumber() <= endRoute.getStationNumber())
+                    .sorted((r1, r2) -> Integer.compare(r1.getStationNumber(), r2.getStationNumber()))
+                    .collect(Collectors.toList());
+
+
+            double totalDistance = relevantRoutes.stream()
+                    .mapToDouble(Route::getDistance)
+                    .sum();
+
+            var seatType = seat.getSeatType();
+
+            dto.getSeat().setPrice(seatType.getPrice().calTotalPrice(totalDistance));
+            dto.getSeat().setSeatType(seatType.getCode());
             // Trả về DTO sau khi lưu
-            return seatHoldMapper.toDto(seatHold);
+            return dto;
         } else {
             log.info("khong the book");
             return null;
         }
     }
 
-
     /**
      * Deletes a SeatHold by its ID.
      *
      * @param id The ID of the SeatHold to delete
      */
-    @MessageMapping("/cancelSeatHold")
-    @SendTo("/topic/seats")
     public void deleteSeatHoldById(Integer id) {
         // Check if SeatHold exists before deleting
         if (seatHoldRepository.existsById(id)) {
             seatHoldRepository.deleteById(id);
         } else {
             throw new RuntimeException("SeatHold not found with ID: " + id);
+        }
+    }  public void deleteSeatHold(CreateSeatHoldRequestDto seatHoldRequestDto) {
+       var seat = seatHoldRepository.findBySeat_SeatIdAndDepartureDateAndTrain_TrainId(seatHoldRequestDto.getSeatId(), seatHoldRequestDto.getDepartureDate(), seatHoldRequestDto.getTrainId());
+
+        if (seat.isPresent()) {
+            seatHoldRepository.delete(seat.get());
+        } else {
+            throw new RuntimeException("SeatHold not delete");
         }
     }
 
@@ -172,6 +205,7 @@ public class SeatHoldService {
                 .filter(seatHold -> !isSeatHoldExpired(seatHold))  // Chỉ giữ lại những SeatHold chưa hết hạn
                 .collect(Collectors.toList());
     }
+
 
     // Tìm các SeatHold hợp lệ cho một chuyến tàu cụ thể và ngày đi cụ thể
     public List<SeatHold> findValidSeatHolds(Train train, LocalDate journeyDate, Seat seat) {
@@ -244,13 +278,31 @@ public class SeatHoldService {
         // 6. Create a list of SeatDTOs
         List<SeatDTO> seatDTOList = new ArrayList<>();
 
+        // Xác định startRoute và endRoute
+        Route startRoute = routes.stream()
+                .filter(r -> r.getStartStation().getCode().equals(seatHoldRequestDto.getDepartureStationCode()))
+                .findFirst().orElse(null);
+
+        Route endRoute = routes.stream()
+                .filter(r -> r.getEndStation().getCode().equals(seatHoldRequestDto.getArrivalStationCode()))
+                .findFirst().orElse(null);
+
+        List<Route> relevantRoutes = routes.stream()
+                .filter(r -> r.getStationNumber() >= startRoute.getStationNumber() &&
+                        r.getStationNumber() <= endRoute.getStationNumber())
+                .sorted((r1, r2) -> Integer.compare(r1.getStationNumber(), r2.getStationNumber()))
+                .collect(Collectors.toList());
+
+        double totalDistance = relevantRoutes.stream()
+                .mapToDouble(Route::getDistance)
+                .sum();
         // 7. Check the availability of each seat in this carriage
         for (Seat seat : seats) {
             // Create a new SeatDTO for this seat
             SeatDTO seatDTO = new SeatDTO();
             seatDTO.setSeatId(seat.getSeatId());
             seatDTO.setSeatNumber(seat.getSeatNumber());
-            seatDTO.setSeatType(seat.getSeatType().getSeatType());
+            seatDTO.setSeatType(seat.getSeatType().getCode());
             // Check if the seat can be booked for the specified journey and stations
             List<SeatHold> existingSeatHolds = updateSeatHoldsWithExpiredRemoved(train, journeyDate, seat);
 
@@ -273,6 +325,11 @@ public class SeatHoldService {
             }
 
             seatDTO.setStatus(status);
+
+            seatDTO.setPrice(seat.getSeatType().getPrice().calTotalPrice(totalDistance));
+
+
+
 
             // Add the SeatDTO to the list
             seatDTOList.add(seatDTO);

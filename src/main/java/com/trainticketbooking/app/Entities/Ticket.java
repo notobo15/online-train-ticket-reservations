@@ -40,4 +40,15 @@ public class Ticket {
     @Column(name = "isDeparture", nullable = true)
     private boolean isDeparture;
 
+
+    @ManyToOne
+    @JoinColumn(name = "start_station_id")
+    private Station startStation;
+
+    @ManyToOne
+    @JoinColumn(name = "end_station_id")
+    private Station endStation;
+
+    @Column(name = "departure_date")
+    private LocalDate departureDate;
 }

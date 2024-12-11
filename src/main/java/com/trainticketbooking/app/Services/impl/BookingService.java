@@ -11,6 +11,7 @@ import com.trainticketbooking.app.Entities.*;
 import com.trainticketbooking.app.Repos.*;
 import com.trainticketbooking.app.Services.IBookingService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BookingService implements IBookingService {
 
     @Autowired
@@ -44,6 +46,8 @@ public class BookingService implements IBookingService {
     private PassengerService passengerService;
     @Autowired
     private PassengerTypeService passengerTypeService;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<Booking> getAll() {
@@ -72,6 +76,7 @@ public class BookingService implements IBookingService {
             Booking updatedBooking = existingBooking.get();
             updatedBooking.setBookingTime(booking.getBookingTime());
             updatedBooking.setTotalPrice(booking.getTotalPrice());
+            updatedBooking.setStatus(booking.getStatus());
             return bookingRepository.save(updatedBooking);
         } else {
             throw new RuntimeException("Booking not found with ID: " + booking.getBookingId());
@@ -134,20 +139,25 @@ public class BookingService implements IBookingService {
             throw new IllegalArgumentException("Invalid payment amount");
         }
     }
-
-    // Create a new booking
+    @Transactional
     public Booking createBooking(BookingRequestDTO bookingDTO) {
         // Step 1: Create a new Booking entity using the details from BookingDTO
+
+        bookingDTO.setStartStationId(stationRepository.findByCode(bookingDTO.getStartStationCode()).getStationId());
+        bookingDTO.setEndStationId(stationRepository.findByCode(bookingDTO.getEndStationCode()).getStationId());
         Booking booking = new Booking();
         booking.setBookingTime(LocalDateTime.now());
         double totalPrice = 0;
+
         for (var ticketDTO : bookingDTO.getTickets()) {
             totalPrice += ticketDTO.getPrice();
+            if (ticketDTO.getSeatReturnId() != 0) {
+                totalPrice += ticketDTO.getSeatReturnPrice(); // Include return ticket price in total
+            }
         }
         booking.setTotalPrice(totalPrice);
 
-        // Assuming you are passing station IDs, you can get the actual Station objects
-        // if needed
+        // Get Station objects
         Station startStation = stationRepository.findById(bookingDTO.getStartStationId())
                 .orElseThrow(() -> new RuntimeException("Start station not found"));
         Station endStation = stationRepository.findById(bookingDTO.getEndStationId())
@@ -156,45 +166,83 @@ public class BookingService implements IBookingService {
         booking.setStartStation(startStation);
         booking.setEndStation(endStation);
         booking.setDepartureDate(LocalDate.now());
-
+        booking.setStatus("Pending");
         // Save the booking
         Booking savedBooking = bookingRepository.save(booking);
 
-        // Step 2: For each TicketDTO, create and associate the ticket with the booking
+        // Step 2: Process each ticket in bookingDTO
         for (var ticketDTO : bookingDTO.getTickets()) {
-            Ticket ticket = new Ticket();
-            ticket.setBooking(savedBooking);
-            ticket.setPrice(ticketDTO.getPrice());
-            ticket.setBookingDate(LocalDateTime.now());
-            ticket.setStatus("Booked");
+            // Create outbound ticket
+            Ticket outboundTicket = new Ticket();
+            outboundTicket.setBooking(savedBooking);
+            outboundTicket.setPrice(ticketDTO.getPrice());
+            outboundTicket.setBookingDate(LocalDateTime.now());
+            outboundTicket.setStatus("Booked");
 
-            // Fetch seat object using seatId
+            // Fetch seat object for outbound ticket
             Seat seat = seatRepository.findById(ticketDTO.getSeatId())
                     .orElseThrow(() -> new RuntimeException("Seat not found"));
-            ticket.setSeat(seat);
+            outboundTicket.setSeat(seat);
 
-            // Set departure status
-            ticket.setDeparture(ticketDTO.isDeparture());
+            // Set departure status and station details
+            outboundTicket.setDeparture(true);
+            outboundTicket.setStartStation(startStation);
+            outboundTicket.setEndStation(endStation);
 
-            // Save the ticket
-            ticketRepository.save(ticket);
-
+            // Set passenger details
             var existedPassenger = passengerService
                     .getPassengerByIdentityCardNumber(ticketDTO.getPassenger().getIdentityCardNumber());
 
-            if (existedPassenger.isPresent()) {
-
-            } else {
-
+            if (existedPassenger.isEmpty()) {
                 existedPassenger = Optional.of(new Passenger());
                 var passengerType = passengerTypeService.getById(ticketDTO.getPassenger().getPassengerTypeId());
                 existedPassenger.get().setIdentityCardNumber(ticketDTO.getPassenger().getIdentityCardNumber());
                 existedPassenger.get().setPassengerType(passengerType.get());
             }
             existedPassenger.get().setFullName(ticketDTO.getPassenger().getFullName());
+            outboundTicket.setPassenger(existedPassenger.get());
             passengerService.savePassenger(existedPassenger.get());
-        }
 
+            // Save outbound ticket
+            ticketRepository.save(outboundTicket);
+
+            // If seatReturn is valid, create return ticket
+            if (ticketDTO.getSeatReturnId() != 0) {
+                Ticket returnTicket = new Ticket();
+                returnTicket.setBooking(savedBooking);
+                returnTicket.setPrice(ticketDTO.getSeatReturnPrice());
+                returnTicket.setBookingDate(LocalDateTime.now());
+                returnTicket.setStatus("Booked");
+                returnTicket.setDepartureDate(bookingDTO.getArrivalDate());
+                // Fetch seat object for return ticket
+                Seat returnSeat = seatRepository.findById(ticketDTO.getSeatReturnId())
+                        .orElseThrow(() -> new RuntimeException("Return seat not found"));
+                returnTicket.setSeat(returnSeat);
+
+                // Set departure status and station details (reverse for return trip)
+                returnTicket.setDeparture(false);
+                returnTicket.setStartStation(endStation); // Reverse start and end station
+                returnTicket.setEndStation(startStation);
+
+                // Use the same passenger as the outbound ticket
+                returnTicket.setPassenger(existedPassenger.get());
+
+                // Save return ticket
+                ticketRepository.save(returnTicket);
+            }
+        }
+        try {
+////            var sendEmailBooking = bookingRepository.findByBookingId(savedBooking.getBookingId());
+//            var sendEmailBooking = bookingRepository.findByBookingIdWithTickets(savedBooking.getBookingId())
+//                    .orElseThrow(() -> new RuntimeException("Booking not found with tickets"));
+            var tickets = ticketRepository.findByBookingBookingId(savedBooking.getBookingId());
+
+
+            String emailBody = buildEmailContent(savedBooking, tickets);
+            emailService.sendEmail("chrisnguyeen2000@gmail.com", "Booking Confirmation", emailBody, true);
+        } catch (Exception e) {
+            log.error("Failed to send booking confirmation email", e);
+        }
         return savedBooking;
     }
 
@@ -213,7 +261,7 @@ public class BookingService implements IBookingService {
         bookingDTO.setStartStation(booking.getStartStation().getStationName());
         bookingDTO.setEndStation(booking.getEndStation().getStationName());
         bookingDTO.setDepartureDate(booking.getDepartureDate());
-
+        bookingDTO.setStatus(booking.getStatus());
         // Add tickets associated with this booking
         List<TicketResponseDTO> ticketDTOs = ticketRepository.findByBookingBookingId(bookingId).stream()
                 .map(ticket -> {
@@ -250,7 +298,9 @@ public class BookingService implements IBookingService {
             bookingDTO.setTotalPrice(booking.getTotalPrice());
             bookingDTO.setStartStation(booking.getStartStation().getStationName());
             bookingDTO.setEndStation(booking.getEndStation().getStationName());
+            bookingDTO.setEndStation(booking.getEndStation().getStationName());
             bookingDTO.setDepartureDate(booking.getDepartureDate());
+            bookingDTO.setStatus(booking.getStatus());
             List<TicketResponseDTO> ticketDTOs = ticketRepository.findByBookingBookingId(booking.getBookingId())
                     .stream()
                     .map(ticket -> {
@@ -261,6 +311,12 @@ public class BookingService implements IBookingService {
                         ticketDTO.setStatus(ticket.getStatus());
                         ticketDTO.setSeatNumber(ticket.getSeat().getSeatNumber());
                         ticketDTO.setTicketId(ticket.getSeat().getSeatId());
+                        ticketDTO.setTrainName(ticket.getSeat().getCarriage().getTrain().getTrainNumber());
+                        ticketDTO.setCarriageName(ticket.getSeat().getCarriage().getCarriageNumber());
+                        ticketDTO.setSeatType(ticket.getSeat().getSeatType().getCode());
+                        ticketDTO.setStartStationName(ticket.getStartStation().getStationName());
+                        ticketDTO.setEndStationName(ticket.getEndStation().getStationName());
+                        ticketDTO.setDepartureDate(ticket.getDepartureDate());
 
                         var passengerDto = new PassengerResponseDTO();
                         passengerDto.setPassengerId(ticket.getPassenger().getPassengerId());
@@ -281,5 +337,35 @@ public class BookingService implements IBookingService {
     public Page<Booking> findAll(Pageable pageable) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Transactional
+    private String buildEmailContent(Booking booking, List<Ticket> tickets) {
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("<h1>Booking Confirmation</h1>");
+        emailContent.append("<p>Thank you for your booking. Here are the details:</p>");
+
+        emailContent.append("<h3>Booking Details:</h3>");
+        emailContent.append("<p>Booking ID: ").append(booking.getBookingId()).append("</p>");
+        emailContent.append("<p>Booking Time: ").append(booking.getBookingTime()).append("</p>");
+        emailContent.append("<p>Departure Station: ").append(booking.getStartStation().getStationName()).append("</p>");
+        emailContent.append("<p>Arrival Station: ").append(booking.getEndStation().getStationName()).append("</p>");
+        emailContent.append("<p>Total Price: ").append(booking.getTotalPrice()).append("</p>");
+        emailContent.append("<p>Status: ").append(booking.getStatus()).append("</p>");
+
+        emailContent.append("<h3>Tickets:</h3>");
+        for (Ticket ticket : tickets) {
+            emailContent.append("<p>Ticket ID: ").append(ticket.getTicketId()).append("</p>");
+            emailContent.append("<p>Passenger: ").append(ticket.getPassenger().getFullName()).append("</p>");
+            emailContent.append("<p>Seat: ").append(ticket.getSeat().getSeatNumber()).append("</p>");
+            emailContent.append("<p>Price: ").append(ticket.getPrice()).append("</p>");
+            emailContent.append("<p>Departure: ").append(ticket.isDeparture() ? "Yes" : "No").append("</p>");
+            emailContent.append("<hr>");
+        }
+
+        emailContent.append("<p>If you have any questions, feel free to contact us.</p>");
+        emailContent.append("<p>Best regards,</p>");
+        emailContent.append("<p>Your Company</p>");
+        return emailContent.toString();
     }
 }

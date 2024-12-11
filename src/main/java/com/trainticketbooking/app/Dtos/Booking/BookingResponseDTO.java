@@ -13,9 +13,11 @@ public class BookingResponseDTO {
 
     private Integer bookingId;
     private LocalDateTime bookingTime;
+
     private Double totalPrice;
     private String startStation;
     private String endStation;
+    private String status;
     private LocalDate departureDate;
     private List<TicketResponseDTO> tickets;  // List of tickets associated with the booking
 

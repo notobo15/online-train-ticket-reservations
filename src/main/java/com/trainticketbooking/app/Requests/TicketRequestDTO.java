@@ -15,4 +15,6 @@ public class TicketRequestDTO {
     private Double price;
     private boolean isDeparture;
     private PassengerRequestDTO passenger;
+    private Integer seatReturnId;
+    private Double seatReturnPrice;
 }

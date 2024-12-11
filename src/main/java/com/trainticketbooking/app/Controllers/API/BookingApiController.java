@@ -37,16 +37,17 @@ public class BookingApiController {
     }
 
     @PostMapping
-    public ApiResponse<SeatHoldResponseDto> createBooking(@RequestBody BookingRequestDTO bookingDTO) {
+    public ApiResponse<Integer> createBooking(@RequestBody BookingRequestDTO bookingDTO) {
         try {
             // Create the booking
-            bookingService.createBooking(bookingDTO);
-            return ApiResponse.<SeatHoldResponseDto>builder()
-                    .result(null)
+            var booking = bookingService.createBooking(bookingDTO);
+            return ApiResponse.<Integer>builder()
+                    .result(booking.getBookingId())
                     .message("Create successfully.")
+                    .success(true)
                     .build();
         } catch (Exception e) {
-            return ApiResponse.<SeatHoldResponseDto>builder()
+            return ApiResponse.<Integer>builder()
                     .result(null)
                     .success(false)
                     .message("Booking khong thanh cong")
@@ -61,14 +62,17 @@ public class BookingApiController {
         if (bookingDTO != null) {
             return ApiResponse.<BookingResponseDTO>builder()
                     .result(bookingDTO)
+                    .success(true)
                     .message("get booking by id")
                     .build();
         } else {
             return ApiResponse.<BookingResponseDTO>builder()
                     .result(null)
-                    .message("Booking khong thanh cong")
+                    .message("Can't get info booking")
+                    .success(false)
                     .build();
         }
+
     }
 
     // Get a list of all bookings
@@ -77,6 +81,7 @@ public class BookingApiController {
         List<BookingResponseDTO> bookings = bookingService.getAllBookings();
         return ApiResponse.<List<BookingResponseDTO>>builder()
                 .result(bookings)
+                .success(true)
                 .build();
     }
 }

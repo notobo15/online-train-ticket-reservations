@@ -8,4 +8,5 @@ public class SeatDTO {
     private String seatNumber;
     private String seatType;
     private String status; // "Booked," "Reserved," "Available"
+    private double price; // "Booked," "Reserved," "Available"
 }

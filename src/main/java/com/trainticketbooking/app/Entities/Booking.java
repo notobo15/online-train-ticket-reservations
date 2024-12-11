@@ -23,15 +23,21 @@ public class Booking {
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
-    @OneToMany(mappedBy = "booking")
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Ticket> tickets;
 
     @OneToOne(mappedBy = "booking")
     private Payment payment;
 
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+//    @ManyToOne
+//    @JoinColumn(name = "train_id")
+//    private Train train;
 
     @ManyToOne
     @JoinColumn(name = "start_station_id")
