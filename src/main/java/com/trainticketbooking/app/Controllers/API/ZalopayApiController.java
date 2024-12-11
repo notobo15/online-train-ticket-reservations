@@ -51,6 +51,7 @@ public class ZalopayApiController {
         put("key2", "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf");
         put("endpoint", "https://sb-openapi.zalopay.vn/v2/create");
         put("query_order_url", "https://sb-openapi.zalopay.vn/v2/query");
+        put("ngrokUrl", "https://abcd1234.ngrok.io");
     }};
 
     @Autowired
@@ -61,7 +62,6 @@ public class ZalopayApiController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createOrder(@RequestBody ZaloPayRequestDto zaloPayRequestDto) {
-        String ngrokUrl = "https://abcd1234.ngrok.io";
         Payment payment = new Payment();
         Booking booking;
         Optional<Booking> bookingOptional = bookingService.getById(zaloPayRequestDto.getBookingId());
@@ -100,7 +100,7 @@ public class ZalopayApiController {
                 put("bank_code", "");
                 put("item", new JSONArray(Arrays.asList(item)).toString());
                 put("embed_data", new JSONObject(embed_data).toString());
-                put("callback_url", ngrokUrl + "/api/zalopay/callback");
+                put("callback_url", config.get("ngrokUrl") + "/api/zalopay/callback");
             }};
 
             // Generate HMAC
